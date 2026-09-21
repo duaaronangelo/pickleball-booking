@@ -232,21 +232,26 @@
       <!-- Booking Summary Box -->
       <div class="bg-sand-50 rounded-2xl p-4 border border-slate-200 mb-4 space-y-2 text-xs">
         <div class="flex justify-between">
-          <span class="text-slate-500">Venue & Courts:</span>
+          <span class="text-slate-500">Courts:</span>
           <span class="font-bold text-slate-800" id="modalCourtName">Court 1</span>
         </div>
         <div class="flex justify-between">
           <span class="text-slate-500">Date:</span>
           <span class="font-bold text-slate-800" id="modalDate">Today</span>
         </div>
-        <div class="flex justify-between">
+        <div class="flex justify-between items-start pt-1 border-t border-slate-200/60">
           <span class="text-slate-500">Time Slots:</span>
-          <span class="font-bold text-slate-800 text-right whitespace-pre-line" id="modalTimeslots">None</span>
+          <span class="font-bold text-slate-800 text-right whitespace-pre-line leading-relaxed" id="modalTimeslots">None</span>
         </div>
 
-        <div class="pt-2 border-t border-slate-200 flex justify-between text-sm font-black text-slate-900">
+        <!-- Itemized Breakdown Before Total Payable -->
+        <div class="pt-2 border-t border-slate-200 space-y-1.5" id="modalItemizedBreakdown">
+          <!-- Dynamically populated itemized rows -->
+        </div>
+
+        <div class="pt-2 border-t-2 border-slate-300 flex justify-between text-sm font-black text-slate-900">
           <span>Total Payable:</span>
-          <span class="text-brand-900" id="modalTotal">₱0</span>
+          <span class="text-brand-900 text-base" id="modalTotal">₱0</span>
         </div>
       </div>
 
@@ -257,7 +262,7 @@
         <div class="bg-white p-2 rounded-xl w-40 h-40 mx-auto border border-slate-200 shadow-inner flex items-center justify-center">
           <img id="gcash-qr-img" src="" alt="GCash QR Code" class="w-full h-full object-contain rounded-lg" />
         </div>
-        <p class="text-[11px] text-slate-500 mt-2 font-medium">100% Court Reservation Fee</p>
+        <p class="text-[11px] text-slate-600 mt-2 font-bold">Kindly settle total payable to book your slot. Thank you!</p>
       </div>
 
       <!-- Booking Form -->
@@ -384,21 +389,31 @@
     const API_URL = "https://script.google.com/macros/s/AKfycbxjcGWN_iyGH26kuzwY_FX7qnHn365D3evpZ-cqZxYoRNO6IrmIgIJC2BVlwG6PiLIxXQ/exec"; 
     const QR_IMAGE_URL = "https://i.postimg.cc/cLdL90D5/IMG-3613.jpg"; 
 
-    // Standard baseline schedule
+    // Helper to normalize time strings ("08:00 AM" -> "8:00 AM") for seamless Google Sheet matching
+    function normalizeTimeSlot(str) {
+      if (!str) return '';
+      return str.replace(/\b0(\d:[0-5]\d)/g, '$1').trim();
+    }
+
+    // Standard baseline schedule matching Google Sheet Slots tab
     const STANDARD_TIMES = [
-      { id: 's1', startHour: 7, time: '07:00 AM - 08:00 AM', period: 'morning', price: 350 },
-      { id: 's2', startHour: 8, time: '08:00 AM - 09:00 AM', period: 'morning', price: 350 },
-      { id: 's3', startHour: 9, time: '09:00 AM - 10:00 AM', period: 'morning', price: 350 },
+      { id: 's1', startHour: 7, time: '7:00 AM - 8:00 AM', period: 'morning', price: 350 },
+      { id: 's2', startHour: 8, time: '8:00 AM - 9:00 AM', period: 'morning', price: 350 },
+      { id: 's3', startHour: 9, time: '9:00 AM - 10:00 AM', period: 'morning', price: 350 },
       { id: 's4', startHour: 10, time: '10:00 AM - 11:00 AM', period: 'morning', price: 350 },
       { id: 's5', startHour: 11, time: '11:00 AM - 12:00 PM', period: 'morning', price: 350 },
-      { id: 's6', startHour: 13, time: '01:00 PM - 02:00 PM', period: 'afternoon', price: 350 },
-      { id: 's7', startHour: 14, time: '02:00 PM - 03:00 PM', period: 'afternoon', price: 350 },
-      { id: 's8', startHour: 15, time: '03:00 PM - 04:00 PM', period: 'afternoon', price: 350 },
-      { id: 's9', startHour: 16, time: '04:00 PM - 05:00 PM', period: 'afternoon', price: 350 },
-      { id: 's10', startHour: 17, time: '05:00 PM - 06:00 PM', period: 'afternoon', price: 350 },
-      { id: 's11', startHour: 18, time: '06:00 PM - 07:00 PM', period: 'afternoon', price: 350 },
-      { id: 's12', startHour: 19, time: '07:00 PM - 08:00 PM', period: 'afternoon', price: 350 },
-      { id: 's13', startHour: 20, time: '08:00 PM - 09:00 PM', period: 'afternoon', price: 350 }
+      { id: 's6', startHour: 12, time: '12:00 PM - 1:00 PM', period: 'afternoon', price: 350 },
+      { id: 's7', startHour: 13, time: '1:00 PM - 2:00 PM', period: 'afternoon', price: 350 },
+      { id: 's8', startHour: 14, time: '2:00 PM - 3:00 PM', period: 'afternoon', price: 350 },
+      { id: 's9', startHour: 15, time: '3:00 PM - 4:00 PM', period: 'afternoon', price: 350 },
+      { id: 's10', startHour: 16, time: '4:00 PM - 5:00 PM', period: 'afternoon', price: 350 },
+      { id: 's11', startHour: 17, time: '5:00 PM - 6:00 PM', period: 'afternoon', price: 350 },
+      { id: 's12', startHour: 18, time: '6:00 PM - 7:00 PM', period: 'afternoon', price: 350 },
+      { id: 's13', startHour: 19, time: '7:00 PM - 8:00 PM', period: 'afternoon', price: 350 },
+      { id: 's14', startHour: 20, time: '8:00 PM - 9:00 PM', period: 'afternoon', price: 350 },
+      { id: 's15', startHour: 21, time: '9:00 PM - 10:00 PM', period: 'afternoon', price: 350 },
+      { id: 's16', startHour: 22, time: '10:00 PM - 11:00 PM', period: 'afternoon', price: 350 },
+      { id: 's17', startHour: 23, time: '11:00 PM - 12:00 AM', period: 'afternoon', price: 350 }
     ];
 
     // Generate upcoming dates dynamically
@@ -491,14 +506,14 @@
         slotMap = {};
         if (Array.isArray(openSlots)) {
           openSlots.forEach(s => {
-            const key = `${s.TimeSlot.trim()}|${s.CourtName.trim()}`;
+            const normalizedTime = normalizeTimeSlot(s.TimeSlot);
+            const key = `${normalizedTime}|${s.CourtName.trim()}`;
             slotMap[key] = s;
           });
         }
         renderSchedule();
       } catch (err) {
         console.warn('Backend connection fallback:', err);
-        // Fallback layout if connection is offline
         slotMap = {};
         renderSchedule();
       }
@@ -516,20 +531,18 @@
       STANDARD_TIMES.forEach((slot) => {
         if (activeFilter !== 'all' && slot.period !== activeFilter) return;
 
-        // Check if the slot hour has already passed for today
-        const isPast = selectedDateObj.isToday && slot.startHour < currentHour;
+        // Skip/hide any slot that has already passed for today
+        const isPast = selectedDateObj.isToday && slot.startHour <= currentHour;
+        if (isPast) return;
 
         visibleSlotsCount++;
 
         const card = document.createElement('div');
-        card.className = "bg-white rounded-2xl p-3.5 border border-slate-200 shadow-sm space-y-2.5 transition hover:shadow-md" + (isPast ? " opacity-60 bg-slate-50/60" : "");
+        card.className = "bg-white rounded-2xl p-3.5 border border-slate-200 shadow-sm space-y-2.5 transition hover:shadow-md";
 
         let cardHTML = `
           <div class="flex items-center justify-between border-b border-slate-100 pb-2">
-            <div class="flex items-center gap-2">
-              <span class="text-sm font-extrabold text-slate-900">${slot.time}</span>
-              ${isPast ? '<span class="text-[9px] bg-slate-200 text-slate-600 px-1.5 py-0.5 rounded font-bold uppercase">Passed</span>' : ''}
-            </div>
+            <span class="text-sm font-extrabold text-slate-900">${slot.time}</span>
             <span class="text-[11px] text-slate-500 font-bold">₱${slot.price}/hr</span>
           </div>
           <div class="grid grid-cols-3 gap-2 pt-0.5">
@@ -537,23 +550,16 @@
 
         [1, 2, 3].forEach(courtNum => {
           const courtName = `Court ${courtNum}`;
-          const key = `${slot.time}|${courtName}`;
+          const normalizedTime = normalizeTimeSlot(slot.time);
+          const key = `${normalizedTime}|${courtName}`;
           
-          // Slot is available if present in slotMap (or default available if map is empty)
           const liveSlot = slotMap[key];
           const isAvailable = Object.keys(slotMap).length === 0 ? true : !!liveSlot;
           const slotId = liveSlot ? liveSlot.SlotID : `${slot.id}-c${courtNum}`;
 
           const isSelected = selectedSlots.some(s => s.time === slot.time && s.court === courtNum);
 
-          if (isPast) {
-            cardHTML += `
-              <div class="py-2.5 px-1 rounded-xl bg-slate-100 border border-slate-200/60 text-slate-400 font-semibold text-xs flex flex-col items-center justify-center gap-0.5 opacity-50 select-none">
-                <span class="text-[9px] uppercase font-medium text-slate-400">Court ${courtNum}</span>
-                <span class="text-[10px] font-medium text-slate-400">Passed</span>
-              </div>
-            `;
-          } else if (isSelected) {
+          if (isSelected) {
             cardHTML += `
               <button onclick="toggleSlotSelection('${slot.time}', ${courtNum}, '${slotId}', ${slot.price})" class="py-2.5 px-1 rounded-xl bg-brand-900 text-white font-black text-xs flex flex-col items-center justify-center gap-0.5 border border-brand-900 shadow-sm bounce-pop">
                 <span class="text-[9px] uppercase font-bold text-lime-300">Court ${courtNum}</span>
@@ -586,8 +592,8 @@
         container.innerHTML = `
           <div class="p-8 text-center text-slate-500 bg-white rounded-2xl border border-slate-200">
             <i class="fa-solid fa-moon text-3xl text-slate-300 mb-2"></i>
-            <p class="text-xs font-bold text-slate-700">No slots match the active filter.</p>
-            <p class="text-[11px] text-slate-400 mt-1">Please select another date or clear filters.</p>
+            <p class="text-xs font-bold text-slate-700">No more upcoming slots for today.</p>
+            <p class="text-[11px] text-slate-400 mt-1">Please select tomorrow or another date above.</p>
           </div>
         `;
       }
@@ -663,9 +669,22 @@
       const baseTotal = selectedSlots.reduce((sum, item) => sum + item.price, 0);
       const courtsUsed = [...new Set(selectedSlots.map(s => s.court))];
 
-      document.getElementById('modalCourtName').textContent = courtsUsed.length > 1 ? `Multi-Court (${courtsUsed.map(c => 'Court ' + c).join(', ')})` : `Court ${courtsUsed[0]}`;
+      document.getElementById('modalCourtName').textContent = courtsUsed.length > 1 ? `Courts ${courtsUsed.join(', ')}` : `Court ${courtsUsed[0]}`;
       document.getElementById('modalDate').textContent = selectedDateStr;
-      document.getElementById('modalTimeslots').textContent = selectedSlots.map(s => `${s.time} (Court ${s.court})`).join('\n');
+      
+      // Revised time slots formatting: Court XX , <timeslot>
+      const formattedTimeslots = selectedSlots.map(s => `Court ${s.court} , ${s.time}`).join('\n');
+      document.getElementById('modalTimeslots').textContent = formattedTimeslots;
+
+      // Render Itemized Breakdown before Total Payable
+      const breakdownContainer = document.getElementById('modalItemizedBreakdown');
+      breakdownContainer.innerHTML = selectedSlots.map(s => `
+        <div class="flex justify-between text-[11px] text-slate-600">
+          <span>Court ${s.court} (${s.time})</span>
+          <span class="font-semibold text-slate-800">₱${s.price.toLocaleString()}</span>
+        </div>
+      `).join('');
+
       document.getElementById('modalTotal').textContent = `₱${baseTotal.toLocaleString()}`;
 
       modal.classList.remove('opacity-0', 'pointer-events-none');
@@ -686,31 +705,39 @@
       btn.disabled = true;
       btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin text-xs"></i> <span>Processing Booking...</span>`;
 
-      // Use target slot ID
-      const targetSlot = selectedSlots[0];
-      const payload = {
-        slotId: targetSlot ? targetSlot.slotId : 1,
-        email: document.getElementById('email').value,
-        gcashRef: document.getElementById('gcash-ref').value
-      };
+      const emailVal = document.getElementById('email').value;
+      const gcashRefVal = document.getElementById('gcash-ref').value;
 
       try {
-        const res = await fetch(API_URL, {
-          method: 'POST',
-          body: JSON.stringify(payload)
-        });
-        const result = await res.json();
+        let lastBookingId = null;
 
-        if (result.success) {
-          closeCheckoutModal();
-          showSuccessModal(result.bookingId || `#PH-${Math.floor(1000 + Math.random() * 9000)}`);
-          document.getElementById('booking-form').reset();
-          selectedSlots = [];
-          updateBottomDrawer();
-          fetchSlots();
-        } else {
-          throw new Error(result.message || 'Booking failed');
+        // Process all selected court slots
+        for (const targetSlot of selectedSlots) {
+          const payload = {
+            slotId: targetSlot.slotId,
+            email: emailVal,
+            gcashRef: gcashRefVal
+          };
+
+          const res = await fetch(API_URL, {
+            method: 'POST',
+            body: JSON.stringify(payload)
+          });
+          const result = await res.json();
+
+          if (result.success) {
+            lastBookingId = result.bookingId;
+          } else {
+            throw new Error(result.message || 'Booking failed');
+          }
         }
+
+        closeCheckoutModal();
+        showSuccessModal(lastBookingId || `#PH-${Math.floor(1000 + Math.random() * 9000)}`);
+        document.getElementById('booking-form').reset();
+        selectedSlots = [];
+        updateBottomDrawer();
+        fetchSlots();
       } catch (err) {
         statusMsg.className = 'mt-3 p-3 bg-red-50 border border-red-200 text-red-700 rounded-xl text-center text-xs font-semibold';
         statusMsg.innerText = err.message || 'Error processing payment confirmation. Please verify details.';
