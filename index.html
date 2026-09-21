@@ -54,11 +54,21 @@
             pickleFloat: {
               '0%, 100%': { transform: 'translateY(0) rotate(-10deg)' },
               '50%': { transform: 'translateY(-12px) rotate(10deg)' }
+            },
+            paddleSwing: {
+              '0%, 100%': { transform: 'rotate(-25deg)' },
+              '50%': { transform: 'rotate(25deg)' }
+            },
+            ballVolley: {
+              '0%, 100%': { transform: 'translate(0px, 0px) scale(0.9)' },
+              '50%': { transform: 'translate(35px, -25px) scale(1.2)' }
             }
           },
           animation: {
             'ball-hop': 'ballHop 0.6s ease-out',
             'pickle-float': 'pickleFloat 2s ease-in-out infinite',
+            'paddle-swing': 'paddleSwing 1.2s cubic-bezier(0.4, 0, 0.2, 1) infinite',
+            'ball-volley': 'ballVolley 1.2s cubic-bezier(0.4, 0, 0.2, 1) infinite',
           }
         }
       }
@@ -150,9 +160,15 @@
         </div>
 
         <div class="p-4 space-y-4" id="slotsContainer">
-          <div class="p-8 text-center text-slate-400 bg-white rounded-2xl border border-slate-200">
-            <i class="fa-solid fa-circle-notch fa-spin text-2xl text-emerald-600 mb-2"></i>
-            <p class="text-xs font-semibold text-slate-600">Connecting to live court server...</p>
+          <div class="p-8 text-center text-slate-400 bg-white rounded-3xl border border-slate-200">
+            <!-- Custom Animation Built with Tailwind -->
+            <div class="relative w-20 h-16 mx-auto mb-4">
+              <div class="absolute bottom-0 left-2 origin-bottom text-brand-900 animate-paddle-swing text-4xl">
+                <i class="fa-solid fa-table-tennis-paddle-ball"></i>
+              </div>
+              <div class="absolute w-3.5 h-3.5 bg-lime-400 rounded-full shadow-sm animate-ball-volley" style="bottom: 25px; left: 20px;"></div>
+            </div>
+            <p class="text-sm font-semibold text-slate-600">Getting your courts ready for dinking!</p>
           </div>
         </div>
       </div>
@@ -304,8 +320,8 @@
       </div>
       <div class="space-y-3.5 text-xs sm:text-sm text-slate-600">
         <div class="p-3.5 bg-sand-50 rounded-2xl border border-slate-200">
-          <div class="font-extrabold text-slate-900 text-sm mb-1">1. Dynamic Pricing UI</div>
-          <p class="text-slate-600 text-xs">Removed the static ₱350/hr header. Each individual court now pulls and displays its precise price directly from the Google Sheet.</p>
+          <div class="font-extrabold text-slate-900 text-sm mb-1">1. Custom Loading Animation</div>
+          <p class="text-slate-600 text-xs">Replaced the generic spinning wheel with a playful, bespoke CSS animation of a pickleball racket hitting a ball.</p>
         </div>
         <div class="p-3.5 bg-sand-50 rounded-2xl border border-slate-200">
           <div class="font-extrabold text-slate-900 text-sm mb-1">2. Adaptive Pill Layout</div>
@@ -324,7 +340,6 @@
     const API_URL = "https://script.google.com/macros/s/AKfycbxjcGWN_iyGH26kuzwY_FX7qnHn365D3evpZ-cqZxYoRNO6IrmIgIJC2BVlwG6PiLIxXQ/exec"; 
     const QR_IMAGE_URL = "https://i.postimg.cc/cLdL90D5/IMG-3613.jpg"; 
 
-    // Base slots logic remains, but specific prices are overwritten by the backend sync
     const STANDARD_TIMES = [
       { id: 's1', startHour: 7, time: '7:00 AM - 8:00 AM', period: 'morning' },
       { id: 's2', startHour: 8, time: '8:00 AM - 9:00 AM', period: 'morning' },
@@ -427,7 +442,12 @@
       const container = document.getElementById('slotsContainer');
       container.innerHTML = `
         <div class="p-8 text-center text-slate-400 bg-white rounded-3xl border border-slate-200">
-          <i class="fa-solid fa-circle-notch fa-spin text-3xl text-emerald-600 mb-3"></i>
+          <div class="relative w-20 h-16 mx-auto mb-4">
+            <div class="absolute bottom-0 left-2 origin-bottom text-brand-900 animate-paddle-swing text-4xl">
+              <i class="fa-solid fa-table-tennis-paddle-ball"></i>
+            </div>
+            <div class="absolute w-3.5 h-3.5 bg-lime-400 rounded-full shadow-sm animate-ball-volley" style="bottom: 25px; left: 20px;"></div>
+          </div>
           <p class="text-sm font-semibold text-slate-600">Getting your courts ready for dinking!</p>
         </div>
       `;
@@ -487,7 +507,6 @@
           const isAvailable = Object.keys(slotMap).length === 0 ? true : (liveSlot && liveSlot.Status === 'Available');
           const slotId = liveSlot ? liveSlot.SlotID : `${slot.id}-c${courtNum}`;
           
-          // DYNAMIC PRICING FIX: Pull exact price from backend, fallback to 350
           const courtPrice = liveSlot && liveSlot.Price ? Number(liveSlot.Price) : 350;
 
           const isSelected = selectedSlots.some(s => normalizeTimeSlot(s.time) === normalizedTime && s.court === courtNum);
