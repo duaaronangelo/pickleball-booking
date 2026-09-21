@@ -304,12 +304,12 @@
       </div>
       <div class="space-y-3.5 text-xs sm:text-sm text-slate-600">
         <div class="p-3.5 bg-sand-50 rounded-2xl border border-slate-200">
-          <div class="font-extrabold text-slate-900 text-sm mb-1">1. Adaptive Pill Layout</div>
-          <p class="text-slate-600 text-xs">Transitioned from rigid squares to auto-flowing pill buttons. This guarantees odd numbers of courts fill the space perfectly without orphaned buttons or squished text.</p>
+          <div class="font-extrabold text-slate-900 text-sm mb-1">1. Dynamic Pricing UI</div>
+          <p class="text-slate-600 text-xs">Removed the static ₱350/hr header. Each individual court now pulls and displays its precise price directly from the Google Sheet.</p>
         </div>
         <div class="p-3.5 bg-sand-50 rounded-2xl border border-slate-200">
-          <div class="font-extrabold text-slate-900 text-sm mb-1">2. Multi-Day Realtime Availability</div>
-          <p class="text-slate-600 text-xs">The app dynamically communicates with the Google Sheets backend to fetch available slots specific to the selected date.</p>
+          <div class="font-extrabold text-slate-900 text-sm mb-1">2. Adaptive Pill Layout</div>
+          <p class="text-slate-600 text-xs">Transitioned from rigid squares to auto-flowing pill buttons. This guarantees odd numbers of courts fill the space perfectly.</p>
         </div>
       </div>
       <div class="mt-5">
@@ -324,23 +324,24 @@
     const API_URL = "https://script.google.com/macros/s/AKfycbxjcGWN_iyGH26kuzwY_FX7qnHn365D3evpZ-cqZxYoRNO6IrmIgIJC2BVlwG6PiLIxXQ/exec"; 
     const QR_IMAGE_URL = "https://i.postimg.cc/cLdL90D5/IMG-3613.jpg"; 
 
+    // Base slots logic remains, but specific prices are overwritten by the backend sync
     const STANDARD_TIMES = [
-      { id: 's1', startHour: 7, time: '7:00 AM - 8:00 AM', period: 'morning', price: 350 },
-      { id: 's2', startHour: 8, time: '8:00 AM - 9:00 AM', period: 'morning', price: 350 },
-      { id: 's3', startHour: 9, time: '9:00 AM - 10:00 AM', period: 'morning', price: 350 },
-      { id: 's4', startHour: 10, time: '10:00 AM - 11:00 AM', period: 'morning', price: 350 },
-      { id: 's5', startHour: 11, time: '11:00 AM - 12:00 PM', period: 'morning', price: 350 },
-      { id: 's6', startHour: 12, time: '12:00 PM - 1:00 PM', period: 'afternoon', price: 350 },
-      { id: 's7', startHour: 13, time: '1:00 PM - 2:00 PM', period: 'afternoon', price: 350 },
-      { id: 's8', startHour: 14, time: '2:00 PM - 3:00 PM', period: 'afternoon', price: 350 },
-      { id: 's9', startHour: 15, time: '3:00 PM - 4:00 PM', period: 'afternoon', price: 350 },
-      { id: 's10', startHour: 16, time: '4:00 PM - 5:00 PM', period: 'afternoon', price: 350 },
-      { id: 's11', startHour: 17, time: '5:00 PM - 6:00 PM', period: 'afternoon', price: 350 },
-      { id: 's12', startHour: 18, time: '6:00 PM - 7:00 PM', period: 'afternoon', price: 350 },
-      { id: 's13', startHour: 19, time: '7:00 PM - 8:00 PM', period: 'afternoon', price: 350 },
-      { id: 's14', startHour: 20, time: '8:00 PM - 9:00 PM', period: 'afternoon', price: 350 },
-      { id: 's15', startHour: 21, time: '9:00 PM - 10:00 PM', period: 'afternoon', price: 350 },
-      { id: 's16', startHour: 22, time: '10:00 PM - 11:00 PM', period: 'afternoon', price: 350 }
+      { id: 's1', startHour: 7, time: '7:00 AM - 8:00 AM', period: 'morning' },
+      { id: 's2', startHour: 8, time: '8:00 AM - 9:00 AM', period: 'morning' },
+      { id: 's3', startHour: 9, time: '9:00 AM - 10:00 AM', period: 'morning' },
+      { id: 's4', startHour: 10, time: '10:00 AM - 11:00 AM', period: 'morning' },
+      { id: 's5', startHour: 11, time: '11:00 AM - 12:00 PM', period: 'morning' },
+      { id: 's6', startHour: 12, time: '12:00 PM - 1:00 PM', period: 'afternoon' },
+      { id: 's7', startHour: 13, time: '1:00 PM - 2:00 PM', period: 'afternoon' },
+      { id: 's8', startHour: 14, time: '2:00 PM - 3:00 PM', period: 'afternoon' },
+      { id: 's9', startHour: 15, time: '3:00 PM - 4:00 PM', period: 'afternoon' },
+      { id: 's10', startHour: 16, time: '4:00 PM - 5:00 PM', period: 'afternoon' },
+      { id: 's11', startHour: 17, time: '5:00 PM - 6:00 PM', period: 'afternoon' },
+      { id: 's12', startHour: 18, time: '6:00 PM - 7:00 PM', period: 'afternoon' },
+      { id: 's13', startHour: 19, time: '7:00 PM - 8:00 PM', period: 'afternoon' },
+      { id: 's14', startHour: 20, time: '8:00 PM - 9:00 PM', period: 'afternoon' },
+      { id: 's15', startHour: 21, time: '9:00 PM - 10:00 PM', period: 'afternoon' },
+      { id: 's16', startHour: 22, time: '10:00 PM - 11:00 PM', period: 'afternoon' }
     ];
 
     let daysList = [];
@@ -468,14 +469,13 @@
 
         visibleSlotsCount++;
         const card = document.createElement('div');
-        card.className = "bg-white rounded-3xl p-4 sm:p-5 border border-slate-200 shadow-sm space-y-3.5 transition hover:shadow-md";
+        card.className = "bg-white rounded-3xl p-4 sm:p-5 border border-slate-200 shadow-sm transition hover:shadow-md";
 
         let cardHTML = `
-          <div class="flex items-center justify-between border-b border-slate-100 pb-2.5">
-            <span class="text-base font-black text-slate-900">${slot.time}</span>
-            <span class="bg-brand-50 text-brand-900 px-2 py-1 rounded-lg text-[11px] font-bold">₱${slot.price}/hr</span>
+          <div class="border-b border-slate-100 pb-2.5 mb-3">
+            <span class="text-base font-black text-slate-900 tracking-tight">${slot.time}</span>
           </div>
-          <div class="flex flex-wrap gap-2.5 pt-1">
+          <div class="flex flex-wrap gap-2.5">
         `;
 
         [1, 2, 3, 4, 5, 6, 7].forEach(courtNum => {
@@ -486,26 +486,34 @@
           const liveSlot = slotMap[key];
           const isAvailable = Object.keys(slotMap).length === 0 ? true : (liveSlot && liveSlot.Status === 'Available');
           const slotId = liveSlot ? liveSlot.SlotID : `${slot.id}-c${courtNum}`;
+          
+          // DYNAMIC PRICING FIX: Pull exact price from backend, fallback to 350
+          const courtPrice = liveSlot && liveSlot.Price ? Number(liveSlot.Price) : 350;
 
           const isSelected = selectedSlots.some(s => normalizeTimeSlot(s.time) === normalizedTime && s.court === courtNum);
 
           if (isSelected) {
             cardHTML += `
-              <button onclick="toggleSlotSelection('${slot.time}', ${courtNum}, '${slotId}', ${slot.price})" class="flex-grow min-w-[30%] sm:min-w-[20%] py-2.5 px-3.5 rounded-2xl bg-brand-900 text-white flex items-center justify-center gap-2 border-2 border-brand-900 shadow-md bounce-pop transition">
-                <span class="text-[11px] font-black tracking-wider">COURT ${courtNum}</span>
-                <i class="fa-solid fa-circle-check text-lime-400 text-xs"></i>
+              <button onclick="toggleSlotSelection('${slot.time}', ${courtNum}, '${slotId}', ${courtPrice})" class="flex-grow min-w-[30%] sm:min-w-[20%] py-2.5 px-3.5 rounded-2xl bg-brand-900 text-white flex flex-col items-center justify-center gap-0.5 border-2 border-brand-900 shadow-md bounce-pop transition">
+                <div class="flex items-center gap-1.5">
+                  <span class="text-[11px] font-black tracking-wider">COURT ${courtNum}</span>
+                  <i class="fa-solid fa-circle-check text-lime-400 text-[10px]"></i>
+                </div>
+                <span class="text-[10px] font-bold text-lime-300">₱${courtPrice}</span>
               </button>
             `;
           } else if (isAvailable) {
             cardHTML += `
-              <button onclick="toggleSlotSelection('${slot.time}', ${courtNum}, '${slotId}', ${slot.price})" class="flex-grow min-w-[30%] sm:min-w-[20%] py-2.5 px-3.5 rounded-2xl bg-emerald-50 hover:bg-emerald-100 border-2 border-emerald-100 text-brand-900 flex items-center justify-center gap-2 transition active:scale-95">
+              <button onclick="toggleSlotSelection('${slot.time}', ${courtNum}, '${slotId}', ${courtPrice})" class="flex-grow min-w-[30%] sm:min-w-[20%] py-2.5 px-3.5 rounded-2xl bg-emerald-50 hover:bg-emerald-100 border-2 border-emerald-100 text-brand-900 flex flex-col items-center justify-center gap-0.5 transition active:scale-95">
                 <span class="text-[11px] font-extrabold tracking-wider">COURT ${courtNum}</span>
+                <span class="text-[10px] font-bold text-emerald-700">₱${courtPrice}</span>
               </button>
             `;
           } else {
             cardHTML += `
-              <div class="flex-grow min-w-[30%] sm:min-w-[20%] py-2.5 px-3.5 rounded-2xl bg-slate-50 border-2 border-slate-100 text-slate-400 flex items-center justify-center gap-2 opacity-70 select-none cursor-not-allowed">
+              <div class="flex-grow min-w-[30%] sm:min-w-[20%] py-2.5 px-3.5 rounded-2xl bg-slate-50 border-2 border-slate-100 text-slate-400 flex flex-col items-center justify-center gap-0.5 opacity-70 select-none cursor-not-allowed">
                 <strike class="text-[11px] font-bold tracking-wider">COURT ${courtNum}</strike>
+                <span class="text-[10px] font-semibold text-slate-400">₱${courtPrice}</span>
               </div>
             `;
           }
