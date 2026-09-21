@@ -298,38 +298,6 @@
     </div>
   </div>
 
-  <!-- Notes Modal -->
-  <div id="notesModal" class="fixed inset-0 bg-slate-950/70 backdrop-blur-sm z-50 flex items-center justify-center p-4 opacity-0 pointer-events-none transition-opacity duration-200">
-    <div class="w-full max-w-lg bg-white rounded-3xl p-6 shadow-2xl max-h-[85vh] overflow-y-auto">
-      <div class="flex items-center justify-between mb-4 border-b border-slate-100 pb-3">
-        <div class="flex items-center gap-2">
-          <div class="w-8 h-8 rounded-xl bg-lime-400 text-slate-950 flex items-center justify-center font-bold">
-            <i class="fa-solid fa-wand-magic-sparkles"></i>
-          </div>
-          <h3 class="font-black text-slate-900 text-lg">UX & Smartphone Architecture</h3>
-        </div>
-        <button onclick="toggleDesignNotes()" class="w-8 h-8 rounded-full bg-slate-100 text-slate-500 flex items-center justify-center hover:bg-slate-200">
-          <i class="fa-solid fa-xmark"></i>
-        </button>
-      </div>
-      <div class="space-y-3.5 text-xs sm:text-sm text-slate-600">
-        <div class="p-3.5 bg-sand-50 rounded-2xl border border-slate-200">
-          <div class="font-extrabold text-slate-900 text-sm mb-1">1. Smart Dynamic Pricing Pill</div>
-          <p class="text-slate-600 text-xs">Removed the redundant prices from the court buttons. Now, the exact backend price will only populate in the upper right pill box of a timeslot once you actually select a court.</p>
-        </div>
-        <div class="p-3.5 bg-sand-50 rounded-2xl border border-slate-200">
-          <div class="font-extrabold text-slate-900 text-sm mb-1">2. Custom Loading Animation</div>
-          <p class="text-slate-600 text-xs">Replaced the generic spinning wheel with a playful, bespoke CSS animation of a pickleball racket hitting a ball.</p>
-        </div>
-      </div>
-      <div class="mt-5">
-        <button onclick="toggleDesignNotes()" class="w-full py-3 bg-slate-900 text-white font-extrabold rounded-2xl text-xs uppercase tracking-wider">
-          Got It, Back to App
-        </button>
-      </div>
-    </div>
-  </div>
-
   <script>
     // MAKE SURE TO PASTE YOUR GOOGLE APPS SCRIPT WEB APP URL HERE:
     const API_URL = "https://script.google.com/macros/s/AKfycbxjcGWN_iyGH26kuzwY_FX7qnHn365D3evpZ-cqZxYoRNO6IrmIgIJC2BVlwG6PiLIxXQ/exec"; 
@@ -470,7 +438,7 @@
       } catch (err) {
         console.warn('Backend connection fallback:', err);
         slotMap = {};
-        dynamicCourts = ['Court 1', 'Court 2', 'Court 3', 'Court 4', 'Court 5', 'Court 6', 'Court 7'];
+        dynamicCourts = []; 
         renderSchedule();
       }
     }
@@ -511,30 +479,33 @@
           const key = `${normalizedSlotTime}|${courtName}`;
           
           const liveSlot = slotMap[key];
-          const isAvailable = Object.keys(slotMap).length === 0 ? true : (liveSlot && liveSlot.Status === 'Available');
-          const slotId = liveSlot ? liveSlot.SlotID : `${slot.id}-${courtName.replace(/\s+/g, '')}`;
           
-          const courtPrice = liveSlot && liveSlot.Price ? Number(liveSlot.Price) : 350;
+          if (!liveSlot) return; 
+          
+          const isAvailable = liveSlot.Status === 'Available';
+          const slotId = liveSlot.SlotID; 
+          const courtPrice = Number(liveSlot.Price);
+          const displayCourtName = liveSlot.CourtName.trim(); 
 
-          const isSelected = selectedSlots.some(s => normalizeTimeSlot(s.time) === normalizedSlotTime && s.court === courtName);
+          const isSelected = selectedSlots.some(s => normalizeTimeSlot(s.time) === normalizedSlotTime && s.court === displayCourtName);
 
           if (isSelected) {
             cardHTML += `
-              <button onclick="toggleSlotSelection('${slot.time}', '${courtName}', '${slotId}', ${courtPrice})" class="flex-grow min-w-[30%] sm:min-w-[20%] py-3 px-3.5 rounded-2xl bg-brand-900 text-white flex items-center justify-center gap-1.5 border-2 border-brand-900 shadow-md bounce-pop transition">
-                <span class="text-[11px] font-black tracking-wider uppercase">${courtName}</span>
+              <button onclick="toggleSlotSelection('${slot.time}', '${displayCourtName}', '${slotId}', ${courtPrice})" class="flex-grow min-w-[30%] sm:min-w-[20%] py-3 px-3.5 rounded-2xl bg-brand-900 text-white flex items-center justify-center gap-1.5 border-2 border-brand-900 shadow-md bounce-pop transition">
+                <span class="text-[11px] font-black tracking-wider uppercase">${displayCourtName}</span>
                 <i class="fa-solid fa-circle-check text-lime-400 text-[10px]"></i>
               </button>
             `;
           } else if (isAvailable) {
             cardHTML += `
-              <button onclick="toggleSlotSelection('${slot.time}', '${courtName}', '${slotId}', ${courtPrice})" class="flex-grow min-w-[30%] sm:min-w-[20%] py-3 px-3.5 rounded-2xl bg-emerald-50 hover:bg-emerald-100 border-2 border-emerald-100 text-brand-900 flex items-center justify-center gap-1.5 transition active:scale-95">
-                <span class="text-[11px] font-extrabold tracking-wider uppercase">${courtName}</span>
+              <button onclick="toggleSlotSelection('${slot.time}', '${displayCourtName}', '${slotId}', ${courtPrice})" class="flex-grow min-w-[30%] sm:min-w-[20%] py-3 px-3.5 rounded-2xl bg-emerald-50 hover:bg-emerald-100 border-2 border-emerald-100 text-brand-900 flex items-center justify-center gap-1.5 transition active:scale-95">
+                <span class="text-[11px] font-extrabold tracking-wider uppercase">${displayCourtName}</span>
               </button>
             `;
           } else {
             cardHTML += `
               <div class="flex-grow min-w-[30%] sm:min-w-[20%] py-3 px-3.5 rounded-2xl bg-slate-50 border-2 border-slate-100 text-slate-400 flex items-center justify-center gap-1.5 opacity-70 select-none cursor-not-allowed">
-                <strike class="text-[11px] font-bold tracking-wider uppercase">${courtName}</strike>
+                <strike class="text-[11px] font-bold tracking-wider uppercase">${displayCourtName}</strike>
               </div>
             `;
           }
@@ -718,15 +689,6 @@
         frame.classList.add('max-w-[420px]', 'sm:rounded-[44px]', 'sm:border-[8px]', 'sm:h-[860px]');
         frame.classList.remove('max-w-4xl', 'sm:rounded-3xl', 'h-[100vh]', 'sm:h-[85vh]');
         btnText.textContent = "Full Canvas View";
-      }
-    }
-
-    function toggleDesignNotes() {
-      const modal = document.getElementById('notesModal');
-      if (modal.classList.contains('opacity-0')) {
-        modal.classList.remove('opacity-0', 'pointer-events-none');
-      } else {
-        modal.classList.add('opacity-0', 'pointer-events-none');
       }
     }
   </script>
