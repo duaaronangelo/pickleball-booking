@@ -1,158 +1,138 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-  <meta http-equiv="Content-Style-Type" content="text/css">
-  <title></title>
-  <meta name="Generator" content="Cocoa HTML Writer">
-  <meta name="CocoaVersion" content="2299.7">
-  <style type="text/css">
-    p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica}
-    p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica; min-height: 14.0px}
-  </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pickleball Court Reservation</title>
+  <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
-<p class="p1">&lt;!DOCTYPE html&gt;</p>
-<p class="p1">&lt;html lang="en"&gt;</p>
-<p class="p1">&lt;head&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;meta charset="UTF-8" /&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;meta name="viewport" content="width=device-width, initial-scale=1.0" /&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;title&gt;Pickleball Court Reservation&lt;/title&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;script src="https://cdn.tailwindcss.com"&gt;&lt;/script&gt;</p>
-<p class="p1">&lt;/head&gt;</p>
-<p class="p1">&lt;body class="bg-gray-100 min-h-screen p-4 md:p-8"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;div class="max-w-xl mx-auto bg-white p-6 rounded-xl shadow-md"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;h1 class="text-2xl font-bold text-green-700 mb-4"&gt;Book a Pickleball Court&lt;/h1&gt;</p>
-<p class="p2"><span class="Apple-converted-space">    </span></p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;!-- Step A/B: Available Slots --&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;div id="slot-section"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;h2 class="text-lg font-semibold mb-2"&gt;Available Slots&lt;/h2&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;div id="slots-container" class="space-y-2"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;p class="text-gray-500"&gt;Loading live availability...&lt;/p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;!-- Step C/D: Checkout Modal --&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;div id="checkout-section" class="hidden mt-6 pt-6 border-t"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;h2 class="text-lg font-semibold text-gray-800 mb-2"&gt;Complete Reservation&lt;/h2&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;p id="selected-info" class="text-sm text-gray-600 mb-4"&gt;&lt;/p&gt;</p>
-<p class="p2"><span class="Apple-converted-space">      </span></p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="bg-gray-50 p-4 rounded-lg mb-4 text-center"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;p class="text-xs text-gray-500 uppercase font-bold"&gt;Scan to Pay via GCash&lt;/p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;!-- Your QR Code will display here --&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;img id="gcash-qr-img" src="" alt="GCash QR Code" class="w-48 h-48 mx-auto my-2 rounded border" /&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;p id="fee-breakdown" class="text-lg font-bold text-green-800"&gt;&lt;/p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;form id="booking-form" class="space-y-3"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">          </span>&lt;label class="block text-sm font-medium text-gray-700"&gt;Your Email&lt;/label&gt;</p>
-<p class="p1"><span class="Apple-converted-space">          </span>&lt;input type="email" id="email" required class="w-full mt-1 p-2 border rounded-md" placeholder="name@example.com" /&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">          </span>&lt;label class="block text-sm font-medium text-gray-700"&gt;GCash Reference Number&lt;/label&gt;</p>
-<p class="p1"><span class="Apple-converted-space">          </span>&lt;input type="text" id="gcash-ref" required class="w-full mt-1 p-2 border rounded-md" placeholder="13-digit reference no." /&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;button type="submit" id="submit-btn" class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-2 rounded-md"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">          </span>Confirm Payment &amp; Book</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;/button&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;/form&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;div id="status-message" class="hidden mt-4 p-3 rounded-md text-center"&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;script&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>// ==========================================</p>
-<p class="p1"><span class="Apple-converted-space">    </span>// PASTE YOUR TWO LINKS HERE:</p>
-<p class="p1"><span class="Apple-converted-space">    </span>// ==========================================</p>
-<p class="p1"><span class="Apple-converted-space">    </span>const API_URL = "https://script.google.com/macros/s/AKfycbxjcGWN_iyGH26kuzwY_FX7qnHn365D3evpZ-cqZxYoRNO6IrmIgIJC2BVlwG6PiLIxXQ/exec";<span class="Apple-converted-space"> </span></p>
-<p class="p1"><span class="Apple-converted-space">    </span>const QR_IMAGE_URL = "https://i.postimg.cc/cLdL90D5/IMG-3613.jpg";<span class="Apple-converted-space"> </span></p>
-<p class="p1"><span class="Apple-converted-space">    </span>// ==========================================</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>let selectedSlot = null;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>document.getElementById('gcash-qr-img').src = QR_IMAGE_URL;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>// Fetch live slots from Google Apps Script</p>
-<p class="p1"><span class="Apple-converted-space">    </span>async function fetchSlots() {</p>
-<p class="p1"><span class="Apple-converted-space">      </span>const container = document.getElementById('slots-container');</p>
-<p class="p1"><span class="Apple-converted-space">      </span>try {</p>
-<p class="p1"><span class="Apple-converted-space">        </span>const res = await fetch(API_URL);</p>
-<p class="p1"><span class="Apple-converted-space">        </span>const slots = await res.json();</p>
-<p class="p2"><span class="Apple-converted-space">        </span></p>
-<p class="p1"><span class="Apple-converted-space">        </span>if (slots.length === 0) {</p>
-<p class="p1"><span class="Apple-converted-space">          </span>container.innerHTML = '&lt;p class="text-gray-500"&gt;No available slots right now.&lt;/p&gt;';</p>
-<p class="p1"><span class="Apple-converted-space">          </span>return;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>container.innerHTML = slots.map(slot =&gt; `</p>
-<p class="p1"><span class="Apple-converted-space">          </span>&lt;div onclick="selectSlot(${slot.SlotID}, '${slot.CourtName}', '${slot.TimeSlot}', ${slot.Price})"<span class="Apple-converted-space"> </span></p>
-<p class="p1"><span class="Apple-converted-space">               </span>class="p-3 border rounded-lg hover:border-green-500 cursor-pointer flex justify-between items-center transition"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">              </span>&lt;p class="font-bold text-gray-800"&gt;${slot.CourtName}&lt;/p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">              </span>&lt;p class="text-sm text-gray-500"&gt;${slot.TimeSlot}&lt;/p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;span class="text-green-600 font-bold"&gt;₱${slot.Price}&lt;/span&gt;</p>
-<p class="p1"><span class="Apple-converted-space">          </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>`).join('');</p>
-<p class="p1"><span class="Apple-converted-space">      </span>} catch (err) {</p>
-<p class="p1"><span class="Apple-converted-space">        </span>container.innerHTML = '&lt;p class="text-red-500"&gt;Failed to load slots.&lt;/p&gt;';</p>
-<p class="p1"><span class="Apple-converted-space">      </span>}</p>
-<p class="p1"><span class="Apple-converted-space">    </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>// Handle slot selection</p>
-<p class="p1"><span class="Apple-converted-space">    </span>function selectSlot(id, court, time, price) {</p>
-<p class="p1"><span class="Apple-converted-space">      </span>selectedSlot = { id, court, time, price };</p>
-<p class="p1"><span class="Apple-converted-space">      </span>document.getElementById('checkout-section').classList.remove('hidden');</p>
-<p class="p1"><span class="Apple-converted-space">      </span>document.getElementById('selected-info').innerText = `${court} | ${time}`;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>document.getElementById('fee-breakdown').innerText = `Total: ₱${price}`;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>// Submit booking payload</p>
-<p class="p1"><span class="Apple-converted-space">    </span>document.getElementById('booking-form').addEventListener('submit', async (e) =&gt; {</p>
-<p class="p1"><span class="Apple-converted-space">      </span>e.preventDefault();</p>
-<p class="p1"><span class="Apple-converted-space">      </span>const btn = document.getElementById('submit-btn');</p>
-<p class="p1"><span class="Apple-converted-space">      </span>const statusMsg = document.getElementById('status-message');</p>
-<p class="p2"><span class="Apple-converted-space">      </span></p>
-<p class="p1"><span class="Apple-converted-space">      </span>btn.disabled = true;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>btn.innerText = 'Processing...';</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">      </span>const payload = {</p>
-<p class="p1"><span class="Apple-converted-space">        </span>slotId: selectedSlot.id,</p>
-<p class="p1"><span class="Apple-converted-space">        </span>email: document.getElementById('email').value,</p>
-<p class="p1"><span class="Apple-converted-space">        </span>gcashRef: document.getElementById('gcash-ref').value</p>
-<p class="p1"><span class="Apple-converted-space">      </span>};</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">      </span>try {</p>
-<p class="p1"><span class="Apple-converted-space">        </span>const res = await fetch(API_URL, {</p>
-<p class="p1"><span class="Apple-converted-space">          </span>method: 'POST',</p>
-<p class="p1"><span class="Apple-converted-space">          </span>body: JSON.stringify(payload)</p>
-<p class="p1"><span class="Apple-converted-space">        </span>});</p>
-<p class="p1"><span class="Apple-converted-space">        </span>const result = await res.json();</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>if (result.success) {</p>
-<p class="p1"><span class="Apple-converted-space">          </span>statusMsg.className = 'mt-4 p-3 bg-green-100 text-green-800 rounded-md text-center';</p>
-<p class="p1"><span class="Apple-converted-space">          </span>statusMsg.innerText = `Booking Submitted! Ref ID: ${result.bookingId}. Check your email.`;</p>
-<p class="p1"><span class="Apple-converted-space">          </span>statusMsg.classList.remove('hidden');</p>
-<p class="p1"><span class="Apple-converted-space">          </span>document.getElementById('booking-form').reset();</p>
-<p class="p1"><span class="Apple-converted-space">          </span>document.getElementById('checkout-section').classList.add('hidden');</p>
-<p class="p1"><span class="Apple-converted-space">          </span>fetchSlots();<span class="Apple-converted-space"> </span></p>
-<p class="p1"><span class="Apple-converted-space">        </span>} else {</p>
-<p class="p1"><span class="Apple-converted-space">          </span>throw new Error(result.message || 'Booking failed');</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p1"><span class="Apple-converted-space">      </span>} catch (err) {</p>
-<p class="p1"><span class="Apple-converted-space">        </span>statusMsg.className = 'mt-4 p-3 bg-red-100 text-red-800 rounded-md text-center';</p>
-<p class="p1"><span class="Apple-converted-space">        </span>statusMsg.innerText = err.message;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>statusMsg.classList.remove('hidden');</p>
-<p class="p1"><span class="Apple-converted-space">      </span>} finally {</p>
-<p class="p1"><span class="Apple-converted-space">        </span>btn.disabled = false;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>btn.innerText = 'Confirm Payment &amp; Book';</p>
-<p class="p1"><span class="Apple-converted-space">      </span>}</p>
-<p class="p1"><span class="Apple-converted-space">    </span>});</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>fetchSlots();</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;/script&gt;</p>
-<p class="p1">&lt;/body&gt;</p>
-<p class="p1">&lt;/html&gt;</p>
+<body class="bg-gray-100 min-h-screen p-4 md:p-8">
+  <div class="max-w-xl mx-auto bg-white p-6 rounded-xl shadow-md">
+    <h1 class="text-2xl font-bold text-green-700 mb-4">Book a Pickleball Court</h1>
+    
+    <!-- Step A/B: Available Slots -->
+    <div id="slot-section">
+      <h2 class="text-lg font-semibold mb-2">Available Slots</h2>
+      <div id="slots-container" class="space-y-2">
+        <p class="text-gray-500">Loading live availability...</p>
+      </div>
+    </div>
+
+    <!-- Step C/D: Checkout Modal -->
+    <div id="checkout-section" class="hidden mt-6 pt-6 border-t">
+      <h2 class="text-lg font-semibold text-gray-800 mb-2">Complete Reservation</h2>
+      <p id="selected-info" class="text-sm text-gray-600 mb-4"></p>
+      
+      <div class="bg-gray-50 p-4 rounded-lg mb-4 text-center">
+        <p class="text-xs text-gray-500 uppercase font-bold">Scan to Pay via GCash</p>
+        <img id="gcash-qr-img" src="" alt="GCash QR Code" class="w-48 h-48 mx-auto my-2 rounded border" />
+        <p id="fee-breakdown" class="text-lg font-bold text-green-800"></p>
+      </div>
+
+      <form id="booking-form" class="space-y-3">
+        <div>
+          <label class="block text-sm font-medium text-gray-700">Your Email</label>
+          <input type="email" id="email" required class="w-full mt-1 p-2 border rounded-md" placeholder="name@example.com" />
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700">GCash Reference Number</label>
+          <input type="text" id="gcash-ref" required class="w-full mt-1 p-2 border rounded-md" placeholder="13-digit reference no." />
+        </div>
+        <button type="submit" id="submit-btn" class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-2 rounded-md">
+          Confirm Payment & Book
+        </button>
+      </form>
+    </div>
+
+    <div id="status-message" class="hidden mt-4 p-3 rounded-md text-center"></div>
+  </div>
+
+  <script>
+    // ==========================================
+    // PASTE YOUR TWO LINKS HERE:
+    // ==========================================
+    const API_URL = "YOUR_APPS_SCRIPT_URL_HERE"; 
+    const QR_IMAGE_URL = "YOUR_GCASH_QR_IMAGE_URL_HERE"; 
+    // ==========================================
+
+    let selectedSlot = null;
+    document.getElementById('gcash-qr-img').src = QR_IMAGE_URL;
+
+    async function fetchSlots() {
+      const container = document.getElementById('slots-container');
+      try {
+        const res = await fetch(API_URL);
+        const slots = await res.json();
+        
+        if (slots.length === 0) {
+          container.innerHTML = '<p class="text-gray-500">No available slots right now.</p>';
+          return;
+        }
+
+        container.innerHTML = slots.map(slot => `
+          <div onclick="selectSlot(${slot.SlotID}, '${slot.CourtName}', '${slot.TimeSlot}', ${slot.Price})" 
+               class="p-3 border rounded-lg hover:border-green-500 cursor-pointer flex justify-between items-center transition">
+            <div>
+              <p class="font-bold text-gray-800">${slot.CourtName}</p>
+              <p class="text-sm text-gray-500">${slot.TimeSlot}</p>
+            </div>
+            <span class="text-green-600 font-bold">₱${slot.Price}</span>
+          </div>
+        `).join('');
+      } catch (err) {
+        container.innerHTML = '<p class="text-red-500">Failed to load slots.</p>';
+      }
+    }
+
+    function selectSlot(id, court, time, price) {
+      selectedSlot = { id, court, time, price };
+      document.getElementById('checkout-section').classList.remove('hidden');
+      document.getElementById('selected-info').innerText = `${court} | ${time}`;
+      document.getElementById('fee-breakdown').innerText = `Total: ₱${price}`;
+    }
+
+    document.getElementById('booking-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const btn = document.getElementById('submit-btn');
+      const statusMsg = document.getElementById('status-message');
+      
+      btn.disabled = true;
+      btn.innerText = 'Processing...';
+
+      const payload = {
+        slotId: selectedSlot.id,
+        email: document.getElementById('email').value,
+        gcashRef: document.getElementById('gcash-ref').value
+      };
+
+      try {
+        const res = await fetch(API_URL, {
+          method: 'POST',
+          body: JSON.stringify(payload)
+        });
+        const result = await res.json();
+
+        if (result.success) {
+          statusMsg.className = 'mt-4 p-3 bg-green-100 text-green-800 rounded-md text-center';
+          statusMsg.innerText = `Booking Submitted! Ref ID: ${result.bookingId}. Check your email.`;
+          statusMsg.classList.remove('hidden');
+          document.getElementById('booking-form').reset();
+          document.getElementById('checkout-section').classList.add('hidden');
+          fetchSlots(); 
+        } else {
+          throw new Error(result.message || 'Booking failed');
+        }
+      } catch (err) {
+        statusMsg.className = 'mt-4 p-3 bg-red-100 text-red-800 rounded-md text-center';
+        statusMsg.innerText = err.message;
+        statusMsg.classList.remove('hidden');
+      } finally {
+        btn.disabled = false;
+        btn.innerText = 'Confirm Payment & Book';
+      }
+    });
+
+    fetchSlots();
+  </script>
 </body>
 </html>
