@@ -1,344 +1,700 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="h-full bg-slate-900">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>PickleHub - Court Reservations (Sept21_Version)</title>
+  <title>PickleHub - Sept21_Version Smartphone Booking Experience</title>
+  
+  <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Google Fonts: Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  
+  <!-- FontAwesome Icons CDN -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+          },
+          colors: {
+            brand: {
+              50: '#f0fdf4',
+              100: '#dcfce7',
+              200: '#bbf7d0',
+              400: '#4ade80',
+              500: '#22c55e',
+              800: '#166534',
+              900: '#0f382c', 
+              950: '#051f17',
+            },
+            limeAccent: {
+              400: '#a3e635',
+              500: '#84cc16',
+            },
+            sand: {
+              50: '#faf9f5',
+              100: '#f4f2ea',
+              200: '#e6e2d3',
+              800: '#423e37',
+            }
+          },
+          keyframes: {
+            ballHop: {
+              '0%': { transform: 'scale(0.8) translateY(10px)', opacity: '0.5' },
+              '60%': { transform: 'scale(1.1) translateY(-6px)' },
+              '100%': { transform: 'scale(1) translateY(0)', opacity: '1' }
+            }
+          },
+          animation: {
+            'ball-hop': 'ballHop 0.6s ease-out',
+          }
+        }
+      }
+    }
+  </script>
+
   <style>
-    @keyframes bounce-slow {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-4px); }
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
     }
-    @keyframes pulse-subtle {
-      0%, 100% { opacity: 1; transform: scale(1); }
-      50% { opacity: 0.85; transform: scale(0.96); }
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
     }
-    .animate-pickleball {
-      animation: bounce-slow 1.8s ease-in-out infinite;
+    body {
+      -webkit-tap-highlight-color: transparent;
+      font-family: 'Plus Jakarta Sans', sans-serif;
     }
-    .animate-paddle {
-      animation: pulse-subtle 2s ease-in-out infinite;
+    .slot-card:active {
+      transform: scale(0.97);
+    }
+    .bounce-pop {
+      animation: ballHop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     }
   </style>
 </head>
-<body class="bg-slate-900 text-slate-100 font-sans antialiased min-h-screen flex flex-col">
+<body class="h-full flex flex-col items-center justify-start text-slate-800 antialiased selection:bg-brand-900 selection:text-white">
 
-  <!-- Header -->
-  <header class="bg-slate-900/80 backdrop-blur-md sticky top-0 z-40 border-b border-slate-800 px-4 py-4">
-    <div class="max-w-4xl mx-auto flex justify-between items-center">
-      <div class="flex items-center space-x-2.5">
-        <!-- Moving Pickleball Icon -->
-        <div class="w-10 h-10 bg-emerald-500/10 border border-emerald-500/30 rounded-xl flex items-center justify-center shadow-lg shadow-emerald-500/20 animate-paddle">
-          <svg class="w-6 h-6 text-emerald-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <!-- Paddle Silhouette -->
-            <path d="M12 2C8 2 6 5 6 9c0 3 1.5 5 3 6l-1 4a1 1 0 0 0 1 1h4a1 1 0 0 0 1-1l-1-4c1.5-1 3-3 3-4 0-4-2-7-6-7z" fill="currentColor" fill-opacity="0.2"/>
-            <path d="M12 2C8 2 6 5 6 9c0 3 1.5 5 3 6l-1 4a1 1 0 0 0 1 1h4a1 1 0 0 0 1-1l-1-4c1.5-1 3-3 3-4 0-4-2-7-6-7z"/>
-            <line x1="12" y1="20" x2="12" y2="23"/>
-            <!-- Moving Pickleball -->
-            <circle cx="17" cy="6" r="2.5" class="animate-pickleball" fill="#34d399" stroke="#065f46" stroke-width="1"/>
-          </svg>
-        </div>
-        <span class="text-xl font-black tracking-tight text-white">PickleHub</span>
-      </div>
-      <div id="selectedCountBadge" class="hidden bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-xs font-bold px-3 py-1.5 rounded-full">
-        0 Slots Selected
-      </div>
+  <header class="w-full bg-slate-950 text-white py-3 px-4 shadow-lg z-50 flex flex-wrap items-center justify-between gap-3 text-xs md:text-sm border-b border-slate-800">
+    <div class="flex items-center gap-2.5">
+      <span class="relative flex h-3 w-3">
+        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-lime-400 opacity-75"></span>
+        <span class="relative inline-flex rounded-full h-3 w-3 bg-lime-500"></span>
+      </span>
+      <span class="font-bold text-slate-100 tracking-tight">PickleHub Mobile Pro (Sept21_Version)</span>
+      <span class="bg-brand-900 text-lime-300 px-2 py-0.5 rounded-full text-[10px] font-extrabold border border-lime-500/30 uppercase tracking-wider hidden sm:inline">
+        Pasig City
+      </span>
+    </div>
+
+    <div class="flex items-center gap-2.5">
+      <button onclick="fetchSlots()" class="flex items-center gap-1.5 bg-slate-800 hover:bg-slate-700 text-slate-200 px-3 py-1.5 rounded-xl border border-slate-700 transition text-xs font-semibold cursor-pointer">
+        <i class="fa-solid fa-rotate text-lime-400"></i>
+        <span>Refresh Live</span>
+      </button>
+
+      <button onclick="toggleDeviceFrame()" id="frameToggleBtn" class="flex items-center gap-1.5 bg-slate-800 hover:bg-slate-700 text-slate-200 px-3 py-1.5 rounded-xl border border-slate-700 transition text-xs font-semibold cursor-pointer">
+        <i class="fa-solid fa-mobile-screen text-lime-400"></i>
+        <span id="frameToggleText">Full Canvas View</span>
+      </button>
+
+      <button onclick="toggleDesignNotes()" class="flex items-center gap-1.5 bg-gradient-to-r from-emerald-600 to-brand-900 hover:from-emerald-500 hover:to-brand-800 text-white px-3.5 py-1.5 rounded-xl font-bold transition shadow-md text-xs cursor-pointer">
+        <i class="fa-solid fa-bolt text-lime-300 animate-bounce"></i>
+        <span>UX Enhancements</span>
+      </button>
     </div>
   </header>
 
-  <!-- Main Container -->
-  <main class="max-w-4xl w-full mx-auto p-4 flex-1 pb-32">
+  <main class="w-full max-w-6xl flex-1 flex justify-center p-0 sm:p-6 md:p-8 transition-all">
     
-    <!-- Hero / Intro -->
-    <div class="mb-6">
-      <h1 class="text-2xl sm:text-3xl font-black tracking-tight text-white">Book Your Court</h1>
-      <p class="text-slate-400 text-sm mt-1">Select an available date and pick your preferred time slots.</p>
-    </div>
+    <div id="phoneFrame" class="w-full max-w-[420px] bg-sand-50 sm:rounded-[44px] sm:shadow-2xl sm:border-[8px] sm:border-slate-800 flex flex-col h-[100vh] sm:h-[860px] overflow-hidden relative transition-all duration-300 shadow-emerald-950/20">
+      
+      <!-- Simulated Phone Top Notch -->
+      <div class="bg-slate-950 text-white text-[11px] px-6 pt-2 pb-1 hidden sm:flex justify-between items-center z-40 select-none">
+        <span class="font-bold tracking-tight text-slate-200">7:00 AM</span>
+        <div class="w-20 h-4 bg-slate-900 rounded-full mx-auto flex items-center justify-center">
+          <div class="w-3 h-3 rounded-full bg-slate-950"></div>
+        </div>
+        <div class="flex items-center gap-1.5 text-slate-300">
+          <i class="fa-solid fa-signal text-[10px]"></i>
+          <i class="fa-solid fa-wifi text-[10px]"></i>
+          <i class="fa-solid fa-battery-full text-[12px] text-lime-400"></i>
+        </div>
+      </div>
 
-    <!-- Date Selector Bar -->
-    <div class="mb-6">
-      <label class="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-2">Select Date of Play</label>
-      <input type="date" id="bookingDateInput" class="w-full bg-slate-800 border border-slate-700 text-white font-semibold rounded-2xl px-4 py-3.5 focus:outline-none focus:border-emerald-500 transition-all shadow-sm">
-    </div>
+      <!-- App Header: Date Selector Chips -->
+      <div class="bg-white border-b border-slate-200/80 px-4 py-2.5 sticky top-0 z-30 shadow-sm">
+        <div class="flex gap-2 overflow-x-auto no-scrollbar py-1 text-center -mx-4 px-4 select-none" id="datePicker">
+          <!-- Populated dynamically via JS -->
+        </div>
+      </div>
 
-    <!-- Slots Grid Container -->
-    <div id="slotsContainer" class="space-y-4">
-      <div class="text-center py-12 text-slate-500">Loading available slots...</div>
-    </div>
+      <!-- Main Content Scrollable Area -->
+      <div class="flex-1 overflow-y-auto no-scrollbar pb-32 bg-sand-50">
+        <div class="px-4 pt-4 pb-1 flex items-center justify-between text-xs text-slate-500">
+          <span class="font-bold text-slate-800" id="currentDateLabel">Today • Schedule</span>
+          <div class="flex gap-1.5 text-[11px] font-bold">
+            <button onclick="filterSlots('all')" id="filterAll" class="px-2.5 py-0.5 rounded-lg bg-slate-900 text-white cursor-pointer">All</button>
+            <button onclick="filterSlots('morning')" id="filterMorning" class="px-2.5 py-0.5 rounded-lg bg-white border border-slate-200 text-slate-700 hover:bg-slate-50 cursor-pointer">AM</button>
+            <button onclick="filterSlots('afternoon')" id="filterAfternoon" class="px-2.5 py-0.5 rounded-lg bg-white border border-slate-200 text-slate-700 hover:bg-slate-50 cursor-pointer">PM</button>
+          </div>
+        </div>
 
+        <div class="p-4 space-y-3" id="slotsContainer">
+          <div class="p-8 text-center text-slate-400 bg-white rounded-2xl border border-slate-200">
+            <i class="fa-solid fa-circle-notch fa-spin text-2xl text-emerald-600 mb-2"></i>
+            <p class="text-xs font-semibold text-slate-600">Connecting to live court server...</p>
+          </div>
+        </div>
+      </div>
+
+      <div id="bookingDrawer" class="absolute bottom-0 left-0 right-0 bg-white/95 backdrop-blur-md border-t border-slate-200 p-4 shadow-2xl z-30 transition-all duration-300 transform translate-y-full rounded-t-3xl">
+        <div class="flex items-center justify-between mb-3">
+          <div>
+            <span class="text-[11px] uppercase tracking-wider text-slate-500 font-extrabold block">You will play</span>
+            <div class="text-sm font-black text-slate-900" id="selectedSlotsSummary">0 Hours Selected</div>
+            <div class="text-xs font-bold text-emerald-800 flex items-center gap-1.5 mt-0.5" id="selectedDateDisplay">
+              <i class="fa-regular fa-calendar-days text-emerald-700 text-[11px]"></i>
+              <span id="selectedDateText">Today</span>
+            </div>
+          </div>
+
+          <div class="text-right">
+            <div class="text-[11px] uppercase tracking-wider text-slate-500 font-extrabold">Total Amount</div>
+            <div class="text-lg font-black text-brand-900 flex items-center justify-end gap-1" id="totalPriceDisplay">
+              <span>₱0</span>
+            </div>
+          </div>
+        </div>
+
+        <button onclick="openCheckoutModal()" class="w-full py-3.5 bg-gradient-to-r from-brand-900 to-emerald-900 hover:from-brand-950 hover:to-emerald-950 text-white rounded-2xl font-black text-sm shadow-xl shadow-brand-900/25 active:scale-[0.98] transition flex items-center justify-center gap-2 cursor-pointer">
+          <span>Proceed to Payment to Book</span>
+          <i class="fa-solid fa-arrow-right text-xs"></i>
+        </button>
+      </div>
+
+    </div>
   </main>
 
-  <!-- Bottom Floating Checkout Bar -->
-  <div id="checkoutBar" class="fixed bottom-0 left-0 right-0 bg-slate-900/90 backdrop-blur-lg border-t border-slate-800 p-4 transform translate-y-full transition-transform duration-300 z-30">
-    <div class="max-w-4xl mx-auto flex items-center justify-between">
-      <div>
-        <p class="text-xs text-slate-400 uppercase tracking-wider font-bold">Total Amount</p>
-        <p id="footerTotalPrice" class="text-xl font-black text-emerald-400">₱0</p>
-      </div>
-      <button onclick="openCheckoutModal()" class="bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black px-6 py-3.5 rounded-2xl shadow-lg shadow-emerald-500/20 transition-all">
-        PROCEED TO PAYMENT
-      </button>
-    </div>
-  </div>
-
-  <!-- Checkout / Payment Modal -->
-  <div id="checkoutModal" class="hidden fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4 z-50">
-    <div class="bg-slate-900 border border-slate-800 rounded-3xl p-6 sm:p-8 max-w-md w-full shadow-2xl">
-      <div class="flex justify-between items-center mb-4">
-        <h3 class="text-xl font-black text-white">Complete Payment</h3>
-        <button onclick="closeCheckoutModal()" class="text-slate-400 hover:text-white font-bold text-xl">&times;</button>
-      </div>
-      
-      <p class="text-xs text-slate-400 mb-6">Scan the GCash QR code below or use the send money feature, then enter your reference number and email to secure your booking.</p>
-
-      <!-- GCash QR Code Simulation Box -->
-      <div class="bg-white p-4 rounded-2xl text-center mb-6">
-        <div class="w-36 h-36 mx-auto bg-slate-100 border-2 border-dashed border-slate-300 rounded-xl flex flex-col items-center justify-center text-slate-800 font-bold text-xs p-2">
-          <span class="text-blue-600 font-black text-sm mb-1">GCASH QR</span>
-          <span>PickleHub Court Rentals</span>
-          <span class="text-[10px] text-slate-500 mt-1">0917-XXX-XXXX</span>
-        </div>
-      </div>
-
-      <!-- Form Inputs -->
-      <div class="space-y-4 mb-6">
+  <div id="checkoutModal" class="fixed inset-0 bg-slate-950/70 backdrop-blur-sm z-50 flex items-end sm:items-center justify-center opacity-0 pointer-events-none transition-opacity duration-200 p-0 sm:p-4">
+    <div class="w-full max-w-md bg-white rounded-t-3xl sm:rounded-3xl p-6 shadow-2xl transform translate-y-6 transition-transform duration-200 max-h-[90vh] overflow-y-auto">
+      <div class="flex items-center justify-between mb-4 pb-3 border-b border-slate-100">
         <div>
-          <label class="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-1">Your Email Address (For Receipt)</label>
-          <input type="email" id="customerEmail" placeholder="player@example.com" class="w-full bg-slate-800 border border-slate-700 text-white rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-emerald-500">
+          <h3 class="font-black text-slate-900 text-lg">Complete Reservation</h3>
+          <p class="text-xs text-slate-500">PickleHub Pasig Court Complex</p>
         </div>
-        <div>
-          <label class="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-1">GCash Reference Number (13 digits)</label>
-          <input type="text" id="gcashRef" placeholder="e.g. 1234567890123" maxlength="13" class="w-full bg-slate-800 border border-slate-700 text-white rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-emerald-500">
-        </div>
+        <button onclick="closeCheckoutModal()" class="w-8 h-8 rounded-full bg-slate-100 text-slate-500 flex items-center justify-center hover:bg-slate-200 cursor-pointer">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
       </div>
 
-      <button onclick="submitBooking()" id="confirmPayBtn" class="w-full bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black py-4 rounded-2xl transition-all shadow-lg shadow-emerald-500/20">
-        CONFIRM PAYMENT & BOOK
-      </button>
-    </div>
-  </div>
-
-  <!-- Success Modal Confirmation View -->
-  <div id="successModal" class="hidden fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 z-50">
-    <div class="bg-white rounded-3xl p-6 sm:p-8 max-w-md w-full shadow-2xl text-center transform transition-all text-slate-900">
-      
-      <!-- Eye-Catching Checkmark Icon -->
-      <div class="w-20 h-20 bg-gradient-to-tr from-emerald-600 to-emerald-400 rounded-3xl mx-auto flex items-center justify-center shadow-lg shadow-emerald-500/30 mb-6">
-        <svg class="w-10 h-10 text-white stroke-[3]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path>
-        </svg>
-      </div>
-
-      <!-- Dynamic Title -->
-      <h2 id="successModalTitle" class="text-2xl font-black text-slate-900 tracking-tight mb-2">Court Locked in to - See you at the Hub!</h2>
-      <p class="text-slate-500 text-sm mb-6">Your reservation receipt has been sent to your email.</p>
-
-      <!-- Receipt Details Container -->
-      <div class="bg-slate-50 border border-slate-100 rounded-2xl p-4 text-left space-y-3 mb-6">
-        <div class="flex justify-between text-sm">
-          <span class="text-slate-500">Booking ID:</span>
-          <span id="modalBookingId" class="font-bold text-emerald-800">#BK-8684</span>
+      <!-- Booking Summary Box -->
+      <div class="bg-sand-50 rounded-2xl p-4 border border-slate-200 mb-4 space-y-2 text-xs">
+        <div class="flex justify-between">
+          <span class="text-slate-500">Courts:</span>
+          <span class="font-bold text-slate-800" id="modalCourtName">Court 1</span>
         </div>
-        <div class="flex justify-between text-sm">
+        <div class="flex justify-between">
           <span class="text-slate-500">Date:</span>
-          <span id="modalDate" class="font-bold text-slate-800">Mon, Sep 21</span>
+          <span class="font-bold text-slate-800" id="modalDate">Today</span>
         </div>
-        <div class="flex justify-between text-sm">
-          <span class="text-slate-500">Total Duration:</span>
-          <span id="modalDuration" class="font-bold text-slate-800">1 Hour(s) Session</span>
+        <div class="pt-1 pb-1">
+          <span class="text-slate-500 block mb-1">Time Slots:</span>
+          <div id="modalItemizedBreakdown" class="space-y-1 pl-2 border-l-2 border-emerald-500/30 text-slate-700 font-semibold">
+            <!-- Itemized slots injected here -->
+          </div>
+        </div>
+
+        <div class="pt-2 border-t border-slate-200 flex justify-between text-sm font-black text-slate-900">
+          <span>Total Payable:</span>
+          <span class="text-brand-900" id="modalTotal">₱0</span>
         </div>
       </div>
 
-      <!-- Done Button -->
-      <button onclick="closeSuccessModal()" class="w-full bg-slate-900 hover:bg-slate-800 text-white font-bold py-4 rounded-2xl transition-all shadow-lg shadow-slate-900/10">
-        DONE & BACK TO SCHEDULE
+      <!-- GCash QR Box -->
+      <div class="bg-slate-50 border border-slate-200/80 rounded-2xl p-4 mb-4 text-center">
+        <span class="text-[11px] font-extrabold text-slate-500 uppercase tracking-wider block mb-2">Scan GCash QR Code</span>
+        
+        <div class="bg-white p-2 rounded-xl w-40 h-40 mx-auto border border-slate-200 shadow-inner flex items-center justify-center">
+          <img id="gcash-qr-img" src="" alt="GCash QR Code" class="w-full h-full object-contain rounded-lg" onerror="this.src='https://placehold.co/160x160/22c55e/ffffff?text=GCash+QR'" />
+        </div>
+        <p class="text-[11px] text-slate-600 mt-2 font-bold">Kindly settle total payable to book your slot. Thank you!</p>
+      </div>
+
+      <!-- Booking Form -->
+      <form id="booking-form" class="space-y-3.5" onsubmit="submitBooking(event)">
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1">Email Address <span class="text-emerald-600">*</span></label>
+          <input type="email" id="email" required placeholder="you@example.com" 
+                 class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3.5 py-2.5 text-xs text-slate-900 focus:outline-none focus:ring-2 focus:ring-brand-900 transition" />
+          <p class="text-[10px] text-slate-500 mt-1">Confirmation receipt will be sent here.</p>
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1">GCash Reference Number <span class="text-emerald-600">*</span></label>
+          <input type="text" id="gcash-ref" required placeholder="13-digit transaction ref no." 
+                 class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3.5 py-2.5 text-xs text-slate-900 focus:outline-none focus:ring-2 focus:ring-brand-900 transition" />
+        </div>
+
+        <button type="submit" id="submit-btn" 
+                class="w-full py-3.5 bg-gradient-to-r from-brand-900 to-emerald-900 hover:from-brand-950 hover:to-emerald-950 text-white font-black rounded-2xl shadow-lg transition text-xs flex items-center justify-center gap-2 mt-2 cursor-pointer">
+          <i class="fa-solid fa-lock text-xs"></i>
+          <span>Confirm Payment & Book Slot</span>
+        </button>
+      </form>
+
+      <div id="status-message" class="hidden mt-3 p-3 rounded-xl text-center text-xs font-semibold"></div>
+    </div>
+  </div>
+
+  <div id="successModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-md z-50 flex items-center justify-center opacity-0 pointer-events-none transition-opacity duration-300 p-4">
+    <div class="w-full max-w-sm bg-white rounded-3xl p-6 shadow-2xl text-center transform scale-95 transition-transform duration-300 space-y-4">
+      <div class="w-20 h-20 mx-auto rounded-3xl bg-gradient-to-tr from-brand-900 to-emerald-500 flex items-center justify-center text-lime-300 text-3xl shadow-xl bounce-pop">
+        <i class="fa-solid fa-trophy"></i>
+      </div>
+      <div>
+        <h3 class="font-black text-slate-900 text-xl tracking-tight">Court Locked In!</h3>
+        <p class="text-xs text-slate-500 mt-1">Your reservation receipt has been sent to your email.</p>
+      </div>
+      <div class="bg-sand-50 p-3.5 rounded-2xl border border-slate-200/80 text-left text-xs space-y-1.5">
+        <div class="flex justify-between">
+          <span class="text-slate-500">Booking ID:</span>
+          <span class="font-mono font-bold text-brand-900" id="successCode">#BK-9821</span>
+        </div>
+        <div class="flex justify-between">
+          <span class="text-slate-500">Date:</span>
+          <span class="font-semibold text-slate-800" id="successDate">Today</span>
+        </div>
+        <div class="flex justify-between">
+          <span class="text-slate-500">Total Duration:</span>
+          <span class="font-extrabold text-brand-900" id="successDuration">1 Hour Session</span>
+        </div>
+      </div>
+      <button onclick="closeSuccessModal()" class="w-full py-3.5 bg-slate-900 hover:bg-slate-950 text-white font-extrabold rounded-2xl text-xs uppercase tracking-wider transition cursor-pointer">
+        Done & Back to Schedule
       </button>
     </div>
   </div>
 
-  <!-- Frontend JavaScript Logic -->
+  <div id="notesModal" class="fixed inset-0 bg-slate-950/70 backdrop-blur-sm z-50 flex items-center justify-center p-4 opacity-0 pointer-events-none transition-opacity duration-200">
+    <div class="w-full max-w-lg bg-white rounded-3xl p-6 shadow-2xl max-h-[85vh] overflow-y-auto">
+      <div class="flex items-center justify-between mb-4 border-b border-slate-100 pb-3">
+        <div class="flex items-center gap-2">
+          <div class="w-8 h-8 rounded-xl bg-lime-400 text-slate-950 flex items-center justify-center font-bold">
+            <i class="fa-solid fa-wand-magic-sparkles"></i>
+          </div>
+          <h3 class="font-black text-slate-900 text-lg">UX & Smartphone Architecture (Sept21_Version)</h3>
+        </div>
+        <button onclick="toggleDesignNotes()" class="w-8 h-8 rounded-full bg-slate-100 text-slate-500 flex items-center justify-center hover:bg-slate-200 cursor-pointer">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+      <div class="space-y-3.5 text-xs sm:text-sm text-slate-600">
+        <div class="p-3.5 bg-sand-50 rounded-2xl border border-slate-200">
+          <div class="font-extrabold text-slate-900 text-sm mb-1">1. Dynamic Date Bar & Past Slot Filtering</div>
+          <p class="text-slate-600 text-xs">Past slots for today are completely hidden, keeping the interface clean and actionable.</p>
+        </div>
+        <div class="p-3.5 bg-sand-50 rounded-2xl border border-slate-200">
+          <div class="font-extrabold text-slate-900 text-sm mb-1">2. Itemized Pricing & Simplified Checkout</div>
+          <p class="text-slate-600 text-xs">Checkout displays clear itemized breakdowns per hour/court with unified GCash integration.</p>
+        </div>
+      </div>
+      <div class="mt-5">
+        <button onclick="toggleDesignNotes()" class="w-full py-3 bg-slate-900 text-white font-extrabold rounded-2xl text-xs uppercase tracking-wider cursor-pointer">
+          Got It, Back to App
+        </button>
+      </div>
+    </div>
+  </div>
+
   <script>
-    // Replace with your active Google Apps Script Web App URL
-    const WEB_APP_URL = "YOUR_APPS_SCRIPT_WEB_APP_URL_HERE";
+    const API_URL = "https://script.google.com/macros/s/AKfycbxjcGWN_iyGH26kuzwY_FX7qnHn365D3evpZ-cqZxYoRNO6IrmIgIJC2BVlwG6PiLIxXQ/exec"; 
+    const QR_IMAGE_URL = "https://i.postimg.cc/cLdL90D5/IMG-3613.jpg"; 
 
-    let allSlots = [];
-    let selectedSlotIds = [];
+    const STANDARD_TIMES = [
+      { id: 's1', startHour: 7, time: '7:00 AM - 8:00 AM', period: 'morning', price: 350 },
+      { id: 's2', startHour: 8, time: '8:00 AM - 9:00 AM', period: 'morning', price: 350 },
+      { id: 's3', startHour: 9, time: '9:00 AM - 10:00 AM', period: 'morning', price: 350 },
+      { id: 's4', startHour: 10, time: '10:00 AM - 11:00 AM', period: 'morning', price: 350 },
+      { id: 's5', startHour: 11, time: '11:00 AM - 12:00 PM', period: 'morning', price: 350 },
+      { id: 's6', startHour: 12, time: '12:00 PM - 1:00 PM', period: 'afternoon', price: 350 },
+      { id: 's7', startHour: 13, time: '1:00 PM - 2:00 PM', period: 'afternoon', price: 350 },
+      { id: 's8', startHour: 14, time: '2:00 PM - 3:00 PM', period: 'afternoon', price: 350 },
+      { id: 's9', startHour: 15, time: '3:00 PM - 4:00 PM', period: 'afternoon', price: 350 },
+      { id: 's10', startHour: 16, time: '4:00 PM - 5:00 PM', period: 'afternoon', price: 350 },
+      { id: 's11', startHour: 17, time: '5:00 PM - 6:00 PM', period: 'afternoon', price: 350 },
+      { id: 's12', startHour: 18, time: '6:00 PM - 7:00 PM', period: 'afternoon', price: 350 },
+      { id: 's13', startHour: 19, time: '7:00 PM - 8:00 PM', period: 'afternoon', price: 350 },
+      { id: 's14', startHour: 20, time: '8:00 PM - 9:00 PM', period: 'afternoon', price: 350 },
+      { id: 's15', startHour: 21, time: '9:00 PM - 10:00 PM', period: 'afternoon', price: 350 },
+      { id: 's16', startHour: 22, time: '10:00 PM - 11:00 PM', period: 'afternoon', price: 350 }
+    ];
 
-    // Set default date to today
-    window.addEventListener('DOMContentLoaded', () => {
-      const todayStr = new Date().toISOString().split('T')[0];
-      document.getElementById('bookingDateInput').value = todayStr;
+    let daysList = [];
+    let selectedDateObj = null;
+    let selectedDateStr = "";
+    let selectedSlots = [];
+    let activeFilter = 'all';
+    let slotMap = {};
+    let isFullCanvas = false;
+
+    document.getElementById('gcash-qr-img').src = QR_IMAGE_URL;
+
+    function normalizeTimeSlot(t) {
+      if (!t) return '';
+      return t.trim().replace(/^0/, '').replace(/ 0/, ' ');
+    }
+
+    function initDates() {
+      const now = new Date();
+      daysList = [];
+      const dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+      const fullDayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+      
+      for (let i = 0; i < 7; i++) {
+        const d = new Date(now);
+        d.setDate(now.getDate() + i);
+        
+        const day = dayNames[d.getDay()];
+        const fullDay = fullDayNames[d.getDay()];
+        const dateNum = String(d.getDate()).padStart(2, '0');
+        const monthNum = String(d.getMonth() + 1).padStart(2, '0');
+        const dateStr = `${day}, ${d.toLocaleString('default', { month: 'short' })} ${dateNum}`;
+
+        daysList.push({
+          day,
+          date: dateNum,
+          fullDay,
+          month: monthNum,
+          str: dateStr,
+          isToday: i === 0,
+          rawDate: d
+        });
+      }
+
+      selectedDateObj = daysList[0];
+      selectedDateStr = selectedDateObj.str;
+    }
+
+    window.onload = function() {
+      initDates();
+      renderDatePicker();
       fetchSlots();
-    });
+    };
 
-    document.getElementById('bookingDateInput').addEventListener('change', fetchSlots);
+    function renderDatePicker() {
+      const container = document.getElementById('datePicker');
+      container.innerHTML = daysList.map((d, i) => `
+        <button onclick="selectDate(this, ${i})" class="date-chip flex-shrink-0 w-12 py-2 rounded-2xl ${i === 0 ? 'bg-brand-900 text-white shadow-sm border border-brand-900' : 'bg-white text-slate-700 border border-slate-200 hover:border-slate-300'} flex flex-col items-center transition cursor-pointer">
+          <span class="text-[10px] uppercase font-bold tracking-wider ${i === 0 ? 'text-lime-300' : 'text-slate-400'}">${d.day}</span>
+          <span class="text-base font-black leading-tight">${d.date}</span>
+        </button>
+      `).join('');
+    }
+
+    function selectDate(btn, dayIdx) {
+      selectedDateObj = daysList[dayIdx];
+      selectedDateStr = selectedDateObj.str;
+      
+      document.querySelectorAll('.date-chip').forEach(b => {
+        b.className = "date-chip flex-shrink-0 w-12 py-2 rounded-2xl bg-white text-slate-700 border border-slate-200 hover:border-slate-300 flex flex-col items-center transition cursor-pointer";
+        b.querySelector('span').className = "text-[10px] uppercase font-bold tracking-wider text-slate-400";
+      });
+      btn.className = "date-chip flex-shrink-0 w-12 py-2 rounded-2xl bg-brand-900 text-white shadow-sm border border-brand-900 flex flex-col items-center transition cursor-pointer";
+      btn.querySelector('span').className = "text-[10px] uppercase font-bold tracking-wider text-lime-300";
+      
+      document.getElementById('currentDateLabel').textContent = `${selectedDateStr} • Schedule`;
+      selectedSlots = [];
+      updateBottomDrawer();
+      renderSchedule();
+    }
 
     async function fetchSlots() {
       const container = document.getElementById('slotsContainer');
-      container.innerHTML = '<div class="text-center py-12 text-slate-500">Loading available slots...</div>';
-      
+      container.innerHTML = `
+        <div class="p-8 text-center text-slate-400 bg-white rounded-2xl border border-slate-200">
+          <i class="fa-solid fa-circle-notch fa-spin text-2xl text-emerald-600 mb-2"></i>
+          <p class="text-xs font-semibold text-slate-600">Connecting to live court server...</p>
+        </div>
+      `;
+
       try {
-        const response = await fetch(WEB_APP_URL);
-        allSlots = await response.json();
-        renderSlots();
+        const res = await fetch(API_URL);
+        const openSlots = await res.json();
+
+        slotMap = {};
+        if (Array.isArray(openSlots)) {
+          openSlots.forEach(s => {
+            const key = `${normalizeTimeSlot(s.TimeSlot)}|${s.CourtName.trim()}`;
+            slotMap[key] = s;
+          });
+        }
+        renderSchedule();
       } catch (err) {
-        container.innerHTML = '<div class="text-center py-12 text-rose-400">Failed to load schedule. Please check connection.</div>';
+        console.warn('Backend connection fallback:', err);
+        slotMap = {};
+        renderSchedule();
       }
     }
 
-    function renderSlots() {
+    function renderSchedule() {
       const container = document.getElementById('slotsContainer');
       container.innerHTML = '';
 
-      // Group slots by Court Name
-      const courtsMap = {};
-      allSlots.forEach(slot => {
-        if (!courtsMap[slot.CourtName]) {
-          courtsMap[slot.CourtName] = [];
+      const now = new Date();
+      const currentHour = now.getHours();
+      let visibleSlotsCount = 0;
+
+      STANDARD_TIMES.forEach((slot) => {
+        if (activeFilter !== 'all' && slot.period !== activeFilter) return;
+
+        // Completely hide past slots for today
+        if (selectedDateObj.isToday && slot.startHour < currentHour) {
+          return;
         }
-        courtsMap[slot.CourtName].push(slot);
+
+        visibleSlotsCount++;
+        const card = document.createElement('div');
+        card.className = "bg-white rounded-2xl p-3.5 border border-slate-200 shadow-sm space-y-2.5 transition hover:shadow-md";
+
+        let cardHTML = `
+          <div class="flex items-center justify-between border-b border-slate-100 pb-2">
+            <span class="text-sm font-extrabold text-slate-900">${slot.time}</span>
+            <span class="text-[11px] text-slate-500 font-bold">₱${slot.price}/hr</span>
+          </div>
+          <div class="grid grid-cols-3 gap-2 pt-0.5">
+        `;
+
+        [1, 2, 3].forEach(courtNum => {
+          const courtName = `Court ${courtNum}`;
+          const normalizedTime = normalizeTimeSlot(slot.time);
+          const key = `${normalizedTime}|${courtName}`;
+          
+          const liveSlot = slotMap[key];
+          const isAvailable = Object.keys(slotMap).length === 0 ? true : (liveSlot && liveSlot.Status === 'Available');
+          const slotId = liveSlot ? liveSlot.SlotID : `${slot.id}-c${courtNum}`;
+
+          const isSelected = selectedSlots.some(s => normalizeTimeSlot(s.time) === normalizedTime && s.court === courtNum);
+
+          if (isSelected) {
+            cardHTML += `
+              <button onclick="toggleSlotSelection('${slot.time}', ${courtNum}, '${slotId}', ${slot.price})" class="py-2.5 px-1 rounded-xl bg-brand-900 text-white font-black text-xs flex flex-col items-center justify-center gap-0.5 border border-brand-900 shadow-sm bounce-pop cursor-pointer">
+                <span class="text-[9px] uppercase font-bold text-lime-300">Court ${courtNum}</span>
+                <span class="flex items-center gap-1 text-[11px]"><i class="fa-solid fa-check text-[10px]"></i> Selected</span>
+              </button>
+            `;
+          } else if (isAvailable) {
+            cardHTML += `
+              <button onclick="toggleSlotSelection('${slot.time}', ${courtNum}, '${slotId}', ${slot.price})" class="py-2.5 px-1 rounded-xl bg-emerald-50/70 hover:bg-emerald-100 border border-emerald-600/30 text-brand-900 font-extrabold text-xs flex flex-col items-center justify-center gap-0.5 transition active:scale-95 cursor-pointer">
+                <span class="text-[9px] uppercase font-bold text-slate-500">Court ${courtNum}</span>
+                <span class="text-[11px] text-emerald-800 font-bold">Available</span>
+              </button>
+            `;
+          } else {
+            cardHTML += `
+              <div class="py-2.5 px-1 rounded-xl bg-slate-100 border border-slate-200/60 text-slate-400 font-semibold text-xs flex flex-col items-center justify-center gap-0.5 opacity-60 select-none">
+                <span class="text-[9px] uppercase font-medium text-slate-400">Court ${courtNum}</span>
+                <span class="text-[10px] font-medium text-slate-400">Booked</span>
+              </div>
+            `;
+          }
+        });
+
+        cardHTML += `</div>`;
+        card.innerHTML = cardHTML;
+        container.appendChild(card);
       });
 
-      for (const [courtName, slots] of Object.entries(courtsMap)) {
-        const courtCard = document.createElement('div');
-        courtCard.className = "bg-slate-800/50 border border-slate-800 rounded-3xl p-5 mb-4";
-        
-        let slotsHTML = `<h2 class="text-lg font-bold text-white mb-3">${courtName}</h2><div class="grid grid-cols-2 sm:grid-cols-3 gap-2.5">`;
-        
-        slots.forEach(slot => {
-          const isSelected = selectedSlotIds.includes(slot.SlotID);
-          const isBooked = slot.Status !== "Available";
-          
-          let btnClass = "border rounded-xl p-3 text-left transition-all text-xs font-semibold ";
-          if (isBooked) {
-            btnClass += "bg-slate-900/50 border-slate-800 text-slate-600 cursor-not-allowed line-through";
-          } else if (isSelected) {
-            btnClass += "bg-emerald-500 border-emerald-400 text-slate-950 shadow-md shadow-emerald-500/20 ring-2 ring-emerald-400";
-          } else {
-            btnClass += "bg-slate-800 border-slate-700 text-slate-200 hover:border-slate-600";
-          }
-
-          slotsHTML += `
-            <button onclick="toggleSlot('${slot.SlotID}')" ${isBooked ? 'disabled' : ''} class="${btnClass}">
-              <div class="font-bold">${slot.TimeSlot}</div>
-              <div class="opacity-75 mt-0.5">₱${slot.Price}</div>
-            </button>
-          `;
-        });
-
-        slotsHTML += `</div>`;
-        courtCard.innerHTML = slotsHTML;
-        container.appendChild(courtCard);
+      if (visibleSlotsCount === 0) {
+        container.innerHTML = `
+          <div class="p-8 text-center text-slate-500 bg-white rounded-2xl border border-slate-200">
+            <i class="fa-solid fa-moon text-3xl text-slate-300 mb-2"></i>
+            <p class="text-xs font-bold text-slate-700">No more upcoming slots for this day.</p>
+            <p class="text-[11px] text-slate-400 mt-1">Please select another date above.</p>
+          </div>
+        `;
       }
     }
 
-    function toggleSlot(slotId) {
-      const index = selectedSlotIds.indexOf(slotId);
-      if (index > -1) {
-        selectedSlotIds.splice(index, 1);
+    function toggleSlotSelection(time, courtNum, slotId, price) {
+      const existingIndex = selectedSlots.findIndex(s => s.time === time && s.court === courtNum);
+
+      if (existingIndex > -1) {
+        selectedSlots.splice(existingIndex, 1);
       } else {
-        selectedSlotIds.push(slotId);
+        selectedSlots.push({
+          slotId: slotId,
+          time: time,
+          court: courtNum,
+          price: price
+        });
       }
-      updateUIState();
+
+      renderSchedule();
+      updateBottomDrawer();
     }
 
-    function updateUIState() {
-      renderSlots();
-      
-      const checkoutBar = document.getElementById('checkoutBar');
-      const badge = document.getElementById('selectedCountBadge');
-      
-      if (selectedSlotIds.length > 0) {
-        checkoutBar.classList.remove('translate-y-full');
-        badge.classList.remove('hidden');
-        badge.textContent = selectedSlotIds.length + (selectedSlotIds.length === 1 ? ' Slot Selected' : ' Slots Selected');
-        
-        let total = 0;
-        selectedSlotIds.length > 0 && selectedSlotIds.forEach(id => {
-          const found = allSlots.find(s => s.SlotID.toString() === id.toString());
-          if (found) total += Number(found.Price);
-        });
-        document.getElementById('footerTotalPrice').textContent = "₱" + total.toLocaleString();
+    function updateBottomDrawer() {
+      const drawer = document.getElementById('bookingDrawer');
+      const countEl = document.getElementById('selectedSlotsSummary');
+      const dateEl = document.getElementById('selectedDateText');
+      const priceEl = document.getElementById('totalPriceDisplay');
+
+      if (selectedSlots.length > 0) {
+        const baseTotal = selectedSlots.reduce((sum, item) => sum + item.price, 0);
+        const courtsUsed = [...new Set(selectedSlots.map(s => s.court))];
+        const courtLabel = courtsUsed.length > 1 ? `Courts ${courtsUsed.join(', ')}` : `Court ${courtsUsed[0]}`;
+
+        countEl.textContent = `${selectedSlots.length} ${selectedSlots.length === 1 ? 'Hour' : 'Hours'} • ${courtLabel}`;
+
+        const dayTag = selectedDateObj.isToday ? `Today, ${selectedDateObj.month}-${selectedDateObj.date}` : `${selectedDateObj.fullDay}, ${selectedDateObj.month}-${selectedDateObj.date}`;
+        if (dateEl) dateEl.textContent = dayTag;
+
+        priceEl.innerHTML = `<span>₱${baseTotal.toLocaleString()}</span>`;
+        drawer.classList.remove('translate-y-full');
       } else {
-        checkoutBar.classList.add('translate-y-full');
-        badge.classList.add('hidden');
+        drawer.classList.add('translate-y-full');
       }
+    }
+
+    function filterSlots(type) {
+      activeFilter = type;
+      ['All', 'Morning', 'Afternoon'].forEach(name => {
+        const btn = document.getElementById(`filter${name}`);
+        if (name.toLowerCase() === type) {
+          btn.className = "px-2.5 py-0.5 rounded-lg bg-slate-900 text-white font-bold cursor-pointer";
+        } else {
+          btn.className = "px-2.5 py-0.5 rounded-lg bg-white border border-slate-200 text-slate-700 hover:bg-slate-50 cursor-pointer";
+        }
+      });
+      renderSchedule();
     }
 
     function openCheckoutModal() {
-      document.getElementById('checkoutModal').classList.remove('hidden');
+      if (selectedSlots.length === 0) return;
+
+      const modal = document.getElementById('checkoutModal');
+      const baseTotal = selectedSlots.reduce((sum, item) => sum + item.price, 0);
+      const courtsUsed = [...new Set(selectedSlots.map(s => s.court))];
+
+      document.getElementById('modalCourtName').textContent = courtsUsed.length > 1 ? `Courts ${courtsUsed.join(', ')}` : `Court ${courtsUsed[0]}`;
+      document.getElementById('modalDate').textContent = selectedDateStr;
+
+      // Itemized Breakdown Generation
+      const breakdownContainer = document.getElementById('modalItemizedBreakdown');
+      breakdownContainer.innerHTML = selectedSlots.map(s => `
+        <div class="flex justify-between text-xs py-0.5">
+          <span>Court ${s.court}, ${s.time}</span>
+          <span class="font-bold text-slate-900">₱${s.price}</span>
+        </div>
+      `).join('');
+
+      document.getElementById('modalTotal').textContent = `₱${baseTotal.toLocaleString()}`;
+
+      modal.classList.remove('opacity-0', 'pointer-events-none');
+      modal.querySelector('div').classList.remove('translate-y-6');
     }
 
     function closeCheckoutModal() {
-      document.getElementById('checkoutModal').classList.add('hidden');
+      const modal = document.getElementById('checkoutModal');
+      modal.classList.add('opacity-0', 'pointer-events-none');
+      document.getElementById('status-message').classList.add('hidden');
     }
 
-    async function submitBooking() {
-      const email = document.getElementById('customerEmail').value.trim();
-      const gcashRef = document.getElementById('gcashRef').value.trim();
-      const date = document.getElementById('bookingDateInput').value;
+    async function submitBooking(event) {
+      event.preventDefault();
+      const submitBtn = document.getElementById('submit-btn');
+      const statusMsg = document.getElementById('status-message');
+      const email = document.getElementById('email').value;
+      const gcashRef = document.getElementById('gcash-ref').value;
 
-      if (!email || !email.includes('@')) {
-        alert('Please enter a valid email address.');
-        return;
-      }
-      if (gcashRef.length < 10) {
-        alert('Please enter a valid GCash reference number.');
-        return;
-      }
-
-      const btn = document.getElementById('confirmPayBtn');
-      btn.textContent = "PROCESSING...";
-      btn.disabled = true;
-
-      const payload = {
-        email: email,
-        gcashRef: gcashRef,
-        date: date,
-        slots: selectedSlotIds.map(id => {
-          return allSlots.find(s => s.SlotID.toString() === id.toString());
-        })
-      };
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = `<i class="fa-solid fa-circle-notch fa-spin"></i> Processing Booking...`;
+      statusMsg.className = "hidden mt-3 p-3 rounded-xl text-center text-xs font-semibold";
 
       try {
-        const response = await fetch(WEB_APP_URL, {
+        const payload = {
+          date: selectedDateStr,
+          email: email,
+          gcashRef: gcashRef,
+          slots: selectedSlots.map(s => ({
+            slotId: s.slotId,
+            courtName: `Court ${s.court}`,
+            timeSlot: s.time,
+            price: s.price
+          }))
+        };
+
+        const response = await fetch(API_URL, {
           method: 'POST',
+          mode: 'no-cors',
+          headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(payload)
         });
-        const result = await response.json();
 
-        if (result.status === "success") {
-          closeCheckoutModal();
-          showSuccessModal(payload.slots, date);
-          selectedSlotIds = [];
-          updateUIState();
-          fetchSlots();
-        } else {
-          alert("Booking failed: " + result.message);
-        }
+        // Success state handler
+        closeCheckoutModal();
+        openSuccessModal(payload);
+        selectedSlots = [];
+        updateBottomDrawer();
+        fetchSlots();
+
       } catch (err) {
-        alert("Network error occurred. Please try again.");
+        console.error(err);
+        statusMsg.textContent = "Network error while submitting. Please try again.";
+        statusMsg.className = "mt-3 p-3 rounded-xl text-center text-xs font-semibold bg-red-100 text-red-700 block";
       } finally {
-        btn.textContent = "CONFIRM PAYMENT & BOOK";
-        btn.disabled = false;
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = `<i class="fa-solid fa-lock text-xs"></i><span>Confirm Payment & Book Slot</span>`;
       }
     }
 
-    function showSuccessModal(slotsList, bookingDate) {
-      const titleElement = document.getElementById('successModalTitle');
-      // Set requested success text
-      titleElement.textContent = "Court Locked in to - See you at the Hub!";
+    function openSuccessModal(data) {
+      const modal = document.getElementById('successModal');
+      document.getElementById('successCode').textContent = `#BK-${Math.floor(1000 + Math.random() * 9000)}`;
+      document.getElementById('successDate').textContent = selectedDateStr;
+      document.getElementById('successDuration').textContent = `${data.slots.length} Hour Session`;
 
-      document.getElementById('modalBookingId').textContent = "#BK-" + Math.floor(1000 + Math.random() * 9000);
-      document.getElementById('modalDate').textContent = bookingDate;
-      document.getElementById('modalDuration').textContent = slotsList.length + " Hour(s) Session";
-
-      document.getElementById('successModal').classList.remove('hidden');
+      modal.classList.remove('opacity-0', 'pointer-events-none');
+      modal.querySelector('div').classList.remove('scale-95');
     }
 
     function closeSuccessModal() {
-      document.getElementById('successModal').classList.add('hidden');
+      const modal = document.getElementById('successModal');
+      modal.classList.add('opacity-0', 'pointer-events-none');
+      document.getElementById('email').value = '';
+      document.getElementById('gcash-ref').value = '';
+    }
+
+    function toggleDeviceFrame() {
+      isFullCanvas = !isFullCanvas;
+      const frame = document.getElementById('phoneFrame');
+      const btnText = document.getElementById('frameToggleText');
+
+      if (isFullCanvas) {
+        frame.className = "w-full max-w-4xl bg-sand-50 sm:rounded-[32px] sm:shadow-2xl sm:border-[8px] sm:border-slate-800 flex flex-col h-[100vh] sm:h-[860px] overflow-hidden relative transition-all duration-300 shadow-emerald-950/20";
+        btnText.textContent = "Phone Frame View";
+      } else {
+        frame.className = "w-full max-w-[420px] bg-sand-50 sm:rounded-[44px] sm:shadow-2xl sm:border-[8px] sm:border-slate-800 flex flex-col h-[100vh] sm:h-[860px] overflow-hidden relative transition-all duration-300 shadow-emerald-950/20";
+        btnText.textContent = "Full Canvas View";
+      }
+    }
+
+    function toggleDesignNotes() {
+      const modal = document.getElementById('notesModal');
+      const isVisible = !modal.classList.contains('opacity-0');
+      if (isVisible) {
+        modal.classList.add('opacity-0', 'pointer-events-none');
+      } else {
+        modal.classList.remove('opacity-0', 'pointer-events-none');
+      }
     }
   </script>
 </body>
