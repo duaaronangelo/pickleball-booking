@@ -5,46 +5,114 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Pickleball Court Reservation</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+  </style>
 </head>
-<body class="bg-gray-100 min-h-screen p-4 md:p-8">
-  <div class="max-w-xl mx-auto bg-white p-6 rounded-xl shadow-md">
-    <h1 class="text-2xl font-bold text-green-700 mb-4">Book a Pickleball Court</h1>
-    
-    <!-- Step A/B: Available Slots -->
-    <div id="slot-section">
-      <h2 class="text-lg font-semibold mb-2">Available Slots</h2>
-      <div id="slots-container" class="space-y-2">
-        <p class="text-gray-500">Loading live availability...</p>
+<body class="bg-slate-900 text-slate-100 min-h-screen pb-12">
+
+  <!-- Navigation Bar -->
+  <header class="bg-slate-800/80 backdrop-blur-md border-b border-slate-700 sticky top-0 z-30">
+    <div class="max-w-4xl mx-auto px-4 py-4 flex items-center justify-between">
+      <div class="flex items-center space-x-3">
+        <div class="w-10 h-10 bg-emerald-500 rounded-xl flex items-center justify-center text-slate-900 font-extrabold text-xl shadow-lg shadow-emerald-500/20">
+          🎾
+        </div>
+        <div>
+          <h1 class="font-extrabold text-lg tracking-tight text-white leading-tight">PickleHub Courts</h1>
+          <p class="text-xs text-slate-400">Pasig City, Metro Manila</p>
+        </div>
+      </div>
+      <div class="flex items-center space-x-2 bg-slate-900/60 px-3 py-1.5 rounded-full border border-slate-700 text-xs text-slate-300">
+        <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+        <span>Live Availability</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="max-w-4xl mx-auto px-4 pt-8">
+
+    <!-- Hero Announcement -->
+    <div class="bg-gradient-to-r from-emerald-600 to-teal-700 rounded-2xl p-6 mb-8 text-white shadow-xl relative overflow-hidden">
+      <div class="relative z-10">
+        <span class="bg-emerald-900/40 text-emerald-100 text-xs font-semibold px-2.5 py-1 rounded-md uppercase tracking-wider">Instant Booking</span>
+        <h2 class="text-2xl font-extrabold mt-2 mb-1">Reserve Your Pickleball Court</h2>
+        <p class="text-emerald-100 text-sm max-w-lg">No account creation required. Select your slot, pay via GCash, and receive instant confirmation.</p>
       </div>
     </div>
 
-    <!-- Step C/D: Checkout Modal -->
-    <div id="checkout-section" class="hidden mt-6 pt-6 border-t">
-      <h2 class="text-lg font-semibold text-gray-800 mb-2">Complete Reservation</h2>
-      <p id="selected-info" class="text-sm text-gray-600 mb-4"></p>
+    <!-- Section Header -->
+    <div class="flex items-center justify-between mb-6">
+      <div>
+        <h3 class="text-xl font-bold text-white">Available Time Slots</h3>
+        <p class="text-xs text-slate-400">Click on any open slot to proceed to reservation</p>
+      </div>
+      <button onclick="fetchSlots()" class="text-xs bg-slate-800 hover:bg-slate-700 border border-slate-700 px-3 py-1.5 rounded-lg text-slate-300 flex items-center space-x-1 transition">
+        <span>🔄 Refresh</span>
+      </button>
+    </div>
+
+    <!-- Slots Grid Container -->
+    <div id="slots-container" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <!-- Loading Skeleton -->
+      <div class="bg-slate-800/50 border border-slate-700/50 rounded-xl p-4 animate-pulse h-24"></div>
+      <div class="bg-slate-800/50 border border-slate-700/50 rounded-xl p-4 animate-pulse h-24"></div>
+    </div>
+
+  </main>
+
+  <!-- Checkout Drawer / Modal -->
+  <div id="checkout-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-end md:items-center justify-center p-0 md:p-4 hidden transition-opacity duration-300">
+    <div class="bg-slate-900 border border-slate-800 w-full max-w-lg rounded-t-2xl md:rounded-2xl p-6 shadow-2xl relative max-h-[90vh] overflow-y-auto">
       
-      <div class="bg-gray-50 p-4 rounded-lg mb-4 text-center">
-        <p class="text-xs text-gray-500 uppercase font-bold">Scan to Pay via GCash</p>
-        <img id="gcash-qr-img" src="" alt="GCash QR Code" class="w-48 h-48 mx-auto my-2 rounded border" />
-        <p id="fee-breakdown" class="text-lg font-bold text-green-800"></p>
+      <!-- Close Button -->
+      <button onclick="closeModal()" class="absolute top-4 right-4 text-slate-400 hover:text-white bg-slate-800 hover:bg-slate-700 rounded-full w-8 h-8 flex items-center justify-center transition">
+        ✕
+      </button>
+
+      <div class="mb-6">
+        <span class="text-xs font-bold text-emerald-400 uppercase tracking-widest">Step 2 of 2</span>
+        <h3 class="text-xl font-bold text-white mt-1">Complete Booking</h3>
+        <p id="selected-info" class="text-sm text-slate-400 mt-1"></p>
       </div>
 
-      <form id="booking-form" class="space-y-3">
-        <div>
-          <label class="block text-sm font-medium text-gray-700">Your Email</label>
-          <input type="email" id="email" required class="w-full mt-1 p-2 border rounded-md" placeholder="name@example.com" />
+      <!-- GCash Payment Box -->
+      <div class="bg-slate-800/80 border border-slate-700/80 rounded-xl p-5 mb-6 text-center">
+        <span class="text-xs font-semibold text-slate-400 uppercase">Scan QR to Pay via GCash</span>
+        
+        <div class="bg-white p-3 rounded-lg w-48 h-48 mx-auto my-3 flex items-center justify-center shadow-inner">
+          <img id="gcash-qr-img" src="" alt="GCash QR Code" class="w-full h-full object-contain" />
         </div>
+
+        <div class="text-emerald-400 text-2xl font-extrabold my-1" id="fee-breakdown">₱0</div>
+        <p class="text-xs text-slate-400">100% Court Reservation Fee</p>
+      </div>
+
+      <!-- Booking Form -->
+      <form id="booking-form" class="space-y-4">
         <div>
-          <label class="block text-sm font-medium text-gray-700">GCash Reference Number</label>
-          <input type="text" id="gcash-ref" required class="w-full mt-1 p-2 border rounded-md" placeholder="13-digit reference no." />
+          <label class="block text-xs font-medium text-slate-300 mb-1">Your Email Address <span class="text-emerald-400">*</span></label>
+          <input type="email" id="email" required placeholder="you@example.com" 
+                 class="w-full bg-slate-950 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-emerald-500 transition" />
+          <p class="text-[11px] text-slate-500 mt-1">Your confirmation receipt will be sent here.</p>
         </div>
-        <button type="submit" id="submit-btn" class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-2 rounded-md">
-          Confirm Payment & Book
+
+        <div>
+          <label class="block text-xs font-medium text-slate-300 mb-1">GCash Reference Number <span class="text-emerald-400">*</span></label>
+          <input type="text" id="gcash-ref" required placeholder="e.g. 100 234 567 890" 
+                 class="w-full bg-slate-950 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-emerald-500 transition" />
+        </div>
+
+        <button type="submit" id="submit-btn" 
+                class="w-full bg-emerald-500 hover:bg-emerald-600 text-slate-950 font-bold py-3 px-4 rounded-xl shadow-lg shadow-emerald-500/20 transition flex items-center justify-center space-x-2">
+          <span>Confirm & Complete Booking</span>
         </button>
       </form>
-    </div>
 
-    <div id="status-message" class="hidden mt-4 p-3 rounded-md text-center"></div>
+      <div id="status-message" class="hidden mt-4 p-3 rounded-xl text-center text-sm"></div>
+    </div>
   </div>
 
   <script>
@@ -58,37 +126,59 @@
     let selectedSlot = null;
     document.getElementById('gcash-qr-img').src = QR_IMAGE_URL;
 
+    // Fetch live slots
     async function fetchSlots() {
       const container = document.getElementById('slots-container');
+      container.innerHTML = `
+        <div class="bg-slate-800/50 border border-slate-700/50 rounded-xl p-4 animate-pulse h-24"></div>
+        <div class="bg-slate-800/50 border border-slate-700/50 rounded-xl p-4 animate-pulse h-24"></div>
+      `;
+
       try {
         const res = await fetch(API_URL);
         const slots = await res.json();
         
-        if (slots.length === 0) {
-          container.innerHTML = '<p class="text-gray-500">No available slots right now.</p>';
+        if (!slots || slots.length === 0) {
+          container.innerHTML = `
+            <div class="col-span-full bg-slate-800/40 border border-slate-700 rounded-xl p-8 text-center">
+              <p class="text-slate-400">No available court slots right now.</p>
+            </div>`;
           return;
         }
 
         container.innerHTML = slots.map(slot => `
           <div onclick="selectSlot(${slot.SlotID}, '${slot.CourtName}', '${slot.TimeSlot}', ${slot.Price})" 
-               class="p-3 border rounded-lg hover:border-green-500 cursor-pointer flex justify-between items-center transition">
+               class="bg-slate-800/90 hover:bg-slate-800 border border-slate-700/80 hover:border-emerald-500/80 rounded-2xl p-4 cursor-pointer transition-all duration-200 group relative flex justify-between items-center shadow-lg hover:shadow-emerald-500/5">
             <div>
-              <p class="font-bold text-gray-800">${slot.CourtName}</p>
-              <p class="text-sm text-gray-500">${slot.TimeSlot}</p>
+              <div class="flex items-center space-x-2 mb-1">
+                <span class="bg-emerald-500/10 text-emerald-400 text-[10px] font-bold px-2 py-0.5 rounded-md border border-emerald-500/20 uppercase tracking-wider">${slot.CourtName}</span>
+                <span class="text-slate-500 text-xs">Outdoor Acrylic</span>
+              </div>
+              <p class="text-white font-bold text-base group-hover:text-emerald-400 transition-colors">${slot.TimeSlot}</p>
             </div>
-            <span class="text-green-600 font-bold">₱${slot.Price}</span>
+            <div class="text-right">
+              <span class="text-emerald-400 font-extrabold text-lg">₱${slot.Price}</span>
+              <p class="text-[10px] text-slate-400">1 hour</p>
+            </div>
           </div>
         `).join('');
       } catch (err) {
-        container.innerHTML = '<p class="text-red-500">Failed to load slots.</p>';
+        container.innerHTML = `
+          <div class="col-span-full bg-red-950/30 border border-red-800 rounded-xl p-6 text-center">
+            <p class="text-red-400 text-sm">Failed to connect to the booking server. Please try refreshing.</p>
+          </div>`;
       }
     }
 
     function selectSlot(id, court, time, price) {
       selectedSlot = { id, court, time, price };
-      document.getElementById('checkout-section').classList.remove('hidden');
-      document.getElementById('selected-info').innerText = `${court} | ${time}`;
-      document.getElementById('fee-breakdown').innerText = `Total: ₱${price}`;
+      document.getElementById('selected-info').innerText = `${court} • ${time}`;
+      document.getElementById('fee-breakdown').innerText = `₱${price}`;
+      document.getElementById('checkout-modal').classList.remove('hidden');
+    }
+
+    function closeModal() {
+      document.getElementById('checkout-modal').classList.add('hidden');
     }
 
     document.getElementById('booking-form').addEventListener('submit', async (e) => {
@@ -97,7 +187,7 @@
       const statusMsg = document.getElementById('status-message');
       
       btn.disabled = true;
-      btn.innerText = 'Processing...';
+      btn.innerHTML = `<span>Processing...</span>`;
 
       const payload = {
         slotId: selectedSlot.id,
@@ -113,22 +203,25 @@
         const result = await res.json();
 
         if (result.success) {
-          statusMsg.className = 'mt-4 p-3 bg-green-100 text-green-800 rounded-md text-center';
-          statusMsg.innerText = `Booking Submitted! Ref ID: ${result.bookingId}. Check your email.`;
+          statusMsg.className = 'mt-4 p-3 bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 rounded-xl text-center text-sm';
+          statusMsg.innerText = `🎉 Booking confirmed! Ref ID: ${result.bookingId}. Check your email.`;
           statusMsg.classList.remove('hidden');
           document.getElementById('booking-form').reset();
-          document.getElementById('checkout-section').classList.add('hidden');
-          fetchSlots(); 
+          setTimeout(() => {
+            closeModal();
+            statusMsg.classList.add('hidden');
+            fetchSlots();
+          }, 3000);
         } else {
           throw new Error(result.message || 'Booking failed');
         }
       } catch (err) {
-        statusMsg.className = 'mt-4 p-3 bg-red-100 text-red-800 rounded-md text-center';
+        statusMsg.className = 'mt-4 p-3 bg-red-500/20 border border-red-500/40 text-red-300 rounded-xl text-center text-sm';
         statusMsg.innerText = err.message;
         statusMsg.classList.remove('hidden');
       } finally {
         btn.disabled = false;
-        btn.innerText = 'Confirm Payment & Book';
+        btn.innerHTML = `<span>Confirm & Complete Booking</span>`;
       }
     });
 
