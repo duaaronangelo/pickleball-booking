@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>PickleHub - Sept21_Version Smartphone Booking Experience</title>
+  <title>PickleHub - Comfortable UX Smartphone Booking</title>
   
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -72,9 +72,6 @@
       -webkit-tap-highlight-color: transparent;
       font-family: 'Plus Jakarta Sans', sans-serif;
     }
-    .slot-card:active {
-      transform: scale(0.97);
-    }
     .bounce-pop {
       animation: ballHop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     }
@@ -82,30 +79,30 @@
 </head>
 <body class="h-full flex flex-col items-center justify-start text-slate-800 antialiased selection:bg-brand-900 selection:text-white">
 
-  <header class="w-full bg-slate-950 text-white py-3 px-4 shadow-lg z-50 flex flex-wrap items-center justify-between gap-3 text-xs md:text-sm border-b border-slate-800">
-    <div class="flex items-center gap-2.5">
-      <span class="relative flex h-3 w-3">
+  <header class="w-full bg-slate-950 text-white py-3.5 px-5 shadow-lg z-50 flex flex-wrap items-center justify-between gap-3 text-xs md:text-sm border-b border-slate-800">
+    <div class="flex items-center gap-3">
+      <span class="relative flex h-3.5 w-3.5">
         <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-lime-400 opacity-75"></span>
-        <span class="relative inline-flex rounded-full h-3 w-3 bg-lime-500"></span>
+        <span class="relative inline-flex rounded-full h-3.5 w-3.5 bg-lime-500"></span>
       </span>
-      <span class="font-bold text-slate-100 tracking-tight">PickleHub Mobile Pro (Sept21_Version)</span>
-      <span class="bg-brand-900 text-lime-300 px-2 py-0.5 rounded-full text-[10px] font-extrabold border border-lime-500/30 uppercase tracking-wider hidden sm:inline">
+      <span class="font-bold text-slate-100 tracking-tight text-sm">PickleHub Mobile Pro</span>
+      <span class="bg-brand-900 text-lime-300 px-2.5 py-1 rounded-full text-[11px] font-extrabold border border-lime-500/30 uppercase tracking-wider hidden sm:inline">
         Pasig City
       </span>
     </div>
 
-    <div class="flex items-center gap-2.5">
-      <button onclick="fetchSlots()" class="flex items-center gap-1.5 bg-slate-800 hover:bg-slate-700 text-slate-200 px-3 py-1.5 rounded-xl border border-slate-700 transition text-xs font-semibold cursor-pointer">
+    <div class="flex items-center gap-3">
+      <button onclick="fetchSlots()" class="flex items-center gap-2 bg-slate-800 hover:bg-slate-700 text-slate-200 px-3.5 py-2 rounded-xl border border-slate-700 transition text-xs font-semibold cursor-pointer">
         <i class="fa-solid fa-rotate text-lime-400"></i>
         <span>Refresh Live</span>
       </button>
 
-      <button onclick="toggleDeviceFrame()" id="frameToggleBtn" class="flex items-center gap-1.5 bg-slate-800 hover:bg-slate-700 text-slate-200 px-3 py-1.5 rounded-xl border border-slate-700 transition text-xs font-semibold cursor-pointer">
+      <button onclick="toggleDeviceFrame()" id="frameToggleBtn" class="flex items-center gap-2 bg-slate-800 hover:bg-slate-700 text-slate-200 px-3.5 py-2 rounded-xl border border-slate-700 transition text-xs font-semibold cursor-pointer">
         <i class="fa-solid fa-mobile-screen text-lime-400"></i>
         <span id="frameToggleText">Full Canvas View</span>
       </button>
 
-      <button onclick="toggleDesignNotes()" class="flex items-center gap-1.5 bg-gradient-to-r from-emerald-600 to-brand-900 hover:from-emerald-500 hover:to-brand-800 text-white px-3.5 py-1.5 rounded-xl font-bold transition shadow-md text-xs cursor-pointer">
+      <button onclick="toggleDesignNotes()" class="flex items-center gap-2 bg-gradient-to-r from-emerald-600 to-brand-900 hover:from-emerald-500 hover:to-brand-800 text-white px-4 py-2 rounded-xl font-bold transition shadow-md text-xs cursor-pointer">
         <i class="fa-solid fa-bolt text-lime-300 animate-bounce"></i>
         <span>UX Enhancements</span>
       </button>
@@ -114,10 +111,10 @@
 
   <main class="w-full max-w-6xl flex-1 flex justify-center p-0 sm:p-6 md:p-8 transition-all">
     
-    <div id="phoneFrame" class="w-full max-w-[420px] bg-sand-50 sm:rounded-[44px] sm:shadow-2xl sm:border-[8px] sm:border-slate-800 flex flex-col h-[100vh] sm:h-[860px] overflow-hidden relative transition-all duration-300 shadow-emerald-950/20">
+    <div id="phoneFrame" class="w-full max-w-[440px] bg-sand-50 sm:rounded-[44px] sm:shadow-2xl sm:border-[8px] sm:border-slate-800 flex flex-col h-[100vh] sm:h-[880px] overflow-hidden relative transition-all duration-300 shadow-emerald-950/20">
       
       <!-- Simulated Phone Top Notch -->
-      <div class="bg-slate-950 text-white text-[11px] px-6 pt-2 pb-1 hidden sm:flex justify-between items-center z-40 select-none">
+      <div class="bg-slate-950 text-white text-[11px] px-6 pt-2.5 pb-1 hidden sm:flex justify-between items-center z-40 select-none">
         <span class="font-bold tracking-tight text-slate-200">7:00 AM</span>
         <div class="w-20 h-4 bg-slate-900 rounded-full mx-auto flex items-center justify-center">
           <div class="w-3 h-3 rounded-full bg-slate-950"></div>
@@ -129,52 +126,53 @@
         </div>
       </div>
 
-      <!-- App Header: Date Selector Chips -->
-      <div class="bg-white border-b border-slate-200/80 px-4 py-2.5 sticky top-0 z-30 shadow-sm">
-        <div class="flex gap-2 overflow-x-auto no-scrollbar py-1 text-center -mx-4 px-4 select-none" id="datePicker">
+      <!-- App Header: Comfortable Date Selector Chips -->
+      <div class="bg-white border-b border-slate-200/80 px-4 py-3 sticky top-0 z-30 shadow-sm">
+        <div class="flex gap-2.5 overflow-x-auto no-scrollbar py-1 text-center -mx-4 px-4 select-none" id="datePicker">
           <!-- Populated dynamically via JS -->
         </div>
       </div>
 
       <!-- Main Content Scrollable Area -->
-      <div class="flex-1 overflow-y-auto no-scrollbar pb-32 bg-sand-50">
-        <div class="px-4 pt-4 pb-1 flex items-center justify-between text-xs text-slate-500">
-          <span class="font-bold text-slate-800" id="currentDateLabel">Today • Schedule</span>
-          <div class="flex gap-1.5 text-[11px] font-bold">
-            <button onclick="filterSlots('all')" id="filterAll" class="px-2.5 py-0.5 rounded-lg bg-slate-900 text-white cursor-pointer">All</button>
-            <button onclick="filterSlots('morning')" id="filterMorning" class="px-2.5 py-0.5 rounded-lg bg-white border border-slate-200 text-slate-700 hover:bg-slate-50 cursor-pointer">AM</button>
-            <button onclick="filterSlots('afternoon')" id="filterAfternoon" class="px-2.5 py-0.5 rounded-lg bg-white border border-slate-200 text-slate-700 hover:bg-slate-50 cursor-pointer">PM</button>
+      <div class="flex-1 overflow-y-auto no-scrollbar pb-36 bg-sand-50">
+        <div class="px-5 pt-4 pb-2 flex items-center justify-between text-xs text-slate-500">
+          <span class="font-bold text-slate-800 text-sm" id="currentDateLabel">Today • Schedule</span>
+          <div class="flex gap-2 text-xs font-bold">
+            <button onclick="filterSlots('all')" id="filterAll" class="px-3 py-1.5 rounded-xl bg-slate-900 text-white cursor-pointer shadow-sm">All</button>
+            <button onclick="filterSlots('morning')" id="filterMorning" class="px-3 py-1.5 rounded-xl bg-white border border-slate-200 text-slate-700 hover:bg-slate-50 cursor-pointer shadow-sm">AM</button>
+            <button onclick="filterSlots('afternoon')" id="filterAfternoon" class="px-3 py-1.5 rounded-xl bg-white border border-slate-200 text-slate-700 hover:bg-slate-50 cursor-pointer shadow-sm">PM</button>
           </div>
         </div>
 
-        <div class="p-4 space-y-3" id="slotsContainer">
-          <div class="p-8 text-center text-slate-400 bg-white rounded-2xl border border-slate-200">
-            <i class="fa-solid fa-circle-notch fa-spin text-2xl text-emerald-600 mb-2"></i>
-            <p class="text-xs font-semibold text-slate-600">Connecting to live court server...</p>
+        <!-- Spacious Slots List Container -->
+        <div class="px-4 space-y-4 pt-1" id="slotsContainer">
+          <div class="p-10 text-center text-slate-400 bg-white rounded-3xl border border-slate-200 shadow-sm">
+            <i class="fa-solid fa-circle-notch fa-spin text-3xl text-emerald-600 mb-3"></i>
+            <p class="text-sm font-semibold text-slate-700">Connecting to live court server...</p>
           </div>
         </div>
       </div>
 
-      <div id="bookingDrawer" class="absolute bottom-0 left-0 right-0 bg-white/95 backdrop-blur-md border-t border-slate-200 p-4 shadow-2xl z-30 transition-all duration-300 transform translate-y-full rounded-t-3xl">
-        <div class="flex items-center justify-between mb-3">
+      <div id="bookingDrawer" class="absolute bottom-0 left-0 right-0 bg-white/95 backdrop-blur-md border-t border-slate-200 p-5 shadow-2xl z-30 transition-all duration-300 transform translate-y-full rounded-t-3xl">
+        <div class="flex items-center justify-between mb-4">
           <div>
             <span class="text-[11px] uppercase tracking-wider text-slate-500 font-extrabold block">You will play</span>
-            <div class="text-sm font-black text-slate-900" id="selectedSlotsSummary">0 Hours Selected</div>
+            <div class="text-base font-black text-slate-900" id="selectedSlotsSummary">0 Hours Selected</div>
             <div class="text-xs font-bold text-emerald-800 flex items-center gap-1.5 mt-0.5" id="selectedDateDisplay">
-              <i class="fa-regular fa-calendar-days text-emerald-700 text-[11px]"></i>
+              <i class="fa-regular fa-calendar-days text-emerald-700 text-xs"></i>
               <span id="selectedDateText">Today</span>
             </div>
           </div>
 
           <div class="text-right">
             <div class="text-[11px] uppercase tracking-wider text-slate-500 font-extrabold">Total Amount</div>
-            <div class="text-lg font-black text-brand-900 flex items-center justify-end gap-1" id="totalPriceDisplay">
+            <div class="text-xl font-black text-brand-900 flex items-center justify-end gap-1" id="totalPriceDisplay">
               <span>₱0</span>
             </div>
           </div>
         </div>
 
-        <button onclick="openCheckoutModal()" class="w-full py-3.5 bg-gradient-to-r from-brand-900 to-emerald-900 hover:from-brand-950 hover:to-emerald-950 text-white rounded-2xl font-black text-sm shadow-xl shadow-brand-900/25 active:scale-[0.98] transition flex items-center justify-center gap-2 cursor-pointer">
+        <button onclick="openCheckoutModal()" class="w-full py-4 bg-gradient-to-r from-brand-900 to-emerald-900 hover:from-brand-950 hover:to-emerald-950 text-white rounded-2xl font-black text-sm shadow-xl shadow-brand-900/25 active:scale-[0.98] transition flex items-center justify-center gap-2.5 cursor-pointer">
           <span>Proceed to Payment to Book</span>
           <i class="fa-solid fa-arrow-right text-xs"></i>
         </button>
@@ -190,8 +188,8 @@
           <h3 class="font-black text-slate-900 text-lg">Complete Reservation</h3>
           <p class="text-xs text-slate-500">PickleHub Pasig Court Complex</p>
         </div>
-        <button onclick="closeCheckoutModal()" class="w-8 h-8 rounded-full bg-slate-100 text-slate-500 flex items-center justify-center hover:bg-slate-200 cursor-pointer">
-          <i class="fa-solid fa-xmark"></i>
+        <button onclick="closeCheckoutModal()" class="w-9 h-9 rounded-full bg-slate-100 text-slate-500 flex items-center justify-center hover:bg-slate-200 cursor-pointer">
+          <i class="fa-solid fa-xmark text-sm"></i>
         </button>
       </div>
 
@@ -207,44 +205,44 @@
         </div>
         <div class="pt-1 pb-1">
           <span class="text-slate-500 block mb-1">Time Slots:</span>
-          <div id="modalItemizedBreakdown" class="space-y-1 pl-2 border-l-2 border-emerald-500/30 text-slate-700 font-semibold">
+          <div id="modalItemizedBreakdown" class="space-y-1.5 pl-2 border-l-2 border-emerald-500/30 text-slate-700 font-semibold">
             <!-- Itemized slots injected here -->
           </div>
         </div>
 
         <div class="pt-2 border-t border-slate-200 flex justify-between text-sm font-black text-slate-900">
           <span>Total Payable:</span>
-          <span class="text-brand-900" id="modalTotal">₱0</span>
+          <span class="text-brand-900 text-base" id="modalTotal">₱0</span>
         </div>
       </div>
 
       <!-- GCash QR Box -->
       <div class="bg-slate-50 border border-slate-200/80 rounded-2xl p-4 mb-4 text-center">
-        <span class="text-[11px] font-extrabold text-slate-500 uppercase tracking-wider block mb-2">Scan GCash QR Code</span>
+        <span class="text-xs font-extrabold text-slate-600 uppercase tracking-wider block mb-2">Scan GCash QR Code</span>
         
-        <div class="bg-white p-2 rounded-xl w-40 h-40 mx-auto border border-slate-200 shadow-inner flex items-center justify-center">
-          <img id="gcash-qr-img" src="" alt="GCash QR Code" class="w-full h-full object-contain rounded-lg" onerror="this.src='https://placehold.co/160x160/22c55e/ffffff?text=GCash+QR'" />
+        <div class="bg-white p-2.5 rounded-2xl w-44 h-44 mx-auto border border-slate-200 shadow-inner flex items-center justify-center">
+          <img id="gcash-qr-img" src="" alt="GCash QR Code" class="w-full h-full object-contain rounded-xl" onerror="this.src='https://placehold.co/160x160/22c55e/ffffff?text=GCash+QR'" />
         </div>
-        <p class="text-[11px] text-slate-600 mt-2 font-bold">Kindly settle total payable to book your slot. Thank you!</p>
+        <p class="text-xs text-slate-600 mt-2.5 font-bold">Kindly settle total payable to book your slot. Thank you!</p>
       </div>
 
       <!-- Booking Form -->
-      <form id="booking-form" class="space-y-3.5" onsubmit="submitBooking(event)">
+      <form id="booking-form" class="space-y-4" onsubmit="submitBooking(event)">
         <div>
-          <label class="block text-xs font-bold text-slate-700 mb-1">Email Address <span class="text-emerald-600">*</span></label>
+          <label class="block text-xs font-bold text-slate-700 mb-1.5">Email Address <span class="text-emerald-600">*</span></label>
           <input type="email" id="email" required placeholder="you@example.com" 
-                 class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3.5 py-2.5 text-xs text-slate-900 focus:outline-none focus:ring-2 focus:ring-brand-900 transition" />
+                 class="w-full bg-slate-50 border border-slate-300 rounded-xl px-4 py-3 text-xs text-slate-900 focus:outline-none focus:ring-2 focus:ring-brand-900 transition" />
           <p class="text-[10px] text-slate-500 mt-1">Confirmation receipt will be sent here.</p>
         </div>
 
         <div>
-          <label class="block text-xs font-bold text-slate-700 mb-1">GCash Reference Number <span class="text-emerald-600">*</span></label>
+          <label class="block text-xs font-bold text-slate-700 mb-1.5">GCash Reference Number <span class="text-emerald-600">*</span></label>
           <input type="text" id="gcash-ref" required placeholder="13-digit transaction ref no." 
-                 class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3.5 py-2.5 text-xs text-slate-900 focus:outline-none focus:ring-2 focus:ring-brand-900 transition" />
+                 class="w-full bg-slate-50 border border-slate-300 rounded-xl px-4 py-3 text-xs text-slate-900 focus:outline-none focus:ring-2 focus:ring-brand-900 transition" />
         </div>
 
         <button type="submit" id="submit-btn" 
-                class="w-full py-3.5 bg-gradient-to-r from-brand-900 to-emerald-900 hover:from-brand-950 hover:to-emerald-950 text-white font-black rounded-2xl shadow-lg transition text-xs flex items-center justify-center gap-2 mt-2 cursor-pointer">
+                class="w-full py-4 bg-gradient-to-r from-brand-900 to-emerald-900 hover:from-brand-950 hover:to-emerald-950 text-white font-black rounded-2xl shadow-lg transition text-xs flex items-center justify-center gap-2 mt-2 cursor-pointer">
           <i class="fa-solid fa-lock text-xs"></i>
           <span>Confirm Payment & Book Slot</span>
         </button>
@@ -263,7 +261,7 @@
         <h3 class="font-black text-slate-900 text-xl tracking-tight">Court Locked In!</h3>
         <p class="text-xs text-slate-500 mt-1">Your reservation receipt has been sent to your email.</p>
       </div>
-      <div class="bg-sand-50 p-3.5 rounded-2xl border border-slate-200/80 text-left text-xs space-y-1.5">
+      <div class="bg-sand-50 p-4 rounded-2xl border border-slate-200/80 text-left text-xs space-y-2">
         <div class="flex justify-between">
           <span class="text-slate-500">Booking ID:</span>
           <span class="font-mono font-bold text-brand-900" id="successCode">#BK-9821</span>
@@ -286,28 +284,28 @@
   <div id="notesModal" class="fixed inset-0 bg-slate-950/70 backdrop-blur-sm z-50 flex items-center justify-center p-4 opacity-0 pointer-events-none transition-opacity duration-200">
     <div class="w-full max-w-lg bg-white rounded-3xl p-6 shadow-2xl max-h-[85vh] overflow-y-auto">
       <div class="flex items-center justify-between mb-4 border-b border-slate-100 pb-3">
-        <div class="flex items-center gap-2">
-          <div class="w-8 h-8 rounded-xl bg-lime-400 text-slate-950 flex items-center justify-center font-bold">
+        <div class="flex items-center gap-2.5">
+          <div class="w-9 h-9 rounded-xl bg-lime-400 text-slate-950 flex items-center justify-center font-bold">
             <i class="fa-solid fa-wand-magic-sparkles"></i>
           </div>
-          <h3 class="font-black text-slate-900 text-lg">UX & Smartphone Architecture (Sept21_Version)</h3>
+          <h3 class="font-black text-slate-900 text-lg">Comfortable UX Redesign</h3>
         </div>
         <button onclick="toggleDesignNotes()" class="w-8 h-8 rounded-full bg-slate-100 text-slate-500 flex items-center justify-center hover:bg-slate-200 cursor-pointer">
           <i class="fa-solid fa-xmark"></i>
         </button>
       </div>
       <div class="space-y-3.5 text-xs sm:text-sm text-slate-600">
-        <div class="p-3.5 bg-sand-50 rounded-2xl border border-slate-200">
-          <div class="font-extrabold text-slate-900 text-sm mb-1">1. Dynamic Date Bar & Past Slot Filtering</div>
-          <p class="text-slate-600 text-xs">Past slots for today are completely hidden, keeping the interface clean and actionable.</p>
+        <div class="p-4 bg-sand-50 rounded-2xl border border-slate-200">
+          <div class="font-extrabold text-slate-900 text-sm mb-1">1. Generous Touch Targets</div>
+          <p class="text-slate-600 text-xs">Replaced cramped squarish grids with spacious stacked or comfortable multi-column layout buttons that eliminate accidental mis-taps.</p>
         </div>
-        <div class="p-3.5 bg-sand-50 rounded-2xl border border-slate-200">
-          <div class="font-extrabold text-slate-900 text-sm mb-1">2. Itemized Pricing & Simplified Checkout</div>
-          <p class="text-slate-600 text-xs">Checkout displays clear itemized breakdowns per hour/court with unified GCash integration.</p>
+        <div class="p-4 bg-sand-50 rounded-2xl border border-slate-200">
+          <div class="font-extrabold text-slate-900 text-sm mb-1">2. Clear Visual Hierarchy</div>
+          <p class="text-slate-600 text-xs">Each court card gives ample vertical breathing room, bold pricing tags, and prominent availability indicators.</p>
         </div>
       </div>
       <div class="mt-5">
-        <button onclick="toggleDesignNotes()" class="w-full py-3 bg-slate-900 text-white font-extrabold rounded-2xl text-xs uppercase tracking-wider cursor-pointer">
+        <button onclick="toggleDesignNotes()" class="w-full py-3.5 bg-slate-900 text-white font-extrabold rounded-2xl text-xs uppercase tracking-wider cursor-pointer">
           Got It, Back to App
         </button>
       </div>
@@ -392,7 +390,7 @@
     function renderDatePicker() {
       const container = document.getElementById('datePicker');
       container.innerHTML = daysList.map((d, i) => `
-        <button onclick="selectDate(this, ${i})" class="date-chip flex-shrink-0 w-12 py-2 rounded-2xl ${i === 0 ? 'bg-brand-900 text-white shadow-sm border border-brand-900' : 'bg-white text-slate-700 border border-slate-200 hover:border-slate-300'} flex flex-col items-center transition cursor-pointer">
+        <button onclick="selectDate(this, ${i})" class="date-chip flex-shrink-0 w-14 py-2.5 rounded-2xl ${i === 0 ? 'bg-brand-900 text-white shadow-md border border-brand-900' : 'bg-white text-slate-700 border border-slate-200 hover:border-slate-300'} flex flex-col items-center transition cursor-pointer">
           <span class="text-[10px] uppercase font-bold tracking-wider ${i === 0 ? 'text-lime-300' : 'text-slate-400'}">${d.day}</span>
           <span class="text-base font-black leading-tight">${d.date}</span>
         </button>
@@ -404,10 +402,10 @@
       selectedDateStr = selectedDateObj.str;
       
       document.querySelectorAll('.date-chip').forEach(b => {
-        b.className = "date-chip flex-shrink-0 w-12 py-2 rounded-2xl bg-white text-slate-700 border border-slate-200 hover:border-slate-300 flex flex-col items-center transition cursor-pointer";
+        b.className = "date-chip flex-shrink-0 w-14 py-2.5 rounded-2xl bg-white text-slate-700 border border-slate-200 hover:border-slate-300 flex flex-col items-center transition cursor-pointer";
         b.querySelector('span').className = "text-[10px] uppercase font-bold tracking-wider text-slate-400";
       });
-      btn.className = "date-chip flex-shrink-0 w-12 py-2 rounded-2xl bg-brand-900 text-white shadow-sm border border-brand-900 flex flex-col items-center transition cursor-pointer";
+      btn.className = "date-chip flex-shrink-0 w-14 py-2.5 rounded-2xl bg-brand-900 text-white shadow-md border border-brand-900 flex flex-col items-center transition cursor-pointer";
       btn.querySelector('span').className = "text-[10px] uppercase font-bold tracking-wider text-lime-300";
       
       document.getElementById('currentDateLabel').textContent = `${selectedDateStr} • Schedule`;
@@ -419,9 +417,9 @@
     async function fetchSlots() {
       const container = document.getElementById('slotsContainer');
       container.innerHTML = `
-        <div class="p-8 text-center text-slate-400 bg-white rounded-2xl border border-slate-200">
-          <i class="fa-solid fa-circle-notch fa-spin text-2xl text-emerald-600 mb-2"></i>
-          <p class="text-xs font-semibold text-slate-600">Connecting to live court server...</p>
+        <div class="p-10 text-center text-slate-400 bg-white rounded-3xl border border-slate-200 shadow-sm">
+          <i class="fa-solid fa-circle-notch fa-spin text-3xl text-emerald-600 mb-3"></i>
+          <p class="text-sm font-semibold text-slate-700">Connecting to live court server...</p>
         </div>
       `;
 
@@ -462,14 +460,16 @@
 
         visibleSlotsCount++;
         const card = document.createElement('div');
-        card.className = "bg-white rounded-2xl p-3.5 border border-slate-200 shadow-sm space-y-2.5 transition hover:shadow-md";
+        card.className = "bg-white rounded-3xl p-4 border border-slate-200/90 shadow-sm space-y-3 transition hover:shadow-md";
 
         let cardHTML = `
-          <div class="flex items-center justify-between border-b border-slate-100 pb-2">
-            <span class="text-sm font-extrabold text-slate-900">${slot.time}</span>
-            <span class="text-[11px] text-slate-500 font-bold">₱${slot.price}/hr</span>
+          <div class="flex items-center justify-between border-b border-slate-100 pb-2.5 px-1">
+            <span class="text-sm font-extrabold text-slate-900 flex items-center gap-2">
+              <i class="fa-regular fa-clock text-emerald-600"></i> ${slot.time}
+            </span>
+            <span class="text-xs text-brand-900 font-black bg-brand-50 px-2.5 py-1 rounded-xl border border-brand-100">₱${slot.price}/hr</span>
           </div>
-          <div class="grid grid-cols-3 gap-2 pt-0.5">
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5 pt-0.5">
         `;
 
         [1, 2, 3].forEach(courtNum => {
@@ -485,23 +485,23 @@
 
           if (isSelected) {
             cardHTML += `
-              <button onclick="toggleSlotSelection('${slot.time}', ${courtNum}, '${slotId}', ${slot.price})" class="py-2.5 px-1 rounded-xl bg-brand-900 text-white font-black text-xs flex flex-col items-center justify-center gap-0.5 border border-brand-900 shadow-sm bounce-pop cursor-pointer">
-                <span class="text-[9px] uppercase font-bold text-lime-300">Court ${courtNum}</span>
-                <span class="flex items-center gap-1 text-[11px]"><i class="fa-solid fa-check text-[10px]"></i> Selected</span>
+              <button onclick="toggleSlotSelection('${slot.time}', ${courtNum}, '${slotId}', ${slot.price})" class="py-3 px-3 rounded-2xl bg-brand-900 text-white font-black text-xs flex items-center justify-between sm:flex-col sm:items-center sm:justify-center gap-1 border border-brand-900 shadow-md bounce-pop cursor-pointer">
+                <span class="text-[10px] uppercase font-extrabold text-lime-300">Court ${courtNum}</span>
+                <span class="flex items-center gap-1.5 text-xs"><i class="fa-solid fa-circle-check text-lime-300 text-xs"></i> Selected</span>
               </button>
             `;
           } else if (isAvailable) {
             cardHTML += `
-              <button onclick="toggleSlotSelection('${slot.time}', ${courtNum}, '${slotId}', ${slot.price})" class="py-2.5 px-1 rounded-xl bg-emerald-50/70 hover:bg-emerald-100 border border-emerald-600/30 text-brand-900 font-extrabold text-xs flex flex-col items-center justify-center gap-0.5 transition active:scale-95 cursor-pointer">
-                <span class="text-[9px] uppercase font-bold text-slate-500">Court ${courtNum}</span>
-                <span class="text-[11px] text-emerald-800 font-bold">Available</span>
+              <button onclick="toggleSlotSelection('${slot.time}', ${courtNum}, '${slotId}', ${slot.price})" class="py-3 px-3 rounded-2xl bg-emerald-50/80 hover:bg-emerald-100 border border-emerald-600/30 text-brand-900 font-extrabold text-xs flex items-center justify-between sm:flex-col sm:items-center sm:justify-center gap-1 transition active:scale-[0.98] cursor-pointer shadow-sm">
+                <span class="text-[10px] uppercase font-bold text-slate-500">Court ${courtNum}</span>
+                <span class="text-xs text-emerald-800 font-bold flex items-center gap-1">Available</span>
               </button>
             `;
           } else {
             cardHTML += `
-              <div class="py-2.5 px-1 rounded-xl bg-slate-100 border border-slate-200/60 text-slate-400 font-semibold text-xs flex flex-col items-center justify-center gap-0.5 opacity-60 select-none">
-                <span class="text-[9px] uppercase font-medium text-slate-400">Court ${courtNum}</span>
-                <span class="text-[10px] font-medium text-slate-400">Booked</span>
+              <div class="py-3 px-3 rounded-2xl bg-slate-100 border border-slate-200/60 text-slate-400 font-semibold text-xs flex items-center justify-between sm:flex-col sm:items-center sm:justify-center gap-1 opacity-60 select-none">
+                <span class="text-[10px] uppercase font-medium text-slate-400">Court ${courtNum}</span>
+                <span class="text-xs font-medium text-slate-400">Booked</span>
               </div>
             `;
           }
@@ -514,10 +514,10 @@
 
       if (visibleSlotsCount === 0) {
         container.innerHTML = `
-          <div class="p-8 text-center text-slate-500 bg-white rounded-2xl border border-slate-200">
-            <i class="fa-solid fa-moon text-3xl text-slate-300 mb-2"></i>
-            <p class="text-xs font-bold text-slate-700">No more upcoming slots for this day.</p>
-            <p class="text-[11px] text-slate-400 mt-1">Please select another date above.</p>
+          <div class="p-10 text-center text-slate-500 bg-white rounded-3xl border border-slate-200 shadow-sm">
+            <i class="fa-solid fa-moon text-4xl text-slate-300 mb-3"></i>
+            <p class="text-sm font-bold text-slate-700">No more upcoming slots for this day.</p>
+            <p class="text-xs text-slate-400 mt-1">Please select another date above.</p>
           </div>
         `;
       }
@@ -569,9 +569,9 @@
       ['All', 'Morning', 'Afternoon'].forEach(name => {
         const btn = document.getElementById(`filter${name}`);
         if (name.toLowerCase() === type) {
-          btn.className = "px-2.5 py-0.5 rounded-lg bg-slate-900 text-white font-bold cursor-pointer";
+          btn.className = "px-3 py-1.5 rounded-xl bg-slate-900 text-white font-bold cursor-pointer shadow-sm";
         } else {
-          btn.className = "px-2.5 py-0.5 rounded-lg bg-white border border-slate-200 text-slate-700 hover:bg-slate-50 cursor-pointer";
+          btn.className = "px-3 py-1.5 rounded-xl bg-white border border-slate-200 text-slate-700 hover:bg-slate-50 cursor-pointer shadow-sm";
         }
       });
       renderSchedule();
@@ -590,7 +590,7 @@
       // Itemized Breakdown Generation
       const breakdownContainer = document.getElementById('modalItemizedBreakdown');
       breakdownContainer.innerHTML = selectedSlots.map(s => `
-        <div class="flex justify-between text-xs py-0.5">
+        <div class="flex justify-between text-xs py-1">
           <span>Court ${s.court}, ${s.time}</span>
           <span class="font-bold text-slate-900">₱${s.price}</span>
         </div>
@@ -679,10 +679,10 @@
       const btnText = document.getElementById('frameToggleText');
 
       if (isFullCanvas) {
-        frame.className = "w-full max-w-4xl bg-sand-50 sm:rounded-[32px] sm:shadow-2xl sm:border-[8px] sm:border-slate-800 flex flex-col h-[100vh] sm:h-[860px] overflow-hidden relative transition-all duration-300 shadow-emerald-950/20";
+        frame.className = "w-full max-w-4xl bg-sand-50 sm:rounded-[32px] sm:shadow-2xl sm:border-[8px] sm:border-slate-800 flex flex-col h-[100vh] sm:h-[880px] overflow-hidden relative transition-all duration-300 shadow-emerald-950/20";
         btnText.textContent = "Phone Frame View";
       } else {
-        frame.className = "w-full max-w-[420px] bg-sand-50 sm:rounded-[44px] sm:shadow-2xl sm:border-[8px] sm:border-slate-800 flex flex-col h-[100vh] sm:h-[860px] overflow-hidden relative transition-all duration-300 shadow-emerald-950/20";
+        frame.className = "w-full max-w-[440px] bg-sand-50 sm:rounded-[44px] sm:shadow-2xl sm:border-[8px] sm:border-slate-800 flex flex-col h-[100vh] sm:h-[880px] overflow-hidden relative transition-all duration-300 shadow-emerald-950/20";
         btnText.textContent = "Full Canvas View";
       }
     }
