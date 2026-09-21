@@ -31,7 +31,7 @@
               400: '#4ade80',
               500: '#22c55e',
               800: '#166534',
-              900: '#0f382c', // Millennial Emerald
+              900: '#0f382c', 
               950: '#051f17',
             },
             limeAccent: {
@@ -45,25 +45,15 @@
               800: '#423e37',
             }
           },
-          animation: {
-            'bounce-subtle': 'bounceSubtle 1.2s infinite ease-in-out',
-            'pulse-glow': 'pulseGlow 2s infinite',
-            'ball-hop': 'ballHop 0.6s ease-out',
-          },
           keyframes: {
-            bounceSubtle: {
-              '0%, 100%': { transform: 'translateY(0)' },
-              '50%': { transform: 'translateY(-4px)' }
-            },
-            pulseGlow: {
-              '0%, 100%': { opacity: '1', boxShadow: '0 0 15px rgba(34, 197, 94, 0.4)' },
-              '50%': { opacity: '0.85', boxShadow: '0 0 25px rgba(163, 230, 53, 0.7)' }
-            },
             ballHop: {
               '0%': { transform: 'scale(0.8) translateY(10px)', opacity: '0.5' },
               '60%': { transform: 'scale(1.1) translateY(-6px)' },
               '100%': { transform: 'scale(1) translateY(0)', opacity: '1' }
             }
+          },
+          animation: {
+            'ball-hop': 'ballHop 0.6s ease-out',
           }
         }
       }
@@ -71,7 +61,6 @@
   </script>
 
   <style>
-    /* Custom Scrollbar Styling */
     .no-scrollbar::-webkit-scrollbar {
       display: none;
     }
@@ -79,20 +68,13 @@
       -ms-overflow-style: none;
       scrollbar-width: none;
     }
-    
     body {
       -webkit-tap-highlight-color: transparent;
       font-family: 'Plus Jakarta Sans', sans-serif;
     }
-
-    .slot-card {
-      transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
-    }
-    
     .slot-card:active {
       transform: scale(0.97);
     }
-
     .bounce-pop {
       animation: ballHop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     }
@@ -114,19 +96,16 @@
     </div>
 
     <div class="flex items-center gap-2.5">
-      <!-- Sync Status / Refresh Button -->
       <button onclick="fetchSlots()" class="flex items-center gap-1.5 bg-slate-800 hover:bg-slate-700 text-slate-200 px-3 py-1.5 rounded-xl border border-slate-700 transition text-xs font-semibold">
         <i class="fa-solid fa-rotate text-lime-400"></i>
         <span>Refresh Live</span>
       </button>
 
-      <!-- Device Frame Toggle Button -->
       <button onclick="toggleDeviceFrame()" id="frameToggleBtn" class="flex items-center gap-1.5 bg-slate-800 hover:bg-slate-700 text-slate-200 px-3 py-1.5 rounded-xl border border-slate-700 transition text-xs font-semibold">
         <i class="fa-solid fa-mobile-screen text-lime-400"></i>
         <span id="frameToggleText">Full Canvas View</span>
       </button>
 
-      <!-- UX Breakdown Toggle -->
       <button onclick="toggleDesignNotes()" class="flex items-center gap-1.5 bg-gradient-to-r from-emerald-600 to-brand-900 hover:from-emerald-500 hover:to-brand-800 text-white px-3.5 py-1.5 rounded-xl font-bold transition shadow-md text-xs">
         <i class="fa-solid fa-bolt text-lime-300 animate-bounce"></i>
         <span>UX Enhancements</span>
@@ -137,10 +116,9 @@
   <!-- Main Container / Smartphone Wrapper -->
   <main class="w-full max-w-6xl flex-1 flex justify-center p-0 sm:p-6 md:p-8 transition-all">
     
-    <!-- Smartphone Viewport Frame Container -->
     <div id="phoneFrame" class="w-full max-w-[420px] bg-sand-50 sm:rounded-[44px] sm:shadow-2xl sm:border-[8px] sm:border-slate-800 flex flex-col h-[100vh] sm:h-[860px] overflow-hidden relative transition-all duration-300 shadow-emerald-950/20">
       
-      <!-- Simulated Phone Top Notch & Status Bar -->
+      <!-- Simulated Phone Top Notch -->
       <div class="bg-slate-950 text-white text-[11px] px-6 pt-2 pb-1 hidden sm:flex justify-between items-center z-40 select-none">
         <span class="font-bold tracking-tight text-slate-200">7:00 AM</span>
         <div class="w-20 h-4 bg-slate-900 rounded-full mx-auto flex items-center justify-center">
@@ -155,7 +133,6 @@
 
       <!-- App Header -->
       <div class="bg-white border-b border-slate-200/80 px-4 py-2.5 sticky top-0 z-30 shadow-sm">
-        <!-- Interactive Date Selector Bar -->
         <div class="flex gap-2 overflow-x-auto no-scrollbar py-1 text-center -mx-4 px-4 select-none" id="datePicker">
           <!-- Populated dynamically -->
         </div>
@@ -163,8 +140,6 @@
 
       <!-- Main Content Scrollable Area -->
       <div class="flex-1 overflow-y-auto no-scrollbar pb-32 bg-sand-50">
-        
-        <!-- Time Filter & Slot Count Header -->
         <div class="px-4 pt-4 pb-1 flex items-center justify-between text-xs text-slate-500">
           <span class="font-bold text-slate-800" id="currentDateLabel">Today • Schedule</span>
           <div class="flex gap-1.5 text-[11px] font-bold">
@@ -174,9 +149,7 @@
           </div>
         </div>
 
-        <!-- Timeslots Container -->
         <div class="p-4 space-y-3" id="slotsContainer">
-          <!-- Dynamically populated via JavaScript -->
           <div class="p-8 text-center text-slate-400 bg-white rounded-2xl border border-slate-200">
             <i class="fa-solid fa-circle-notch fa-spin text-2xl text-emerald-600 mb-2"></i>
             <p class="text-xs font-semibold text-slate-600">Connecting to live court server...</p>
@@ -184,10 +157,8 @@
         </div>
       </div>
 
-      <!-- Floating Bottom Booking Bar & Multi-Hour Cart -->
+      <!-- Floating Bottom Booking Bar -->
       <div id="bookingDrawer" class="absolute bottom-0 left-0 right-0 bg-white/95 backdrop-blur-md border-t border-slate-200 p-4 shadow-2xl z-30 transition-all duration-300 transform translate-y-full rounded-t-3xl">
-        
-        <!-- Session Summary -->
         <div class="flex items-center justify-between mb-3">
           <div>
             <span class="text-[11px] uppercase tracking-wider text-slate-500 font-extrabold block">You will play</span>
@@ -206,7 +177,6 @@
           </div>
         </div>
 
-        <!-- Checkout Trigger Button -->
         <button onclick="openCheckoutModal()" class="w-full py-3.5 bg-gradient-to-r from-brand-900 to-emerald-900 hover:from-brand-950 hover:to-emerald-950 text-white rounded-2xl font-black text-sm shadow-xl shadow-brand-900/25 active:scale-[0.98] transition flex items-center justify-center gap-2">
           <span>Proceed to Payment to Book</span>
           <i class="fa-solid fa-arrow-right text-xs"></i>
@@ -239,19 +209,16 @@
           <span class="text-slate-500">Date:</span>
           <span class="font-bold text-slate-800" id="modalDate">Today</span>
         </div>
-        <div class="flex justify-between items-start pt-1 border-t border-slate-200/60">
-          <span class="text-slate-500">Time Slots:</span>
-          <span class="font-bold text-slate-800 text-right whitespace-pre-line leading-relaxed" id="modalTimeslots">None</span>
+        <div class="pt-1 pb-1">
+          <span class="text-slate-500 block mb-1">Time Slots:</span>
+          <div id="modalItemizedBreakdown" class="space-y-1 pl-2 border-l-2 border-emerald-500/30 text-slate-700 font-semibold">
+            <!-- Itemized slots injected here -->
+          </div>
         </div>
 
-        <!-- Itemized Breakdown Before Total Payable -->
-        <div class="pt-2 border-t border-slate-200 space-y-1.5" id="modalItemizedBreakdown">
-          <!-- Dynamically populated itemized rows -->
-        </div>
-
-        <div class="pt-2 border-t-2 border-slate-300 flex justify-between text-sm font-black text-slate-900">
+        <div class="pt-2 border-t border-slate-200 flex justify-between text-sm font-black text-slate-900">
           <span>Total Payable:</span>
-          <span class="text-brand-900 text-base" id="modalTotal">₱0</span>
+          <span class="text-brand-900" id="modalTotal">₱0</span>
         </div>
       </div>
 
@@ -266,7 +233,7 @@
       </div>
 
       <!-- Booking Form -->
-      <form id="booking-form" class="space-y-3.5">
+      <form id="booking-form" class="space-y-3.5" onsubmit="submitBooking(event)">
         <div>
           <label class="block text-xs font-bold text-slate-700 mb-1">Email Address <span class="text-emerald-600">*</span></label>
           <input type="email" id="email" required placeholder="you@example.com" 
@@ -291,19 +258,16 @@
     </div>
   </div>
 
-  <!-- SUCCESS CONFIRMATION MODAL OVERLAY -->
+  <!-- SUCCESS CONFIRMATION MODAL -->
   <div id="successModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-md z-50 flex items-center justify-center opacity-0 pointer-events-none transition-opacity duration-300 p-4">
     <div class="w-full max-w-sm bg-white rounded-3xl p-6 shadow-2xl text-center transform scale-95 transition-transform duration-300 space-y-4">
-      
       <div class="w-20 h-20 mx-auto rounded-3xl bg-gradient-to-tr from-brand-900 to-emerald-500 flex items-center justify-center text-lime-300 text-3xl shadow-xl bounce-pop">
         <i class="fa-solid fa-trophy"></i>
       </div>
-
       <div>
         <h3 class="font-black text-slate-900 text-xl tracking-tight">Court Locked In!</h3>
         <p class="text-xs text-slate-500 mt-1">Your reservation receipt has been sent to your email.</p>
       </div>
-
       <div class="bg-sand-50 p-3.5 rounded-2xl border border-slate-200/80 text-left text-xs space-y-1.5">
         <div class="flex justify-between">
           <span class="text-slate-500">Booking ID:</span>
@@ -318,14 +282,13 @@
           <span class="font-extrabold text-brand-900" id="successDuration">1 Hour Session</span>
         </div>
       </div>
-
       <button onclick="closeSuccessModal()" class="w-full py-3.5 bg-slate-900 hover:bg-slate-950 text-white font-extrabold rounded-2xl text-xs uppercase tracking-wider transition">
         Done & Back to Schedule
       </button>
     </div>
   </div>
 
-  <!-- UX REDESIGN BREAKDOWN MODAL -->
+  <!-- NOTES MODAL -->
   <div id="notesModal" class="fixed inset-0 bg-slate-950/70 backdrop-blur-sm z-50 flex items-center justify-center p-4 opacity-0 pointer-events-none transition-opacity duration-200">
     <div class="w-full max-w-lg bg-white rounded-3xl p-6 shadow-2xl max-h-[85vh] overflow-y-auto">
       <div class="flex items-center justify-between mb-4 border-b border-slate-100 pb-3">
@@ -339,41 +302,16 @@
           <i class="fa-solid fa-xmark"></i>
         </button>
       </div>
-
       <div class="space-y-3.5 text-xs sm:text-sm text-slate-600">
-        
         <div class="p-3.5 bg-sand-50 rounded-2xl border border-slate-200">
-          <div class="font-extrabold text-slate-900 text-sm mb-1 flex items-center gap-2">
-            <span class="w-5 h-5 rounded-full bg-brand-900 text-white flex items-center justify-center text-xs">1</span>
-            Interactive Date Selector Bar
-          </div>
-          <p class="text-slate-600 leading-relaxed text-xs">
-            Dynamic calendar row allows seamless date switching. Automatic current-hour filter hides past slots for today.
-          </p>
+          <div class="font-extrabold text-slate-900 text-sm mb-1">1. Dynamic Date Bar & Past Slot Filtering</div>
+          <p class="text-slate-600 text-xs">Past slots for today are completely hidden, keeping the interface clean and actionable.</p>
         </div>
-
         <div class="p-3.5 bg-sand-50 rounded-2xl border border-slate-200">
-          <div class="font-extrabold text-slate-900 text-sm mb-1 flex items-center gap-2">
-            <span class="w-5 h-5 rounded-full bg-brand-900 text-white flex items-center justify-center text-xs">2</span>
-            Side-by-Side 3-Court Grid
-          </div>
-          <p class="text-slate-600 leading-relaxed text-xs">
-            Clean 3-column layout inside each timeslot card allows immediate booking visibility without horizontal scrolling.
-          </p>
+          <div class="font-extrabold text-slate-900 text-sm mb-1">2. Itemized Pricing & Simplified Checkout</div>
+          <p class="text-slate-600 text-xs">Checkout displays clear itemized breakdowns per hour/court with unified GCash integration.</p>
         </div>
-
-        <div class="p-3.5 bg-sand-50 rounded-2xl border border-slate-200">
-          <div class="font-extrabold text-slate-900 text-sm mb-1 flex items-center gap-2">
-            <span class="w-5 h-5 rounded-full bg-brand-900 text-white flex items-center justify-center text-xs">3</span>
-            Backend Integrated Payment Flow
-          </div>
-          <p class="text-slate-600 leading-relaxed text-xs">
-            Directly connected to Google Apps Script backend and GCash QR code for live validation and instant confirmation receipts.
-          </p>
-        </div>
-
       </div>
-
       <div class="mt-5">
         <button onclick="toggleDesignNotes()" class="w-full py-3 bg-slate-900 text-white font-extrabold rounded-2xl text-xs uppercase tracking-wider">
           Got It, Back to App
@@ -383,19 +321,9 @@
   </div>
 
   <script>
-    // ==========================================
-    // BACKEND CONFIGURATION
-    // ==========================================
     const API_URL = "https://script.google.com/macros/s/AKfycbxjcGWN_iyGH26kuzwY_FX7qnHn365D3evpZ-cqZxYoRNO6IrmIgIJC2BVlwG6PiLIxXQ/exec"; 
     const QR_IMAGE_URL = "https://i.postimg.cc/cLdL90D5/IMG-3613.jpg"; 
 
-    // Helper to normalize time strings ("08:00 AM" -> "8:00 AM") for seamless Google Sheet matching
-    function normalizeTimeSlot(str) {
-      if (!str) return '';
-      return str.replace(/\b0(\d:[0-5]\d)/g, '$1').trim();
-    }
-
-    // Standard baseline schedule matching Google Sheet Slots tab
     const STANDARD_TIMES = [
       { id: 's1', startHour: 7, time: '7:00 AM - 8:00 AM', period: 'morning', price: 350 },
       { id: 's2', startHour: 8, time: '8:00 AM - 9:00 AM', period: 'morning', price: 350 },
@@ -412,11 +340,9 @@
       { id: 's13', startHour: 19, time: '7:00 PM - 8:00 PM', period: 'afternoon', price: 350 },
       { id: 's14', startHour: 20, time: '8:00 PM - 9:00 PM', period: 'afternoon', price: 350 },
       { id: 's15', startHour: 21, time: '9:00 PM - 10:00 PM', period: 'afternoon', price: 350 },
-      { id: 's16', startHour: 22, time: '10:00 PM - 11:00 PM', period: 'afternoon', price: 350 },
-      { id: 's17', startHour: 23, time: '11:00 PM - 12:00 AM', period: 'afternoon', price: 350 }
+      { id: 's16', startHour: 22, time: '10:00 PM - 11:00 PM', period: 'afternoon', price: 350 }
     ];
 
-    // Generate upcoming dates dynamically
     let daysList = [];
     let selectedDateObj = null;
     let selectedDateStr = "";
@@ -425,6 +351,11 @@
     let slotMap = {};
 
     document.getElementById('gcash-qr-img').src = QR_IMAGE_URL;
+
+    function normalizeTimeSlot(t) {
+      if (!t) return '';
+      return t.trim().replace(/^0/, '').replace(/ 0/, ' ');
+    }
 
     function initDates() {
       const now = new Date();
@@ -506,8 +437,7 @@
         slotMap = {};
         if (Array.isArray(openSlots)) {
           openSlots.forEach(s => {
-            const normalizedTime = normalizeTimeSlot(s.TimeSlot);
-            const key = `${normalizedTime}|${s.CourtName.trim()}`;
+            const key = `${normalizeTimeSlot(s.TimeSlot)}|${s.CourtName.trim()}`;
             slotMap[key] = s;
           });
         }
@@ -525,18 +455,17 @@
 
       const now = new Date();
       const currentHour = now.getHours();
-
       let visibleSlotsCount = 0;
 
       STANDARD_TIMES.forEach((slot) => {
         if (activeFilter !== 'all' && slot.period !== activeFilter) return;
 
-        // Skip/hide any slot that has already passed for today
-        const isPast = selectedDateObj.isToday && slot.startHour <= currentHour;
-        if (isPast) return;
+        // Completely hide past slots for today
+        if (selectedDateObj.isToday && slot.startHour < currentHour) {
+          return;
+        }
 
         visibleSlotsCount++;
-
         const card = document.createElement('div');
         card.className = "bg-white rounded-2xl p-3.5 border border-slate-200 shadow-sm space-y-2.5 transition hover:shadow-md";
 
@@ -554,10 +483,10 @@
           const key = `${normalizedTime}|${courtName}`;
           
           const liveSlot = slotMap[key];
-          const isAvailable = Object.keys(slotMap).length === 0 ? true : !!liveSlot;
+          const isAvailable = Object.keys(slotMap).length === 0 ? true : (liveSlot && liveSlot.Status === 'Available');
           const slotId = liveSlot ? liveSlot.SlotID : `${slot.id}-c${courtNum}`;
 
-          const isSelected = selectedSlots.some(s => s.time === slot.time && s.court === courtNum);
+          const isSelected = selectedSlots.some(s => normalizeTimeSlot(s.time) === normalizedTime && s.court === courtNum);
 
           if (isSelected) {
             cardHTML += `
@@ -592,8 +521,8 @@
         container.innerHTML = `
           <div class="p-8 text-center text-slate-500 bg-white rounded-2xl border border-slate-200">
             <i class="fa-solid fa-moon text-3xl text-slate-300 mb-2"></i>
-            <p class="text-xs font-bold text-slate-700">No more upcoming slots for today.</p>
-            <p class="text-[11px] text-slate-400 mt-1">Please select tomorrow or another date above.</p>
+            <p class="text-xs font-bold text-slate-700">No more upcoming slots for this day.</p>
+            <p class="text-[11px] text-slate-400 mt-1">Please select another date above.</p>
           </div>
         `;
       }
@@ -626,20 +555,12 @@
       if (selectedSlots.length > 0) {
         const baseTotal = selectedSlots.reduce((sum, item) => sum + item.price, 0);
         const courtsUsed = [...new Set(selectedSlots.map(s => s.court))];
-
-        const courtLabel = courtsUsed.length > 1 
-          ? `Courts ${courtsUsed.join(', ')}` 
-          : `Court ${courtsUsed[0]}`;
+        const courtLabel = courtsUsed.length > 1 ? `Courts ${courtsUsed.join(', ')}` : `Court ${courtsUsed[0]}`;
 
         countEl.textContent = `${selectedSlots.length} ${selectedSlots.length === 1 ? 'Hour' : 'Hours'} • ${courtLabel}`;
 
-        const dayTag = selectedDateObj.isToday 
-          ? `Today, ${selectedDateObj.month}-${selectedDateObj.date}` 
-          : `${selectedDateObj.fullDay}, ${selectedDateObj.month}-${selectedDateObj.date}`;
-
-        if (dateEl) {
-          dateEl.textContent = dayTag;
-        }
+        const dayTag = selectedDateObj.isToday ? `Today, ${selectedDateObj.month}-${selectedDateObj.date}` : `${selectedDateObj.fullDay}, ${selectedDateObj.month}-${selectedDateObj.date}`;
+        if (dateEl) dateEl.textContent = dayTag;
 
         priceEl.innerHTML = `<span>₱${baseTotal.toLocaleString()}</span>`;
         drawer.classList.remove('translate-y-full');
@@ -661,7 +582,6 @@
       renderSchedule();
     }
 
-    // Modal & Submission Helpers
     function openCheckoutModal() {
       if (selectedSlots.length === 0) return;
 
@@ -671,17 +591,13 @@
 
       document.getElementById('modalCourtName').textContent = courtsUsed.length > 1 ? `Courts ${courtsUsed.join(', ')}` : `Court ${courtsUsed[0]}`;
       document.getElementById('modalDate').textContent = selectedDateStr;
-      
-      // Revised time slots formatting: Court XX , <timeslot>
-      const formattedTimeslots = selectedSlots.map(s => `Court ${s.court} , ${s.time}`).join('\n');
-      document.getElementById('modalTimeslots').textContent = formattedTimeslots;
 
-      // Render Itemized Breakdown before Total Payable
+      // Itemized Breakdown Generation
       const breakdownContainer = document.getElementById('modalItemizedBreakdown');
       breakdownContainer.innerHTML = selectedSlots.map(s => `
-        <div class="flex justify-between text-[11px] text-slate-600">
-          <span>Court ${s.court} (${s.time})</span>
-          <span class="font-semibold text-slate-800">₱${s.price.toLocaleString()}</span>
+        <div class="flex justify-between text-xs py-0.5">
+          <span>Court ${s.court}, ${s.time}</span>
+          <span class="font-bold text-slate-900">₱${s.price}</span>
         </div>
       `).join('');
 
@@ -697,90 +613,86 @@
       document.getElementById('status-message').classList.add('hidden');
     }
 
-    document.getElementById('booking-form').addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const btn = document.getElementById('submit-btn');
+    async function submitBooking(event) {
+      event.preventDefault();
+      const submitBtn = document.getElementById('submit-btn');
       const statusMsg = document.getElementById('status-message');
-      
-      btn.disabled = true;
-      btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin text-xs"></i> <span>Processing Booking...</span>`;
+      const email = document.getElementById('email').value;
+      const gcashRef = document.getElementById('gcash-ref').value;
 
-      const emailVal = document.getElementById('email').value;
-      const gcashRefVal = document.getElementById('gcash-ref').value;
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = `<i class="fa-solid fa-circle-notch fa-spin"></i> Processing Booking...`;
+      statusMsg.className = "hidden mt-3 p-3 rounded-xl text-center text-xs font-semibold";
 
       try {
-        let lastBookingId = null;
+        const payload = {
+          date: selectedDateStr,
+          email: email,
+          gcashRef: gcashRef,
+          slots: selectedSlots.map(s => ({
+            slotId: s.slotId,
+            courtName: `Court ${s.court}`,
+            timeSlot: s.time,
+            price: s.price
+          }))
+        };
 
-        // Process all selected court slots
-        for (const targetSlot of selectedSlots) {
-          const payload = {
-            slotId: targetSlot.slotId,
-            email: emailVal,
-            gcashRef: gcashRefVal
-          };
+        const response = await fetch(API_URL, {
+          method: 'POST',
+          mode: 'no-cors',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
 
-          const res = await fetch(API_URL, {
-            method: 'POST',
-            body: JSON.stringify(payload)
-          });
-          const result = await res.json();
-
-          if (result.success) {
-            lastBookingId = result.bookingId;
-          } else {
-            throw new Error(result.message || 'Booking failed');
-          }
-        }
-
+        // Success state handler
         closeCheckoutModal();
-        showSuccessModal(lastBookingId || `#PH-${Math.floor(1000 + Math.random() * 9000)}`);
-        document.getElementById('booking-form').reset();
+        openSuccessModal(payload);
         selectedSlots = [];
         updateBottomDrawer();
         fetchSlots();
+
       } catch (err) {
-        statusMsg.className = 'mt-3 p-3 bg-red-50 border border-red-200 text-red-700 rounded-xl text-center text-xs font-semibold';
-        statusMsg.innerText = err.message || 'Error processing payment confirmation. Please verify details.';
-        statusMsg.classList.remove('hidden');
+        console.error(err);
+        statusMsg.textContent = "Network error while submitting. Please try again.";
+        statusMsg.className = "mt-3 p-3 rounded-xl text-center text-xs font-semibold bg-red-100 text-red-700 block";
       } finally {
-        btn.disabled = false;
-        btn.innerHTML = `<i class="fa-solid fa-lock text-xs"></i> <span>Confirm Payment & Book Slot</span>`;
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = `<i class="fa-solid fa-lock text-xs"></i><span>Confirm Payment & Book Slot</span>`;
       }
-    });
+    }
 
-    function showSuccessModal(bookingId) {
-      const successModal = document.getElementById('successModal');
-      document.getElementById('successDate').textContent = selectedDateStr;
-      document.getElementById('successDuration').textContent = `${selectedSlots.length || 1} Hour Session`;
-      document.getElementById('successCode').textContent = bookingId;
-
-      successModal.classList.remove('opacity-0', 'pointer-events-none');
-      successModal.querySelector('div').classList.remove('scale-95');
+    function openSuccessModal(data) {
+      const modal = document.getElementById('successModal');
+      document.getElementById('successCode').textContent = `#BK-${Math.floor(1000 + Math.random() * 9000)}`;
+      document.getElementById('successDate').textContent = data.date;
+      document.getElementById('successDuration').textContent = `${data.slots.length} Hour(s) Session`;
+      modal.classList.remove('opacity-0', 'pointer-events-none');
+      modal.querySelector('div').classList.remove('scale-95');
     }
 
     function closeSuccessModal() {
-      const successModal = document.getElementById('successModal');
-      successModal.classList.add('opacity-0', 'pointer-events-none');
+      const modal = document.getElementById('successModal');
+      modal.classList.add('opacity-0', 'pointer-events-none');
+    }
+
+    function toggleDeviceFrame() {
+      const frame = document.getElementById('phoneFrame');
+      const btnText = document.getElementById('frameToggleText');
+      if (frame.classList.contains('max-w-[420px]')) {
+        frame.classList.remove('max-w-[420px]', 'sm:rounded-[44px]', 'sm:border-[8px]');
+        btnText.textContent = "Mobile Frame View";
+      } else {
+        frame.classList.add('max-w-[420px]', 'sm:rounded-[44px]', 'sm:border-[8px]');
+        btnText.textContent = "Full Canvas View";
+      }
     }
 
     function toggleDesignNotes() {
       const modal = document.getElementById('notesModal');
-      modal.classList.toggle('opacity-0');
-      modal.classList.toggle('pointer-events-none');
-    }
-
-    function toggleDeviceFrame() {
-      const phoneFrame = document.getElementById('phoneFrame');
-      const toggleText = document.getElementById('frameToggleText');
-
-      if (phoneFrame.classList.contains('max-w-[420px]')) {
-        phoneFrame.classList.remove('max-w-[420px]', 'sm:rounded-[44px]', 'sm:border-[8px]', 'sm:h-[860px]');
-        phoneFrame.classList.add('max-w-full', 'rounded-none', 'border-none', 'h-[100vh]');
-        toggleText.textContent = "Smartphone Frame Mode";
+      if (modal.classList.contains('opacity-0')) {
+        modal.classList.remove('opacity-0', 'pointer-events-none');
       } else {
-        phoneFrame.classList.add('max-w-[420px]', 'sm:rounded-[44px]', 'sm:border-[8px]', 'sm:h-[860px]');
-        phoneFrame.classList.remove('max-w-full', 'rounded-none', 'border-none', 'h-[100vh]');
-        toggleText.textContent = "Full Canvas View";
+        modal.classList.add('opacity-0', 'pointer-events-none');
       }
     }
   </script>
