@@ -516,19 +516,20 @@
       STANDARD_TIMES.forEach((slot) => {
         if (activeFilter !== 'all' && slot.period !== activeFilter) return;
 
-        // Hide past slots for today
-        if (selectedDateObj.isToday && slot.startHour < currentHour) {
-          return;
-        }
+        // Check if the slot hour has already passed for today
+        const isPast = selectedDateObj.isToday && slot.startHour < currentHour;
 
         visibleSlotsCount++;
 
         const card = document.createElement('div');
-        card.className = "bg-white rounded-2xl p-3.5 border border-slate-200 shadow-sm space-y-2.5 transition hover:shadow-md";
+        card.className = "bg-white rounded-2xl p-3.5 border border-slate-200 shadow-sm space-y-2.5 transition hover:shadow-md" + (isPast ? " opacity-60 bg-slate-50/60" : "");
 
         let cardHTML = `
           <div class="flex items-center justify-between border-b border-slate-100 pb-2">
-            <span class="text-sm font-extrabold text-slate-900">${slot.time}</span>
+            <div class="flex items-center gap-2">
+              <span class="text-sm font-extrabold text-slate-900">${slot.time}</span>
+              ${isPast ? '<span class="text-[9px] bg-slate-200 text-slate-600 px-1.5 py-0.5 rounded font-bold uppercase">Passed</span>' : ''}
+            </div>
             <span class="text-[11px] text-slate-500 font-bold">₱${slot.price}/hr</span>
           </div>
           <div class="grid grid-cols-3 gap-2 pt-0.5">
@@ -545,7 +546,14 @@
 
           const isSelected = selectedSlots.some(s => s.time === slot.time && s.court === courtNum);
 
-          if (isSelected) {
+          if (isPast) {
+            cardHTML += `
+              <div class="py-2.5 px-1 rounded-xl bg-slate-100 border border-slate-200/60 text-slate-400 font-semibold text-xs flex flex-col items-center justify-center gap-0.5 opacity-50 select-none">
+                <span class="text-[9px] uppercase font-medium text-slate-400">Court ${courtNum}</span>
+                <span class="text-[10px] font-medium text-slate-400">Passed</span>
+              </div>
+            `;
+          } else if (isSelected) {
             cardHTML += `
               <button onclick="toggleSlotSelection('${slot.time}', ${courtNum}, '${slotId}', ${slot.price})" class="py-2.5 px-1 rounded-xl bg-brand-900 text-white font-black text-xs flex flex-col items-center justify-center gap-0.5 border border-brand-900 shadow-sm bounce-pop">
                 <span class="text-[9px] uppercase font-bold text-lime-300">Court ${courtNum}</span>
@@ -578,8 +586,8 @@
         container.innerHTML = `
           <div class="p-8 text-center text-slate-500 bg-white rounded-2xl border border-slate-200">
             <i class="fa-solid fa-moon text-3xl text-slate-300 mb-2"></i>
-            <p class="text-xs font-bold text-slate-700">No more upcoming slots for this day.</p>
-            <p class="text-[11px] text-slate-400 mt-1">Please select another date above.</p>
+            <p class="text-xs font-bold text-slate-700">No slots match the active filter.</p>
+            <p class="text-[11px] text-slate-400 mt-1">Please select another date or clear filters.</p>
           </div>
         `;
       }
