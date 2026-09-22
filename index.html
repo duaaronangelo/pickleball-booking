@@ -3,70 +3,37 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>PickleHub - Sept21_Version Smartphone Booking Experience</title>
+  <title>PickleHub - Smartphone Booking Experience</title>
   
-  <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
-  
-  <!-- Google Fonts: Plus Jakarta Sans -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-  
-  <!-- FontAwesome Icons CDN -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
   <script>
     tailwind.config = {
       theme: {
         extend: {
-          fontFamily: {
-            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
-          },
+          fontFamily: { sans: ['"Plus Jakarta Sans"', 'sans-serif'] },
           colors: {
             brand: {
-              50: '#f0fdf4',
-              100: '#dcfce7',
-              200: '#bbf7d0',
-              400: '#4ade80',
-              500: '#22c55e',
-              800: '#166534',
-              900: '#0f382c', 
-              950: '#051f17',
+              50: '#f0fdf4', 100: '#dcfce7', 200: '#bbf7d0', 400: '#4ade80',
+              500: '#22c55e', 800: '#166534', 900: '#0f382c', 950: '#051f17',
             },
-            limeAccent: {
-              400: '#a3e635',
-              500: '#84cc16',
+            reclub: {
+              50: '#fff3ed', 100: '#ffe4d5', 500: '#ff6b35', 600: '#f0561d', 700: '#c74110'
             },
-            sand: {
-              50: '#faf9f5',
-              100: '#f4f2ea',
-              200: '#e6e2d3',
-              800: '#423e37',
-            }
+            limeAccent: { 400: '#a3e635', 500: '#84cc16' },
+            sand: { 50: '#faf9f5', 100: '#f4f2ea', 200: '#e6e2d3', 800: '#423e37' }
           },
           keyframes: {
-            ballHop: {
-              '0%': { transform: 'scale(0.8) translateY(10px)', opacity: '0.5' },
-              '60%': { transform: 'scale(1.1) translateY(-6px)' },
-              '100%': { transform: 'scale(1) translateY(0)', opacity: '1' }
-            },
-            pickleFloat: {
-              '0%, 100%': { transform: 'translateY(0) rotate(-10deg)' },
-              '50%': { transform: 'translateY(-12px) rotate(10deg)' }
-            },
-            paddleSwing: {
-              '0%, 100%': { transform: 'rotate(-25deg)' },
-              '50%': { transform: 'rotate(25deg)' }
-            },
-            ballVolley: {
-              '0%, 100%': { transform: 'translate(0px, 0px) scale(0.9)' },
-              '50%': { transform: 'translate(35px, -25px) scale(1.2)' }
-            }
+            ballHop: { '0%': { transform: 'scale(0.8) translateY(10px)', opacity: '0.5' }, '60%': { transform: 'scale(1.1) translateY(-6px)' }, '100%': { transform: 'scale(1) translateY(0)', opacity: '1' } },
+            paddleSwing: { '0%, 100%': { transform: 'rotate(-25deg)' }, '50%': { transform: 'rotate(25deg)' } },
+            ballVolley: { '0%, 100%': { transform: 'translate(0px, 0px) scale(0.9)' }, '50%': { transform: 'translate(35px, -25px) scale(1.2)' } }
           },
           animation: {
             'ball-hop': 'ballHop 0.6s ease-out',
-            'pickle-float': 'pickleFloat 2s ease-in-out infinite',
             'paddle-swing': 'paddleSwing 1.2s cubic-bezier(0.4, 0, 0.2, 1) infinite',
             'ball-volley': 'ballVolley 1.2s cubic-bezier(0.4, 0, 0.2, 1) infinite',
           }
@@ -76,20 +43,10 @@
   </script>
 
   <style>
-    .no-scrollbar::-webkit-scrollbar {
-      display: none;
-    }
-    .no-scrollbar {
-      -ms-overflow-style: none;
-      scrollbar-width: none;
-    }
-    body {
-      -webkit-tap-highlight-color: transparent;
-      font-family: 'Plus Jakarta Sans', sans-serif;
-    }
-    .bounce-pop {
-      animation: ballHop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    }
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    body { -webkit-tap-highlight-color: transparent; font-family: 'Plus Jakarta Sans', sans-serif; }
+    .bounce-pop { animation: ballHop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
   </style>
 </head>
 <body class="h-full flex flex-col items-center justify-start text-slate-800 antialiased selection:bg-brand-900 selection:text-white">
@@ -105,13 +62,11 @@
         Pasig City
       </span>
     </div>
-
     <div class="flex items-center gap-2.5">
       <button onclick="fetchSlots()" class="flex items-center gap-1.5 bg-slate-800 hover:bg-slate-700 text-slate-200 px-3 py-1.5 rounded-xl border border-slate-700 transition text-xs font-semibold">
         <i class="fa-solid fa-rotate text-lime-400"></i>
         <span>Refresh Live</span>
       </button>
-
       <button onclick="toggleDeviceFrame()" id="frameToggleBtn" class="flex items-center gap-1.5 bg-slate-800 hover:bg-slate-700 text-slate-200 px-3 py-1.5 rounded-xl border border-slate-700 transition text-xs font-semibold">
         <i class="fa-solid fa-mobile-screen text-lime-400"></i>
         <span id="frameToggleText">Full Canvas View</span>
@@ -120,10 +75,9 @@
   </header>
 
   <main class="w-full max-w-6xl flex-1 flex justify-center p-0 sm:p-6 md:p-8 transition-all">
-    
     <div id="phoneFrame" class="w-full max-w-[420px] bg-sand-50 sm:rounded-[44px] sm:shadow-2xl sm:border-[8px] sm:border-slate-800 flex flex-col h-[100vh] sm:h-[860px] overflow-hidden relative transition-all duration-300 shadow-emerald-950/20">
       
-      <!-- Simulated Phone Top Notch -->
+      <!-- App Header & Dates -->
       <div class="bg-slate-950 text-white text-[11px] px-6 pt-2 pb-1 hidden sm:flex justify-between items-center z-40 select-none">
         <span class="font-bold tracking-tight text-slate-200">7:00 AM</span>
         <div class="w-20 h-4 bg-slate-900 rounded-full mx-auto flex items-center justify-center">
@@ -136,15 +90,12 @@
         </div>
       </div>
 
-      <!-- App Header -->
       <div class="bg-white border-b border-slate-200/80 px-4 py-2.5 sticky top-0 z-30 shadow-sm">
-        <div class="flex gap-2 overflow-x-auto no-scrollbar py-1 text-center -mx-4 px-4 select-none" id="datePicker">
-          <!-- Populated dynamically -->
-        </div>
+        <div class="flex gap-2 overflow-x-auto no-scrollbar py-1 text-center -mx-4 px-4 select-none" id="datePicker"></div>
       </div>
 
-      <!-- Main Content Scrollable Area -->
-      <div class="flex-1 overflow-y-auto no-scrollbar pb-32 bg-sand-50">
+      <!-- Scrollable Container -->
+      <div class="flex-1 overflow-y-auto no-scrollbar pb-40 bg-sand-50">
         <div class="px-4 pt-4 pb-1 flex items-center justify-between text-xs text-slate-500">
           <span class="font-bold text-slate-800" id="currentDateLabel">Today • Schedule</span>
           <div class="flex gap-1.5 text-[11px] font-bold">
@@ -156,49 +107,20 @@
 
         <div class="p-4 space-y-4" id="slotsContainer">
           <div class="p-8 text-center text-slate-400 bg-white rounded-3xl border border-slate-200">
-            <div class="relative w-20 h-16 mx-auto mb-4">
-              <div class="absolute bottom-0 left-2 origin-bottom text-brand-900 animate-paddle-swing text-4xl flex items-center justify-center">
-                <svg viewBox="0 0 24 24" fill="currentColor" class="w-9 h-9 transform -rotate-45">
-                  <path d="M19.7,4.3c-2.3-2.3-6.1-2.3-8.5,0l-6.9,6.9c-0.8,0.8-0.8,2.1,0,2.8l1.4,1.4l-3.5,3.5c-0.4,0.4-0.4,1,0,1.4l1.4,1.4c0.4,0.4,1,0.4,1.4,0l3.5-3.5l1.4,1.4c0.8,0.8,2.1,0.8,2.8,0l6.9-6.9C22,9.1,22,5.3,19.7,4.3z"/>
-                </svg>
-              </div>
-              <div class="absolute w-3.5 h-3.5 bg-lime-400 rounded-full shadow-sm animate-ball-volley" style="bottom: 25px; left: 20px;"></div>
-            </div>
-            <p class="text-sm font-semibold text-slate-600">Getting your courts ready for dinking!</p>
+            <i class="fa-solid fa-spinner fa-spin text-2xl mb-3"></i>
+            <p class="text-sm font-semibold">Loading Live Courts...</p>
           </div>
         </div>
       </div>
 
-      <!-- Floating Bottom Booking Bar -->
+      <!-- Floating Bottom Booking Bar (Dynamic for Standard OR Reclub) -->
       <div id="bookingDrawer" class="absolute bottom-0 left-0 right-0 bg-white/95 backdrop-blur-md border-t border-slate-200 p-4 shadow-2xl z-30 transition-all duration-300 transform translate-y-full rounded-t-3xl">
-        <div class="flex items-center justify-between mb-3">
-          <div>
-            <span class="text-[11px] uppercase tracking-wider text-slate-500 font-extrabold block">You will play</span>
-            <div class="text-sm font-black text-slate-900" id="selectedSlotsSummary">0 Hours Selected</div>
-            <div class="text-xs font-bold text-emerald-800 flex items-center gap-1.5 mt-0.5" id="selectedDateDisplay">
-              <i class="fa-regular fa-calendar-days text-emerald-700 text-[11px]"></i>
-              <span id="selectedDateText">Today</span>
-            </div>
-          </div>
-
-          <div class="text-right">
-            <div class="text-[11px] uppercase tracking-wider text-slate-500 font-extrabold">Total Amount</div>
-            <div class="text-lg font-black text-brand-900 flex items-center justify-end gap-1" id="totalPriceDisplay">
-              <span>₱0</span>
-            </div>
-          </div>
-        </div>
-
-        <button onclick="openCheckoutModal()" class="w-full py-3.5 bg-gradient-to-r from-brand-900 to-emerald-900 hover:from-brand-950 hover:to-emerald-950 text-white rounded-2xl font-black text-sm shadow-xl shadow-brand-900/25 active:scale-[0.98] transition flex items-center justify-center gap-2">
-          <span>Proceed to Payment to Book</span>
-          <i class="fa-solid fa-arrow-right text-xs"></i>
-        </button>
+        <!-- Injected via JavaScript -->
       </div>
-
     </div>
   </main>
 
-  <!-- Checkout Modal -->
+  <!-- Checkout Modal (Standard Bookings) -->
   <div id="checkoutModal" class="fixed inset-0 bg-slate-950/70 backdrop-blur-sm z-50 flex items-end sm:items-center justify-center opacity-0 pointer-events-none transition-opacity duration-200 p-0 sm:p-4">
     <div class="w-full max-w-md bg-white rounded-t-3xl sm:rounded-3xl p-6 shadow-2xl transform translate-y-6 transition-transform duration-200 max-h-[90vh] overflow-y-auto">
       <div class="flex items-center justify-between mb-4 pb-3 border-b border-slate-100">
@@ -211,61 +133,39 @@
         </button>
       </div>
 
-      <!-- Booking Summary Box -->
       <div class="bg-sand-50 rounded-2xl p-4 border border-slate-200 mb-4 space-y-2 text-xs">
-        <div class="flex justify-between">
-          <span class="text-slate-500">Courts:</span>
-          <span class="font-bold text-slate-800" id="modalCourtName">Loading...</span>
-        </div>
-        <div class="flex justify-between">
-          <span class="text-slate-500">Date:</span>
-          <span class="font-bold text-slate-800" id="modalDate">Today</span>
-        </div>
+        <div class="flex justify-between"><span class="text-slate-500">Courts:</span><span class="font-bold text-slate-800" id="modalCourtName">Loading...</span></div>
+        <div class="flex justify-between"><span class="text-slate-500">Date:</span><span class="font-bold text-slate-800" id="modalDate">Today</span></div>
         <div class="pt-1 pb-1">
           <span class="text-slate-500 block mb-1">Time Slots:</span>
-          <div id="modalItemizedBreakdown" class="space-y-1 pl-2 border-l-2 border-emerald-500/30 text-slate-700 font-semibold">
-            <!-- Itemized slots injected here -->
-          </div>
+          <div id="modalItemizedBreakdown" class="space-y-1 pl-2 border-l-2 border-emerald-500/30 text-slate-700 font-semibold"></div>
         </div>
-
         <div class="pt-2 border-t border-slate-200 flex justify-between text-sm font-black text-slate-900">
-          <span>Total Payable:</span>
-          <span class="text-brand-900" id="modalTotal">₱0</span>
+          <span>Total Payable:</span><span class="text-brand-900" id="modalTotal">₱0</span>
         </div>
       </div>
 
-      <!-- GCash QR Box -->
       <div class="bg-slate-50 border border-slate-200/80 rounded-2xl p-4 mb-4 text-center">
         <span class="text-[11px] font-extrabold text-slate-500 uppercase tracking-wider block mb-2">Scan GCash QR Code</span>
-        
         <div class="bg-white p-2 rounded-xl w-40 h-40 mx-auto border border-slate-200 shadow-inner flex items-center justify-center">
-          <img id="gcash-qr-img" src="" alt="GCash QR Code" class="w-full h-full object-contain rounded-lg" />
+          <img id="gcash-qr-img" src="https://i.postimg.cc/cLdL90D5/IMG-3613.jpg" alt="GCash QR Code" class="w-full h-full object-contain rounded-lg" />
         </div>
         <p class="text-[11px] text-slate-600 mt-2 font-bold">Kindly settle total payable to book your slot. Thank you!</p>
       </div>
 
-      <!-- Booking Form -->
       <form id="booking-form" class="space-y-3.5" onsubmit="submitBooking(event)">
         <div>
           <label class="block text-xs font-bold text-slate-700 mb-1">Email Address <span class="text-emerald-600">*</span></label>
-          <input type="email" id="email" required placeholder="you@example.com" 
-                 class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3.5 py-2.5 text-xs text-slate-900 focus:outline-none focus:ring-2 focus:ring-brand-900 transition" />
-          <p class="text-[10px] text-slate-500 mt-1">Confirmation receipt will be sent here.</p>
+          <input type="email" id="email" required placeholder="you@example.com" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3.5 py-2.5 text-xs text-slate-900 focus:outline-none focus:ring-2 focus:ring-brand-900 transition" />
         </div>
-
         <div>
           <label class="block text-xs font-bold text-slate-700 mb-1">GCash Reference Number <span class="text-emerald-600">*</span></label>
-          <input type="text" id="gcash-ref" required placeholder="13-digit transaction ref no." 
-                 class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3.5 py-2.5 text-xs text-slate-900 focus:outline-none focus:ring-2 focus:ring-brand-900 transition" />
+          <input type="text" id="gcash-ref" required placeholder="13-digit transaction ref no." class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3.5 py-2.5 text-xs text-slate-900 focus:outline-none focus:ring-2 focus:ring-brand-900 transition" />
         </div>
-
-        <button type="submit" id="submit-btn" 
-                class="w-full py-3.5 bg-gradient-to-r from-brand-900 to-emerald-900 hover:from-brand-950 hover:to-emerald-950 text-white font-black rounded-2xl shadow-lg transition text-xs flex items-center justify-center gap-2 mt-2">
-          <i class="fa-solid fa-lock text-xs"></i>
-          <span>Confirm Payment & Book Slot</span>
+        <button type="submit" id="submit-btn" class="w-full py-3.5 bg-gradient-to-r from-brand-900 to-emerald-900 hover:from-brand-950 text-white font-black rounded-2xl shadow-lg transition text-xs flex items-center justify-center gap-2 mt-2">
+          <i class="fa-solid fa-lock text-xs"></i><span>Confirm Payment & Book Slot</span>
         </button>
       </form>
-
       <div id="status-message" class="hidden mt-3 p-3 rounded-xl text-center text-xs font-semibold"></div>
     </div>
   </div>
@@ -280,20 +180,6 @@
         <h3 class="font-black text-slate-900 text-2xl tracking-tight">See you at The Hub!</h3>
         <p class="text-xs text-slate-500 mt-1">Your reservation receipt has been sent to your email.</p>
       </div>
-      <div class="bg-sand-50 p-3.5 rounded-2xl border border-slate-200/80 text-left text-xs space-y-1.5">
-        <div class="flex justify-between">
-          <span class="text-slate-500">Booking ID:</span>
-          <span class="font-mono font-bold text-brand-900" id="successCode">#BK-9821</span>
-        </div>
-        <div class="flex justify-between">
-          <span class="text-slate-500">Date:</span>
-          <span class="font-semibold text-slate-800" id="successDate">Today</span>
-        </div>
-        <div class="flex justify-between">
-          <span class="text-slate-500">Total Duration:</span>
-          <span class="font-extrabold text-brand-900" id="successDuration">1 Hour Session</span>
-        </div>
-      </div>
       <button onclick="closeSuccessModal()" class="w-full py-3.5 bg-slate-900 hover:bg-slate-950 text-white font-extrabold rounded-2xl text-xs uppercase tracking-wider transition">
         Done & Back to Schedule
       </button>
@@ -301,10 +187,9 @@
   </div>
 
   <script>
-    // MAKE SURE TO PASTE YOUR GOOGLE APPS SCRIPT WEB APP URL HERE:
-    const API_URL = "https://script.google.com/macros/s/AKfycbxjcGWN_iyGH26kuzwY_FX7qnHn365D3evpZ-cqZxYoRNO6IrmIgIJC2BVlwG6PiLIxXQ/exec"; 
-    const QR_IMAGE_URL = "https://i.postimg.cc/cLdL90D5/IMG-3613.jpg"; 
-
+    // === IMPORTANT: PASTE YOUR GOOGLE APPS SCRIPT WEB APP URL HERE ===
+    const API_URL = "https://script.google.com/macros/s/YOUR_ACTUAL_URL_HERE/exec"; 
+    
     const STANDARD_TIMES = [
       { id: 's1', startHour: 7, time: '7:00 AM - 8:00 AM', period: 'morning' },
       { id: 's2', startHour: 8, time: '8:00 AM - 9:00 AM', period: 'morning' },
@@ -327,17 +212,16 @@
     let daysList = [];
     let selectedDateObj = null;
     let selectedDateStr = "";
+    
+    // States for Cart and Reclub Feature
     let selectedSlots = [];
+    let selectedReclubSlot = null;
+    
     let activeFilter = 'all';
     let slotMap = {};
     let dynamicCourts = []; 
 
-    document.getElementById('gcash-qr-img').src = QR_IMAGE_URL;
-
-    function normalizeTimeSlot(t) {
-      if (!t) return '';
-      return t.trim().replace(/^0/, '').replace(/ 0/, ' ');
-    }
+    function normalizeTimeSlot(t) { return t ? t.trim().replace(/^0/, '').replace(/ 0/, ' ') : ''; }
 
     function initDates() {
       const now = new Date();
@@ -348,24 +232,13 @@
       for (let i = 0; i < 7; i++) {
         const d = new Date(now);
         d.setDate(now.getDate() + i);
-        
         const day = dayNames[d.getDay()];
-        const fullDay = fullDayNames[d.getDay()];
         const dateNum = String(d.getDate()).padStart(2, '0');
         const monthNum = String(d.getMonth() + 1).padStart(2, '0');
         const dateStr = `${day}, ${d.toLocaleString('default', { month: 'short' })} ${dateNum}`;
 
-        daysList.push({
-          day,
-          date: dateNum,
-          fullDay,
-          month: monthNum,
-          str: dateStr,
-          isToday: i === 0,
-          rawDate: d
-        });
+        daysList.push({ day, date: dateNum, fullDay: fullDayNames[d.getDay()], month: monthNum, str: dateStr, isToday: i === 0, rawDate: d });
       }
-
       selectedDateObj = daysList[0];
       selectedDateStr = selectedDateObj.str;
     }
@@ -399,32 +272,18 @@
       
       document.getElementById('currentDateLabel').textContent = `${selectedDateStr} • Schedule`;
       selectedSlots = [];
+      selectedReclubSlot = null;
       updateBottomDrawer();
-      
       fetchSlots();
     }
 
     async function fetchSlots() {
       const container = document.getElementById('slotsContainer');
-      container.innerHTML = `
-        <div class="p-8 text-center text-slate-400 bg-white rounded-3xl border border-slate-200">
-          <div class="relative w-20 h-16 mx-auto mb-4">
-            <div class="absolute bottom-0 left-2 origin-bottom text-brand-900 animate-paddle-swing text-4xl flex items-center justify-center">
-              <svg viewBox="0 0 24 24" fill="currentColor" class="w-9 h-9 transform -rotate-45">
-                <path d="M19.7,4.3c-2.3-2.3-6.1-2.3-8.5,0l-6.9,6.9c-0.8,0.8-0.8,2.1,0,2.8l1.4,1.4l-3.5,3.5c-0.4,0.4-0.4,1,0,1.4l1.4,1.4c0.4,0.4,1,0.4,1.4,0l3.5-3.5l1.4,1.4c0.8,0.8,2.1,0.8,2.8,0l6.9-6.9C22,9.1,22,5.3,19.7,4.3z"/>
-              </svg>
-            </div>
-            <div class="absolute w-3.5 h-3.5 bg-lime-400 rounded-full shadow-sm animate-ball-volley" style="bottom: 25px; left: 20px;"></div>
-          </div>
-          <p class="text-sm font-semibold text-slate-600">Getting your courts ready for dinking!</p>
-        </div>
-      `;
+      container.innerHTML = `<div class="p-8 text-center text-slate-400 bg-white rounded-3xl border border-slate-200"><i class="fa-solid fa-spinner fa-spin text-2xl mb-3 text-brand-900"></i><p class="text-sm font-semibold">Syncing courts...</p></div>`;
 
       try {
-        const fetchUrl = `${API_URL}?date=${encodeURIComponent(selectedDateStr)}`;
-        const res = await fetch(fetchUrl);
+        const res = await fetch(`${API_URL}?date=${encodeURIComponent(selectedDateStr)}`);
         const openSlots = await res.json();
-
         slotMap = {};
         dynamicCourts = []; 
 
@@ -433,14 +292,12 @@
           openSlots.forEach(s => {
             const trimmedName = s.CourtName.trim();
             courtsSet.add(trimmedName); 
-            const key = `${normalizeTimeSlot(s.TimeSlot)}|${trimmedName}`;
-            slotMap[key] = s;
+            slotMap[`${normalizeTimeSlot(s.TimeSlot)}|${trimmedName}`] = s;
           });
           dynamicCourts = Array.from(courtsSet).sort();
         }
         renderSchedule();
       } catch (err) {
-        console.warn('Backend connection fallback:', err);
         slotMap = {};
         dynamicCourts = []; 
         renderSchedule();
@@ -450,105 +307,92 @@
     function renderSchedule() {
       const container = document.getElementById('slotsContainer');
       container.innerHTML = '';
-
-      const now = new Date();
-      const currentHour = now.getHours();
       let visibleSlotsCount = 0;
 
       STANDARD_TIMES.forEach((slot) => {
         if (activeFilter !== 'all' && slot.period !== activeFilter) return;
-
-        if (selectedDateObj.isToday && slot.startHour < currentHour) {
-          return;
-        }
+        if (selectedDateObj.isToday && slot.startHour < new Date().getHours()) return;
 
         visibleSlotsCount++;
-        
         const normalizedSlotTime = normalizeTimeSlot(slot.time);
+        
+        // Sum block total for standard cart items
         const selectedInThisBlock = selectedSlots.filter(s => normalizeTimeSlot(s.time) === normalizedSlotTime);
         const blockTotal = selectedInThisBlock.reduce((sum, s) => sum + s.price, 0);
         
-        // Peak Hour Injection
         const isPeakHour = slot.startHour >= 17 && slot.startHour <= 21;
         const peakBadge = isPeakHour ? `<span class="bg-amber-100 text-amber-800 px-2 py-0.5 rounded-md text-[10px] font-extrabold ml-2"><i class="fa-solid fa-fire text-[9px] mr-1"></i>Peak</span>` : '';
 
-        const card = document.createElement('div');
-        card.className = "bg-white rounded-3xl p-4 sm:p-5 border border-slate-200 shadow-sm transition hover:shadow-md";
-
         let cardHTML = `
-          <div class="flex items-center justify-between border-b border-slate-100 pb-2.5 mb-3">
-            <div class="flex items-center gap-2">
-              <span class="text-base font-black text-slate-900 tracking-tight">${slot.time}</span>
-              ${peakBadge}
+          <div class="bg-white rounded-3xl p-4 sm:p-5 border border-slate-200 shadow-sm transition hover:shadow-md mb-4">
+            <div class="flex items-center justify-between border-b border-slate-100 pb-2.5 mb-3">
+              <div class="flex items-center gap-2">
+                <span class="text-base font-black text-slate-900 tracking-tight">${slot.time}</span>${peakBadge}
+              </div>
+              ${blockTotal > 0 ? `<span class="bg-brand-50 text-brand-900 px-2.5 py-1 rounded-lg text-[11px] font-bold">₱${blockTotal}</span>` : ''}
             </div>
-            ${blockTotal > 0 ? `<span class="bg-brand-50 text-brand-900 px-2.5 py-1 rounded-lg text-[11px] font-bold">₱${blockTotal}</span>` : ''}
-          </div>
-          <div class="flex flex-wrap gap-2.5">
+            <div class="flex flex-wrap gap-2.5">
         `;
 
         dynamicCourts.forEach(courtName => {
           const key = `${normalizedSlotTime}|${courtName}`;
-          
           const liveSlot = slotMap[key];
-          
           if (!liveSlot) return; 
           
           const isAvailable = liveSlot.Status === 'Available';
+          const isReclub = liveSlot.Status === 'Reclub';
           const slotId = liveSlot.SlotID; 
           const courtPrice = Number(liveSlot.Price);
-          const displayCourtName = liveSlot.CourtName.trim(); 
+          const rLink = liveSlot.ReclubLink || '';
+          
+          const isSelected = selectedSlots.some(s => normalizeTimeSlot(s.time) === normalizedSlotTime && s.court === courtName);
+          const isSelectedReclub = selectedReclubSlot && selectedReclubSlot.time === slot.time && selectedReclubSlot.court === courtName;
 
-          const isSelected = selectedSlots.some(s => normalizeTimeSlot(s.time) === normalizedSlotTime && s.court === displayCourtName);
-
-          if (isSelected) {
+          if (isReclub) {
+            if (isSelectedReclub) {
+              cardHTML += `
+                <button onclick="toggleSlotSelection('${slot.time}', '${courtName}', '${slotId}', ${courtPrice}, 'Reclub', '${rLink}')" class="flex-grow min-w-[30%] sm:min-w-[20%] py-3 px-3.5 rounded-2xl bg-reclub-600 text-white flex items-center justify-center gap-1.5 border-2 border-reclub-600 shadow-md bounce-pop transition">
+                  <span class="text-[11px] font-black tracking-wider uppercase">${courtName}</span>
+                  <i class="fa-solid fa-users text-white text-[10px]"></i>
+                </button>`;
+            } else {
+              cardHTML += `
+                <button onclick="toggleSlotSelection('${slot.time}', '${courtName}', '${slotId}', ${courtPrice}, 'Reclub', '${rLink}')" class="flex-grow min-w-[30%] sm:min-w-[20%] py-3 px-3.5 rounded-2xl bg-reclub-50 hover:bg-reclub-100 border-2 border-reclub-100 text-reclub-700 flex items-center justify-center gap-1.5 transition active:scale-95">
+                  <span class="text-[11px] font-extrabold tracking-wider uppercase">${courtName}</span>
+                  <i class="fa-solid fa-users text-[10px]"></i>
+                </button>`;
+            }
+          } else if (isSelected) {
             cardHTML += `
-              <button onclick="toggleSlotSelection('${slot.time}', '${displayCourtName}', '${slotId}', ${courtPrice})" class="flex-grow min-w-[30%] sm:min-w-[20%] py-3 px-3.5 rounded-2xl bg-brand-900 text-white flex items-center justify-center gap-1.5 border-2 border-brand-900 shadow-md bounce-pop transition">
-                <span class="text-[11px] font-black tracking-wider uppercase">${displayCourtName}</span>
+              <button onclick="toggleSlotSelection('${slot.time}', '${courtName}', '${slotId}', ${courtPrice}, 'Available', '')" class="flex-grow min-w-[30%] sm:min-w-[20%] py-3 px-3.5 rounded-2xl bg-brand-900 text-white flex items-center justify-center gap-1.5 border-2 border-brand-900 shadow-md bounce-pop transition">
+                <span class="text-[11px] font-black tracking-wider uppercase">${courtName}</span>
                 <i class="fa-solid fa-circle-check text-lime-400 text-[10px]"></i>
-              </button>
-            `;
+              </button>`;
           } else if (isAvailable) {
             cardHTML += `
-              <button onclick="toggleSlotSelection('${slot.time}', '${displayCourtName}', '${slotId}', ${courtPrice})" class="flex-grow min-w-[30%] sm:min-w-[20%] py-3 px-3.5 rounded-2xl bg-emerald-50 hover:bg-emerald-100 border-2 border-emerald-100 text-brand-900 flex items-center justify-center gap-1.5 transition active:scale-95">
-                <span class="text-[11px] font-extrabold tracking-wider uppercase">${displayCourtName}</span>
-              </button>
-            `;
+              <button onclick="toggleSlotSelection('${slot.time}', '${courtName}', '${slotId}', ${courtPrice}, 'Available', '')" class="flex-grow min-w-[30%] sm:min-w-[20%] py-3 px-3.5 rounded-2xl bg-emerald-50 hover:bg-emerald-100 border-2 border-emerald-100 text-brand-900 flex items-center justify-center gap-1.5 transition active:scale-95">
+                <span class="text-[11px] font-extrabold tracking-wider uppercase">${courtName}</span>
+              </button>`;
           } else {
             cardHTML += `
               <div class="flex-grow min-w-[30%] sm:min-w-[20%] py-3 px-3.5 rounded-2xl bg-slate-50 border-2 border-slate-100 text-slate-400 flex items-center justify-center gap-1.5 opacity-70 select-none cursor-not-allowed">
-                <strike class="text-[11px] font-bold tracking-wider uppercase">${displayCourtName}</strike>
-              </div>
-            `;
+                <strike class="text-[11px] font-bold tracking-wider uppercase">${courtName}</strike>
+              </div>`;
           }
         });
 
-        cardHTML += `</div>`;
-        card.innerHTML = cardHTML;
-        container.appendChild(card);
+        cardHTML += `</div></div>`;
+        container.insertAdjacentHTML('beforeend', cardHTML);
       });
 
-      // Handle zero slots visible for the day/filter
-      if (visibleSlotsCount === 0) {
-        const emptyNotice = document.createElement('div');
-        emptyNotice.className = "p-6 text-center text-slate-500 bg-white rounded-3xl border border-slate-200";
-        emptyNotice.innerHTML = `
-          <i class="fa-solid fa-moon text-4xl text-slate-300 mb-3"></i>
-          <p class="text-sm font-bold text-slate-700">No more upcoming slots for this day/filter.</p>
-          <p class="text-xs text-slate-400 mt-1">Please select another date or view All Day above.</p>
-        `;
-        container.appendChild(emptyNotice);
-      }
-
-      // COLLAPSIBLE WAITLIST CARD (Clean, low-friction banner view)
-      if (selectedSlots.length === 0) {
+      // Show Waitlist Banner only if nothing is selected (No Cart, No Reclub)
+      if (selectedSlots.length === 0 && !selectedReclubSlot) {
         const waitlistCard = document.createElement('div');
         waitlistCard.className = "bg-white rounded-3xl border border-slate-200 shadow-sm mt-6 mb-6 overflow-hidden transition-all";
         waitlistCard.innerHTML = `
           <div onclick="toggleWaitlistCollapse()" class="p-4 flex items-center justify-between cursor-pointer hover:bg-slate-50 transition select-none">
             <div class="flex items-center gap-3">
-              <div class="w-9 h-9 rounded-full bg-emerald-50 text-brand-900 flex items-center justify-center text-sm">
-                <i class="fa-solid fa-list-check"></i>
-              </div>
+              <div class="w-9 h-9 rounded-full bg-emerald-50 text-brand-900 flex items-center justify-center text-sm"><i class="fa-solid fa-list-check"></i></div>
               <div>
                 <h4 class="font-bold text-slate-900 text-xs">Can't find your preferred slot?</h4>
                 <p class="text-[10px] text-slate-500">Tap here to join the Pasalo Waitlist</p>
@@ -561,17 +405,14 @@
             <div class="text-left space-y-3">
               <div>
                   <label class="block text-[10px] font-bold text-slate-700 mb-1 ml-1 uppercase tracking-wider">Your Name</label>
-                  <input type="text" id="waitlist-name" class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500" placeholder="Juan Dela Cruz">
+                  <input type="text" id="waitlist-name" class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500">
               </div>
               <div>
                   <label class="block text-[10px] font-bold text-slate-700 mb-1 ml-1 uppercase tracking-wider">Mobile Number</label>
-                  <input type="tel" id="waitlist-mobile" class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500" placeholder="0917 123 4567">
+                  <input type="tel" id="waitlist-mobile" class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500">
               </div>
             </div>
-            <button id="waitlist-submit-btn" onclick="submitWaitlist()" class="w-full py-3 bg-brand-900 hover:bg-brand-950 text-white font-black rounded-xl text-xs uppercase tracking-wider transition cursor-pointer mt-3 shadow-md">
-                Join Priority Waitlist
-            </button>
-            <p class="text-[10px] text-slate-400 text-center mt-3 leading-tight">Your info is securely kept and only used to notify you for a pasalo court.</p>
+            <button id="waitlist-submit-btn" onclick="submitWaitlist()" class="w-full py-3 bg-brand-900 hover:bg-brand-950 text-white font-black rounded-xl text-xs uppercase tracking-wider transition cursor-pointer mt-3 shadow-md">Join Priority Waitlist</button>
           </div>
         `;
         container.appendChild(waitlistCard);
@@ -581,27 +422,26 @@
     function toggleWaitlistCollapse() {
       const content = document.getElementById('waitlistCollapsibleContent');
       const chevron = document.getElementById('waitlistChevron');
-      if (content.classList.contains('hidden')) {
-        content.classList.remove('hidden');
-        chevron.classList.add('rotate-180');
-      } else {
-        content.classList.add('hidden');
-        chevron.classList.remove('rotate-180');
-      }
+      content.classList.toggle('hidden');
+      chevron.classList.toggle('rotate-180');
     }
 
-    function toggleSlotSelection(time, courtName, slotId, price) {
-      const existingIndex = selectedSlots.findIndex(s => s.time === time && s.court === courtName);
-
-      if (existingIndex > -1) {
-        selectedSlots.splice(existingIndex, 1);
+    function toggleSlotSelection(time, courtName, slotId, price, status, reclubLink) {
+      if (status === 'Reclub') {
+        if (selectedReclubSlot && selectedReclubSlot.id === slotId) {
+          selectedReclubSlot = null; // Toggle Off
+        } else {
+          selectedSlots = []; // Clear standard cart so they don't clash
+          selectedReclubSlot = { time: time, court: courtName, id: slotId, link: reclubLink };
+        }
       } else {
-        selectedSlots.push({
-          slotId: slotId,
-          time: time,
-          court: courtName,
-          price: price
-        });
+        selectedReclubSlot = null; // Tapping a normal court clears Reclub viewer
+        const existingIndex = selectedSlots.findIndex(s => s.time === time && s.court === courtName);
+        if (existingIndex > -1) {
+          selectedSlots.splice(existingIndex, 1);
+        } else {
+          selectedSlots.push({ slotId, time, court: courtName, price });
+        }
       }
 
       renderSchedule();
@@ -610,25 +450,58 @@
 
     function updateBottomDrawer() {
       const drawer = document.getElementById('bookingDrawer');
-      const countEl = document.getElementById('selectedSlotsSummary');
-      const dateEl = document.getElementById('selectedDateText');
-      const priceEl = document.getElementById('totalPriceDisplay');
 
-      if (selectedSlots.length > 0) {
+      // STATE 1: RECLUB OPEN PLAY SELECTED
+      if (selectedReclubSlot) {
+        drawer.innerHTML = `
+          <div class="flex items-center justify-between mb-4">
+            <div>
+              <span class="text-[11px] uppercase tracking-wider text-slate-500 font-extrabold block">You are viewing an Open Play</span>
+              <div class="text-sm font-black text-slate-900 mt-1">${selectedReclubSlot.court} • ${selectedReclubSlot.time}</div>
+            </div>
+            <div class="w-10 h-10 rounded-full bg-reclub-100 flex items-center justify-center text-reclub-600 shadow-sm border border-reclub-200">
+              <i class="fa-solid fa-users text-lg"></i>
+            </div>
+          </div>
+          <p class="text-xs font-bold text-slate-700 mb-3 text-center">Want to join this open play? Click to Sign Up in Reclub</p>
+          <a href="${selectedReclubSlot.link}" target="_blank" class="w-full py-3.5 bg-reclub-600 hover:bg-reclub-700 text-white rounded-2xl font-black text-sm shadow-xl shadow-reclub-600/25 active:scale-[0.98] transition flex items-center justify-center gap-2">
+            <span>Proceed to Reclub App</span>
+            <i class="fa-solid fa-arrow-right text-xs"></i>
+          </a>
+        `;
+        drawer.classList.remove('translate-y-full');
+      } 
+      // STATE 2: STANDARD BOOKING CART
+      else if (selectedSlots.length > 0) {
         const baseTotal = selectedSlots.reduce((sum, item) => sum + item.price, 0);
         const courtsUsed = [...new Set(selectedSlots.map(s => s.court))].sort();
-        const courtLabel = courtsUsed.join(', ');
-
-        countEl.textContent = `${selectedSlots.length} ${selectedSlots.length === 1 ? 'Hour' : 'Hours'} • ${courtLabel}`;
-
         const dayTag = selectedDateObj.isToday ? `Today, ${selectedDateObj.month}-${selectedDateObj.date}` : `${selectedDateObj.fullDay}, ${selectedDateObj.month}-${selectedDateObj.date}`;
         const timeslotsList = [...new Set(selectedSlots.map(s => s.time))].join(', ');
         
-        if (dateEl) dateEl.textContent = `${dayTag} • ${timeslotsList}`;
-
-        priceEl.innerHTML = `<span>₱${baseTotal.toLocaleString()}</span>`;
+        drawer.innerHTML = `
+          <div class="flex items-center justify-between mb-3">
+            <div>
+              <span class="text-[11px] uppercase tracking-wider text-slate-500 font-extrabold block">You will play</span>
+              <div class="text-sm font-black text-slate-900">${selectedSlots.length} ${selectedSlots.length === 1 ? 'Hour' : 'Hours'} • ${courtsUsed.join(', ')}</div>
+              <div class="text-xs font-bold text-emerald-800 flex items-center gap-1.5 mt-0.5">
+                <i class="fa-regular fa-calendar-days text-emerald-700 text-[11px]"></i>
+                <span>${dayTag} • ${timeslotsList}</span>
+              </div>
+            </div>
+            <div class="text-right">
+              <div class="text-[11px] uppercase tracking-wider text-slate-500 font-extrabold">Total Amount</div>
+              <div class="text-lg font-black text-brand-900 flex items-center justify-end gap-1"><span>₱${baseTotal.toLocaleString()}</span></div>
+            </div>
+          </div>
+          <button onclick="openCheckoutModal()" class="w-full py-3.5 bg-gradient-to-r from-brand-900 to-emerald-900 hover:from-brand-950 text-white rounded-2xl font-black text-sm shadow-xl shadow-brand-900/25 active:scale-[0.98] transition flex items-center justify-center gap-2">
+            <span>Proceed to Payment to Book</span>
+            <i class="fa-solid fa-arrow-right text-xs"></i>
+          </button>
+        `;
         drawer.classList.remove('translate-y-full');
-      } else {
+      } 
+      // STATE 3: NOTHING SELECTED
+      else {
         drawer.classList.add('translate-y-full');
       }
     }
@@ -637,175 +510,76 @@
       activeFilter = type;
       ['All', 'Morning', 'Afternoon'].forEach(name => {
         const btn = document.getElementById(`filter${name}`);
-        if (name.toLowerCase() === type) {
-          btn.className = "px-2.5 py-0.5 rounded-lg bg-slate-900 text-white font-bold";
-        } else {
-          btn.className = "px-2.5 py-0.5 rounded-lg bg-white border border-slate-200 text-slate-700 hover:bg-slate-50";
-        }
+        btn.className = (name.toLowerCase() === type) ? "px-2.5 py-0.5 rounded-lg bg-slate-900 text-white font-bold" : "px-2.5 py-0.5 rounded-lg bg-white border border-slate-200 text-slate-700 hover:bg-slate-50";
       });
       renderSchedule();
     }
 
     function openCheckoutModal() {
       if (selectedSlots.length === 0) return;
-
       const modal = document.getElementById('checkoutModal');
-      const baseTotal = selectedSlots.reduce((sum, item) => sum + item.price, 0);
-      const courtsUsed = [...new Set(selectedSlots.map(s => s.court))].sort();
-
-      document.getElementById('modalCourtName').textContent = courtsUsed.join(', ');
+      document.getElementById('modalCourtName').textContent = [...new Set(selectedSlots.map(s => s.court))].sort().join(', ');
       document.getElementById('modalDate').textContent = selectedDateStr;
-
-      const breakdownContainer = document.getElementById('modalItemizedBreakdown');
-      breakdownContainer.innerHTML = selectedSlots.map(s => `
-        <div class="flex justify-between text-xs py-1">
-          <span>${s.court}, ${s.time}</span>
-          <span class="font-bold text-slate-900">₱${s.price}</span>
-        </div>
-      `).join('');
-
-      document.getElementById('modalTotal').textContent = `₱${baseTotal.toLocaleString()}`;
-
+      document.getElementById('modalItemizedBreakdown').innerHTML = selectedSlots.map(s => `<div class="flex justify-between text-xs py-1"><span>${s.court}, ${s.time}</span><span class="font-bold text-slate-900">₱${s.price}</span></div>`).join('');
+      document.getElementById('modalTotal').textContent = `₱${selectedSlots.reduce((sum, item) => sum + item.price, 0).toLocaleString()}`;
       modal.classList.remove('opacity-0', 'pointer-events-none');
       modal.querySelector('div').classList.remove('translate-y-6');
     }
 
     function closeCheckoutModal() {
-      const modal = document.getElementById('checkoutModal');
-      modal.classList.add('opacity-0', 'pointer-events-none');
-      document.getElementById('status-message').classList.add('hidden');
+      document.getElementById('checkoutModal').classList.add('opacity-0', 'pointer-events-none');
     }
 
     async function submitBooking(event) {
       event.preventDefault();
       const submitBtn = document.getElementById('submit-btn');
-      const statusMsg = document.getElementById('status-message');
-      const email = document.getElementById('email').value;
-      const gcashRef = document.getElementById('gcash-ref').value;
-
       submitBtn.disabled = true;
       submitBtn.innerHTML = `<i class="fa-solid fa-circle-notch fa-spin"></i> Processing Booking...`;
-      statusMsg.className = "hidden mt-3 p-3 rounded-xl text-center text-xs font-semibold";
 
       try {
-        const payload = {
-          date: selectedDateStr,
-          email: email,
-          gcashRef: gcashRef,
-          slots: selectedSlots.map(s => ({
-            slotId: s.slotId,
-            courtName: s.court, 
-            timeSlot: s.time,
-            price: s.price
-          }))
-        };
-
-        const response = await fetch(API_URL, {
-          method: 'POST',
-          mode: 'no-cors',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload)
+        await fetch(API_URL, {
+          method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            date: selectedDateStr, email: document.getElementById('email').value,
+            gcashRef: document.getElementById('gcash-ref').value,
+            slots: selectedSlots.map(s => ({ slotId: s.slotId, courtName: s.court, timeSlot: s.time, price: s.price }))
+          })
         });
-
         closeCheckoutModal();
-        openSuccessModal(payload);
+        document.getElementById('successModal').classList.remove('opacity-0', 'pointer-events-none');
         selectedSlots = [];
         updateBottomDrawer();
         fetchSlots(); 
-
-      } catch (err) {
-        console.error(err);
-        statusMsg.textContent = "Network error while submitting. Please try again.";
-        statusMsg.className = "mt-3 p-3 rounded-xl text-center text-xs font-semibold bg-red-100 text-red-700 block";
-      } finally {
+      } catch (err) { alert("Error submitting booking."); }
+      finally {
         submitBtn.disabled = false;
         submitBtn.innerHTML = `<i class="fa-solid fa-lock text-xs"></i><span>Confirm Payment & Book Slot</span>`;
       }
     }
 
-    function openSuccessModal(data) {
-      const modal = document.getElementById('successModal');
-      const randomId = Math.floor(1000 + Math.random() * 9000);
-      document.getElementById('successCode').textContent = `#BK-${randomId}`;
-      document.getElementById('successDate').textContent = selectedDateStr;
-      document.getElementById('successDuration').textContent = `${selectedSlots.length} Hour Session`;
-      
-      modal.classList.remove('opacity-0', 'pointer-events-none');
-      modal.querySelector('div').classList.remove('scale-95');
-      modal.querySelector('div').classList.add('scale-100');
-    }
+    function closeSuccessModal() { document.getElementById('successModal').classList.add('opacity-0', 'pointer-events-none'); }
+    function toggleDeviceFrame() { document.getElementById('phoneFrame').classList.toggle('max-w-[420px]'); document.getElementById('phoneFrame').classList.toggle('max-w-4xl'); }
 
-    function closeSuccessModal() {
-      const modal = document.getElementById('successModal');
-      modal.classList.add('opacity-0', 'pointer-events-none');
-      modal.querySelector('div').classList.remove('scale-100');
-      modal.querySelector('div').classList.add('scale-95');
-    }
-
-    function toggleDeviceFrame() {
-      const frame = document.getElementById('phoneFrame');
-      const btnText = document.getElementById('frameToggleText');
-      
-      if (frame.classList.contains('sm:h-[860px]')) {
-        frame.classList.remove('max-w-[420px]', 'sm:rounded-[44px]', 'sm:border-[8px]', 'sm:h-[860px]');
-        frame.classList.add('max-w-4xl', 'sm:rounded-3xl', 'h-[100vh]', 'sm:h-[85vh]');
-        btnText.textContent = "Smartphone View";
-      } else {
-        frame.classList.add('max-w-[420px]', 'sm:rounded-[44px]', 'sm:border-[8px]', 'sm:h-[860px]');
-        frame.classList.remove('max-w-4xl', 'sm:rounded-3xl', 'h-[100vh]', 'sm:h-[85vh]');
-        btnText.textContent = "Full Canvas View";
-      }
-    }
-
-    // Persistent Waitlist Submission Logic
     async function submitWaitlist() {
-      const nameInput = document.getElementById('waitlist-name');
-      const mobileInput = document.getElementById('waitlist-mobile');
+      const name = document.getElementById('waitlist-name').value.trim();
+      const mobile = document.getElementById('waitlist-mobile').value.trim();
       const btn = document.getElementById('waitlist-submit-btn');
       
-      const name = nameInput.value.trim();
-      const mobile = mobileInput.value.trim();
-      const dateVal = selectedDateStr; 
-      
-      if (!name || !mobile) {
-          alert("Please enter both your name and mobile number.");
-          return;
-      }
-      
-      const originalText = btn.innerHTML;
+      if (!name || !mobile) { alert("Please enter both your name and mobile number."); return; }
       btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Submitting...`;
       btn.disabled = true;
       
       try {
-          const payload = {
-              action: "waitlist",
-              name: name,
-              mobileNumber: mobile,
-              date: dateVal
-          };
-          
           await fetch(API_URL, {
-              method: 'POST',
-              mode: 'no-cors',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify(payload)
+              method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ action: "waitlist", name: name, mobileNumber: mobile, date: selectedDateStr })
           });
-          
-          const collapsibleBox = document.getElementById('waitlistCollapsibleContent').parentElement;
-          collapsibleBox.innerHTML = `
+          document.getElementById('waitlistCollapsibleContent').parentElement.innerHTML = `
           <div class="p-5 text-center bg-brand-50 rounded-3xl border border-brand-200">
-              <div class="w-10 h-10 mx-auto rounded-full bg-brand-100 text-brand-600 flex items-center justify-center text-base mb-2">
-                  <i class="fa-solid fa-check"></i>
-              </div>
+              <div class="w-10 h-10 mx-auto rounded-full bg-brand-100 text-brand-600 flex items-center justify-center text-base mb-2"><i class="fa-solid fa-check"></i></div>
               <h4 class="font-bold text-slate-900 text-xs">You're on the list!</h4>
-              <p class="text-[11px] text-slate-600 mt-1">We saved your spot for <strong>${dateVal}</strong> and will notify <strong class="text-slate-800">${mobile}</strong> if a slot opens up.</p>
-          </div>
-          `;
-      } catch (error) {
-          alert("Error joining waitlist. Please try again.");
-          btn.innerHTML = originalText;
-          btn.disabled = false;
-      }
+          </div>`;
+      } catch (error) { alert("Error."); btn.disabled = false; }
     }
   </script>
 </body>
