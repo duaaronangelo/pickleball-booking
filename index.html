@@ -59,20 +59,19 @@
 </head>
 <body class="h-full flex flex-col items-center justify-start text-slate-800 antialiased selection:bg-brand-900 selection:text-white relative">
 
-  <!-- Conflict Modal Pop-up (Covers ~30% centered nicely) -->
+ <!-- Conflict Modal Pop-up (Clean, Compact, & Friendly) -->
   <div id="conflictModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-[100] flex items-center justify-center opacity-0 pointer-events-none transition-opacity duration-300 p-4">
-    <div class="w-full max-w-sm bg-white rounded-3xl p-6 shadow-2xl text-center transform scale-95 transition-transform duration-300 space-y-4 border-2 border-amber-400">
-      <div class="w-16 h-16 mx-auto rounded-full bg-amber-100 flex items-center justify-center text-amber-600 text-3xl shadow-inner">
-        😢
+    <div class="w-full max-w-[340px] bg-white rounded-3xl p-5 shadow-2xl text-center transform scale-95 transition-transform duration-300 space-y-3.5 border border-slate-200">
+      <div class="w-12 h-12 mx-auto rounded-full bg-amber-100 flex items-center justify-center text-amber-600 text-xl shadow-inner">
+        🏃💨
       </div>
-      <div class="space-y-1.5">
-        <h3 class="font-black text-slate-900 text-lg tracking-tight uppercase">Hala! Sorry naunahan kayo 😭</h3>
-        <p class="text-xs font-bold text-red-600">⚠️ Your booking did not push through because the slot was just taken.</p>
-        <p class="text-xs text-slate-600 pt-1">Please message our FB Page so we can process the refund. You may book another timeslot or court!</p>
-        <p class="text-[11px] italic text-slate-400 pt-1">Again, sorry naaaa.</p>
+      <div class="space-y-1">
+        <h3 class="font-black text-slate-900 text-base tracking-tight uppercase">Hala, naunahan kayo! 😭</h3>
+        <p class="text-xs font-bold text-red-600">Booking did not push through (slot was just taken).</p>
+        <p class="text-[11px] text-slate-500 leading-relaxed px-2 pt-1">Message our FB Page for your instant refund, then feel free to pick another slot. Sorry naaaa! 🙏</p>
       </div>
-      <button onclick="closeConflictModal()" class="w-full py-3 bg-slate-900 hover:bg-slate-950 text-white font-extrabold rounded-2xl text-xs uppercase tracking-wider transition shadow-lg">
-        Okay, got it!
+      <button onclick="closeConflictModal()" class="w-full py-3 bg-slate-900 hover:bg-slate-950 text-white font-extrabold rounded-2xl text-xs uppercase tracking-wider transition shadow-md">
+        Choose Another Slot
       </button>
     </div>
   </div>
