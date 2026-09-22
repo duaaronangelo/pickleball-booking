@@ -607,8 +607,11 @@
 
         countEl.textContent = `${selectedSlots.length} ${selectedSlots.length === 1 ? 'Hour' : 'Hours'} • ${courtLabel}`;
 
+        // Updated format: Date + Timeslots (e.g. "Today, 09-22 • 7:00 AM - 8:00 AM, 8:00 AM - 9:00 AM")
         const dayTag = selectedDateObj.isToday ? `Today, ${selectedDateObj.month}-${selectedDateObj.date}` : `${selectedDateObj.fullDay}, ${selectedDateObj.month}-${selectedDateObj.date}`;
-        if (dateEl) dateEl.textContent = dayTag;
+        const timeslotsList = [...new Set(selectedSlots.map(s => s.time))].join(', ');
+        
+        if (dateEl) dateEl.textContent = `${dayTag} • ${timeslotsList}`;
 
         priceEl.innerHTML = `<span>₱${baseTotal.toLocaleString()}</span>`;
         drawer.classList.remove('translate-y-full');
