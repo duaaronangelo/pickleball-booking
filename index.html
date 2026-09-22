@@ -539,40 +539,54 @@
         container.appendChild(emptyNotice);
       }
 
-      // PERSISTENT WAITLIST CARD (Conditionally hidden when user selects slots)
+      // COLLAPSIBLE WAITLIST CARD (Clean, low-friction banner view)
       if (selectedSlots.length === 0) {
         const waitlistCard = document.createElement('div');
-        waitlistCard.className = "p-5 bg-white rounded-3xl border border-slate-200 shadow-sm mt-6 mb-6";
+        waitlistCard.className = "bg-white rounded-3xl border border-slate-200 shadow-sm mt-6 mb-6 overflow-hidden transition-all";
         waitlistCard.innerHTML = `
-          <div class="flex items-center gap-3 mb-3">
-              <div class="w-10 h-10 rounded-full bg-emerald-50 text-brand-900 flex items-center justify-center text-lg">
-                  <i class="fa-solid fa-list-check"></i>
+          <div onclick="toggleWaitlistCollapse()" class="p-4 flex items-center justify-between cursor-pointer hover:bg-slate-50 transition select-none">
+            <div class="flex items-center gap-3">
+              <div class="w-9 h-9 rounded-full bg-emerald-50 text-brand-900 flex items-center justify-center text-sm">
+                <i class="fa-solid fa-list-check"></i>
               </div>
               <div>
-                  <h4 class="font-black text-slate-900 text-sm">Join the Pasalo Waitlist</h4>
-                  <p class="text-[11px] text-slate-500">We will call you in case a court becomes vacant today!</p>
+                <h4 class="font-bold text-slate-900 text-xs">Can't find your preferred slot?</h4>
+                <p class="text-[10px] text-slate-500">Tap here to join the Pasalo Waitlist</p>
               </div>
+            </div>
+            <i id="waitlistChevron" class="fa-solid fa-chevron-down text-xs text-slate-400 transition-transform duration-200"></i>
           </div>
-          <div class="space-y-3 mt-4 text-left">
+          <div id="waitlistCollapsibleContent" class="hidden px-5 pb-5 pt-1 border-t border-slate-100 space-y-3">
+            <p class="text-[11px] text-slate-500 mb-2 mt-2">We will call you in case a court becomes vacant today!</p>
+            <div class="text-left space-y-3">
               <div>
-                  <label class="block text-[11px] font-bold text-slate-700 mb-1 ml-1 uppercase tracking-wider">Your Name</label>
-                  <input type="text" id="waitlist-name" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500" placeholder="Juan Dela Cruz">
+                  <label class="block text-[10px] font-bold text-slate-700 mb-1 ml-1 uppercase tracking-wider">Your Name</label>
+                  <input type="text" id="waitlist-name" class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500" placeholder="Juan Dela Cruz">
               </div>
               <div>
-                  <label class="block text-[11px] font-bold text-slate-700 mb-1 ml-1 uppercase tracking-wider">Mobile Number</label>
-                  <input type="tel" id="waitlist-mobile" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500" placeholder="0917 123 4567">
+                  <label class="block text-[10px] font-bold text-slate-700 mb-1 ml-1 uppercase tracking-wider">Mobile Number</label>
+                  <input type="tel" id="waitlist-mobile" class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500" placeholder="0917 123 4567">
               </div>
+            </div>
+            <button id="waitlist-submit-btn" onclick="submitWaitlist()" class="w-full py-3 bg-brand-900 hover:bg-brand-950 text-white font-black rounded-xl text-xs uppercase tracking-wider transition cursor-pointer mt-3 shadow-md">
+                Join Priority Waitlist
+            </button>
+            <p class="text-[10px] text-slate-400 text-center mt-3 leading-tight">Your info is securely kept and only used to notify you for a pasalo court.</p>
           </div>
-          <button id="waitlist-submit-btn" onclick="submitWaitlist()" class="w-full py-3 bg-brand-900 hover:bg-brand-950 text-white font-black rounded-xl text-xs uppercase tracking-wider transition cursor-pointer mt-4 shadow-md">
-              Join Priority Waitlist
-          </button>
-          <button onclick="scrollToTopDates()" class="w-full py-2.5 mt-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl text-xs transition flex items-center justify-center gap-1.5">
-              <i class="fa-regular fa-calendar-days text-slate-500"></i>
-              <span>Check Future Dates</span>
-          </button>
-          <p class="text-[10px] text-slate-400 text-center mt-3 leading-tight">Your info is securely kept and only used to notify you for a pasalo court.</p>
         `;
         container.appendChild(waitlistCard);
+      }
+    }
+
+    function toggleWaitlistCollapse() {
+      const content = document.getElementById('waitlistCollapsibleContent');
+      const chevron = document.getElementById('waitlistChevron');
+      if (content.classList.contains('hidden')) {
+        content.classList.remove('hidden');
+        chevron.classList.add('rotate-180');
+      } else {
+        content.classList.add('hidden');
+        chevron.classList.remove('rotate-180');
       }
     }
 
@@ -607,7 +621,6 @@
 
         countEl.textContent = `${selectedSlots.length} ${selectedSlots.length === 1 ? 'Hour' : 'Hours'} • ${courtLabel}`;
 
-        // Updated format: Date + Timeslots (e.g. "Today, 09-22 • 7:00 AM - 8:00 AM, 8:00 AM - 9:00 AM")
         const dayTag = selectedDateObj.isToday ? `Today, ${selectedDateObj.month}-${selectedDateObj.date}` : `${selectedDateObj.fullDay}, ${selectedDateObj.month}-${selectedDateObj.date}`;
         const timeslotsList = [...new Set(selectedSlots.map(s => s.time))].join(', ');
         
@@ -744,16 +757,6 @@
       }
     }
 
-    // Smooth Scroll Helper for Secondary CTA
-    function scrollToTopDates() {
-      const phoneFrame = document.querySelector('.overflow-y-auto');
-      if (phoneFrame) {
-        phoneFrame.scrollTo({ top: 0, behavior: 'smooth' });
-      } else {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-      }
-    }
-
     // Persistent Waitlist Submission Logic
     async function submitWaitlist() {
       const nameInput = document.getElementById('waitlist-name');
@@ -788,13 +791,14 @@
               body: JSON.stringify(payload)
           });
           
-          btn.parentElement.innerHTML = `
-          <div class="p-6 text-center bg-brand-50 rounded-2xl border border-brand-200">
-              <div class="w-12 h-12 mx-auto rounded-full bg-brand-100 text-brand-600 flex items-center justify-center text-xl mb-2">
+          const collapsibleBox = document.getElementById('waitlistCollapsibleContent').parentElement;
+          collapsibleBox.innerHTML = `
+          <div class="p-5 text-center bg-brand-50 rounded-3xl border border-brand-200">
+              <div class="w-10 h-10 mx-auto rounded-full bg-brand-100 text-brand-600 flex items-center justify-center text-base mb-2">
                   <i class="fa-solid fa-check"></i>
               </div>
-              <h4 class="font-bold text-slate-900 text-sm">You're on the list!</h4>
-              <p class="text-xs text-slate-600 mt-1">We saved your spot for <strong>${dateVal}</strong> and will notify <strong class="text-slate-800">${mobile}</strong> if a slot opens up.</p>
+              <h4 class="font-bold text-slate-900 text-xs">You're on the list!</h4>
+              <p class="text-[11px] text-slate-600 mt-1">We saved your spot for <strong>${dateVal}</strong> and will notify <strong class="text-slate-800">${mobile}</strong> if a slot opens up.</p>
           </div>
           `;
       } catch (error) {
