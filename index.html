@@ -23,7 +23,8 @@
         .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
     </style>
 </head>
-<body class="bg-slate-50 text-slate-800 font-sans antialiased pb-32">
+<!-- RESTORED MOBILE WRAPPER: max-w-md mx-auto shadow-2xl -->
+<body class="bg-slate-50 text-slate-800 font-sans antialiased pb-32 max-w-md mx-auto shadow-2xl relative min-h-screen">
 
     <!-- Header -->
     <header class="bg-white px-5 pt-12 pb-4 shadow-sm sticky top-0 z-40">
@@ -62,7 +63,7 @@
     </main>
 
     <!-- Floating Action Button (Checkout) -->
-    <div id="fab-container" class="fixed bottom-6 left-5 right-5 z-40 hidden transition-all duration-300 transform translate-y-4 opacity-0">
+    <div id="fab-container" class="fixed bottom-6 left-5 right-5 z-40 hidden transition-all duration-300 transform translate-y-4 opacity-0 max-w-md mx-auto">
         <button onclick="openCheckout()" class="w-full bg-slate-900 text-white rounded-2xl p-4 shadow-xl flex justify-between items-center active:scale-95 transition-transform">
             <div class="flex items-center gap-3">
                 <div class="bg-white/20 w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold" id="fab-count">0</div>
@@ -78,7 +79,7 @@
     </div>
 
     <!-- Checkout Modal -->
-    <div id="checkout-modal" class="fixed inset-0 z-50 hidden">
+    <div id="checkout-modal" class="fixed inset-0 z-50 hidden max-w-md mx-auto">
         <div class="absolute inset-0 bg-slate-900/60 backdrop-blur-sm" onclick="closeCheckout()"></div>
         <div class="absolute bottom-0 left-0 right-0 bg-white rounded-t-3xl p-6 max-h-[90vh] overflow-y-auto transform transition-transform duration-300 translate-y-full" id="checkout-drawer">
             
@@ -115,9 +116,6 @@
 
     <!-- Application Logic -->
     <script>
-        // ==========================================
-        // CONFIGURATION & STATE
-        // ==========================================
         const SCRIPT_URL = 'YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL_HERE'; 
         
         let masterSlots = [];
@@ -125,7 +123,6 @@
         let activeFilter = 'all';
         let forceFullyBooked = false;
 
-        // Set default date to today securely mapped to PHT Timezone
         document.addEventListener("DOMContentLoaded", () => {
             const dateInput = document.getElementById('date-selector');
             const phTime = new Date(new Date().toLocaleString("en-US", {timeZone: "Asia/Manila"}));
@@ -137,15 +134,11 @@
             fetchSchedule();
         });
 
-        // ==========================================
-        // FETCH & RENDER LOGIC
-        // ==========================================
         async function fetchSchedule() {
             forceFullyBooked = false; 
             const dateVal = document.getElementById('date-selector').value;
             const container = document.getElementById('schedule-container');
             
-            // Custom SVG Paddle Loading Animation (No attached ball)
             container.innerHTML = `
                 <div class="flex justify-center items-center h-48">
                     <div class="text-center">
@@ -171,11 +164,9 @@
                 const response = await fetch(`${SCRIPT_URL}?date=${dateVal}`);
                 const data = await response.json();
                 
-                // Secure nested object mapping (just in case App Script returns {slots: [...]})
                 let parsedData = Array.isArray(data) ? data : (data.data || data.slots || []);
                 if(!parsedData || parsedData.length === 0) throw new Error("Empty Data");
                 
-                // Super robust fallback mapping to handle misaligned Google Sheet Headers
                 masterSlots = parsedData.map(slot => ({
                     TimeSlot: slot.TimeSlot || slot["Time Slot"] || slot.timeSlot || slot.Time || slot.time || "08:00 AM - 09:00 AM",
                     CourtName: String(slot.CourtName || slot["Court Name"] || slot.courtName || slot.Court || slot.court || "Court").trim(),
@@ -243,10 +234,9 @@
 
         function renderSchedule() {
             const container = document.getElementById('schedule-container');
-            container.innerHTML = ''; // Clears loading UI
+            container.innerHTML = ''; 
 
             const dateVal = document.getElementById('date-selector').value;
-            // Strictly lock time calculations to Philippine Time (Asia/Manila)
             const phTime = new Date(new Date().toLocaleString("en-US", {timeZone: "Asia/Manila"}));
             const yyyy = phTime.getFullYear();
             const mm = String(phTime.getMonth() + 1).padStart(2, '0');
@@ -293,7 +283,6 @@
                 grouped[slotGroup.time].forEach(court => {
                     const isSelected = selectedSlots.some(s => s.timeSlot === court.TimeSlot && s.courtName === court.CourtName);
                     
-                    // Case-insensitive status mapping!
                     let displayStatus = court.Status.toLowerCase();
                     if (isPast) displayStatus = "passed";
                     
@@ -314,7 +303,6 @@
                 scheduleHTML += `</div></div>`;
             });
 
-            // Smart Waitlist trigger - Render waitlist ON TOP if everything is booked/passed
             if (!hasAnyAvailableSlot || forceFullyBooked) {
                 container.innerHTML += `
                     <div class="p-6 text-center bg-white rounded-3xl border border-slate-200 shadow-sm mb-6">
@@ -338,13 +326,9 @@
                 `;
             }
             
-            // Append schedule cards directly underneath
             container.innerHTML += scheduleHTML;
         }
 
-        // ==========================================
-        // WAITLIST SUBMISSION LOGIC
-        // ==========================================
         async function submitWaitlist() {
             const nameInput = document.getElementById('waitlist-name');
             const mobileInput = document.getElementById('waitlist-mobile');
@@ -402,9 +386,6 @@
             }
         }
 
-        // ==========================================
-        // BOOKING & CHECKOUT LOGIC
-        // ==========================================
         function toggleSlot(timeSlot, courtName, price) {
             const index = selectedSlots.findIndex(s => s.timeSlot === timeSlot && s.courtName === courtName);
             if (index > -1) {
