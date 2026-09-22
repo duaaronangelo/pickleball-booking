@@ -539,17 +539,17 @@
         container.appendChild(emptyNotice);
       }
 
-      // PERSISTENT WAITLIST CARD (Always displayed at the bottom of the schedule)
+      // PERSISTENT WAITLIST CARD (Updated with Dual CTAs and exact copy)
       const waitlistCard = document.createElement('div');
-      waitlistCard.className = "p-5 bg-white rounded-3xl border border-slate-200 shadow-sm mt-6";
+      waitlistCard.className = "p-5 bg-white rounded-3xl border border-slate-200 shadow-sm mt-6 mb-6";
       waitlistCard.innerHTML = `
         <div class="flex items-center gap-3 mb-3">
             <div class="w-10 h-10 rounded-full bg-emerald-50 text-brand-900 flex items-center justify-center text-lg">
-                <i class="fa-solid fa-clock-rotate-left"></i>
+                <i class="fa-solid fa-list-check"></i>
             </div>
             <div>
-                <h4 class="font-black text-slate-900 text-sm">Need a custom slot or full day?</h4>
-                <p class="text-[11px] text-slate-500">Join our priority waitlist for <span id="waitlistDateLabel" class="font-bold text-slate-700">this date</span>.</p>
+                <h4 class="font-black text-slate-900 text-sm">Join the Pasalo Waitlist</h4>
+                <p class="text-[11px] text-slate-500">We will call you in case a court becomes vacant today!</p>
             </div>
         </div>
         <div class="space-y-3 mt-4 text-left">
@@ -565,13 +565,13 @@
         <button id="waitlist-submit-btn" onclick="submitWaitlist()" class="w-full py-3 bg-brand-900 hover:bg-brand-950 text-white font-black rounded-xl text-xs uppercase tracking-wider transition cursor-pointer mt-4 shadow-md">
             Join Priority Waitlist
         </button>
+        <button onclick="scrollToTopDates()" class="w-full py-2.5 mt-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl text-xs transition flex items-center justify-center gap-1.5">
+            <i class="fa-regular fa-calendar-days text-slate-500"></i>
+            <span>Check Future Dates</span>
+        </button>
         <p class="text-[10px] text-slate-400 text-center mt-3 leading-tight">Your info is securely kept and only used to notify you for a pasalo court.</p>
       `;
       container.appendChild(waitlistCard);
-
-      // Update the inline waitlist date text to match the currently selected date header
-      const dateTextEl = document.getElementById('waitlistDateLabel');
-      if (dateTextEl) dateTextEl.textContent = selectedDateStr;
     }
 
     function toggleSlotSelection(time, courtName, slotId, price) {
@@ -736,6 +736,16 @@
         frame.classList.add('max-w-[420px]', 'sm:rounded-[44px]', 'sm:border-[8px]', 'sm:h-[860px]');
         frame.classList.remove('max-w-4xl', 'sm:rounded-3xl', 'h-[100vh]', 'sm:h-[85vh]');
         btnText.textContent = "Full Canvas View";
+      }
+    }
+
+    // Smooth Scroll Helper for Secondary CTA
+    function scrollToTopDates() {
+      const phoneFrame = document.querySelector('.overflow-y-auto');
+      if (phoneFrame) {
+        phoneFrame.scrollTo({ top: 0, behavior: 'smooth' });
+      } else {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
       }
     }
 
