@@ -52,7 +52,6 @@
             <button onclick="setFilter('AM')" id="btn-filter-AM" class="flex-1 py-1.5 text-xs font-bold rounded-lg transition-all text-slate-500 hover:text-slate-900">Morning</button>
             <button onclick="setFilter('PM')" id="btn-filter-PM" class="flex-1 py-1.5 text-xs font-bold rounded-lg transition-all text-slate-500 hover:text-slate-900">Evening</button>
             
-            <!-- Hidden button to easily test the fully booked view during development -->
             <button onclick="simulateFullyBooked()" class="absolute right-0 -top-8 text-[10px] text-slate-400 underline">Sold Out Preview</button>
         </div>
 
@@ -126,7 +125,7 @@
         let activeFilter = 'all';
         let forceFullyBooked = false;
 
-        // Set default date to today
+        // Set default date to today securely mapped to PHT Timezone
         document.addEventListener("DOMContentLoaded", () => {
             const dateInput = document.getElementById('date-selector');
             const phTime = new Date(new Date().toLocaleString("en-US", {timeZone: "Asia/Manila"}));
@@ -142,11 +141,11 @@
         // FETCH & RENDER LOGIC
         // ==========================================
         async function fetchSchedule() {
-            forceFullyBooked = false; // Reset preview override
+            forceFullyBooked = false; 
             const dateVal = document.getElementById('date-selector').value;
             const container = document.getElementById('schedule-container');
             
-            // Render the custom SVG Paddle Loading Animation (No attached ball)
+            // Custom SVG Paddle Loading Animation (No attached ball)
             container.innerHTML = `
                 <div class="flex justify-center items-center h-48">
                     <div class="text-center">
@@ -165,15 +164,27 @@
             updateFAB();
 
             try {
-                if (SCRIPT_URL === 'YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL_HERE') throw new Error("URL NOT SET");
+                if (!SCRIPT_URL || SCRIPT_URL.includes('YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL_HERE')) {
+                    throw new Error("URL NOT SET");
+                }
                 
                 const response = await fetch(`${SCRIPT_URL}?date=${dateVal}`);
-                masterSlots = await response.json();
+                const data = await response.json();
                 
-                if(!masterSlots || masterSlots.length === 0) throw new Error("Empty Data");
+                // Secure nested object mapping (just in case App Script returns {slots: [...]})
+                let parsedData = Array.isArray(data) ? data : (data.data || data.slots || []);
+                if(!parsedData || parsedData.length === 0) throw new Error("Empty Data");
+                
+                // Super robust fallback mapping to handle misaligned Google Sheet Headers
+                masterSlots = parsedData.map(slot => ({
+                    TimeSlot: slot.TimeSlot || slot["Time Slot"] || slot.timeSlot || slot.Time || slot.time || "08:00 AM - 09:00 AM",
+                    CourtName: String(slot.CourtName || slot["Court Name"] || slot.courtName || slot.Court || slot.court || "Court").trim(),
+                    Price: Number(slot.Price || slot.price || slot.Amount || 0),
+                    Status: String(slot.Status || slot.status || slot["Court Status"] || "Available").trim()
+                }));
                 
             } catch (error) {
-                console.log("Using Mock Data as fallback.");
+                console.log("Network or data mapping issue. Displaying Mock Data as fallback.", error);
                 generateMockData();
             }
 
@@ -188,11 +199,10 @@
                                  ((hour + 1) > 12 ? (hour + 1 - 12) : (hour + 1)) + ':00 ' + ((hour + 1) >= 12 ? 'PM' : 'AM');
                 
                 courts.forEach(court => {
-                    let price = (hour >= 17) ? 400 : 300;
                     masterSlots.push({
                         "TimeSlot": timeString,
                         "CourtName": court,
-                        "Price": price,
+                        "Price": (hour >= 17) ? 400 : 300,
                         "Status": Math.random() > 0.4 ? "Available" : "Booked" 
                     });
                 });
@@ -213,13 +223,17 @@
         }
 
         function parseTimeGroup(timeString) {
-            const startStr = timeString.split('-')[0].trim();
-            let [time, modifier] = startStr.split(' ');
-            let [hours, minutes] = time.split(':');
-            let hr = parseInt(hours, 10);
-            if (modifier === 'PM' && hr !== 12) hr += 12;
-            if (modifier === 'AM' && hr === 12) hr = 0;
-            return { hour: hr, period: hr < 12 ? 'AM' : 'PM' };
+            try {
+                const startStr = timeString.split('-')[0].trim();
+                let [time, modifier] = startStr.split(' ');
+                let [hours, minutes] = time.split(':');
+                let hr = parseInt(hours, 10);
+                if (modifier === 'PM' && hr !== 12) hr += 12;
+                if (modifier === 'AM' && hr === 12) hr = 0;
+                return { hour: isNaN(hr) ? 0 : hr, period: hr < 12 ? 'AM' : 'PM' };
+            } catch (e) {
+                return { hour: 0, period: 'AM' };
+            }
         }
 
         function simulateFullyBooked() {
@@ -229,9 +243,10 @@
 
         function renderSchedule() {
             const container = document.getElementById('schedule-container');
-            container.innerHTML = '';
+            container.innerHTML = ''; // Clears loading UI
 
             const dateVal = document.getElementById('date-selector').value;
+            // Strictly lock time calculations to Philippine Time (Asia/Manila)
             const phTime = new Date(new Date().toLocaleString("en-US", {timeZone: "Asia/Manila"}));
             const yyyy = phTime.getFullYear();
             const mm = String(phTime.getMonth() + 1).padStart(2, '0');
@@ -251,60 +266,60 @@
                 return { time: time, startHour: parseTimeGroup(time).hour, period: parseTimeGroup(time).period };
             }).sort((a, b) => a.startHour - b.startHour);
 
-            let visibleSlotsCount = 0;
+            let hasAnyAvailableSlot = false;
+            let scheduleHTML = '';
 
-            if (!forceFullyBooked) {
-                sortedTimes.forEach(slotGroup => {
-                    if (activeFilter !== 'all' && slotGroup.period !== activeFilter) return;
-                    if (isToday && slotGroup.startHour <= currentHour) return;
+            sortedTimes.forEach(slotGroup => {
+                if (activeFilter !== 'all' && slotGroup.period !== activeFilter) return;
+                
+                const isPast = (isToday && slotGroup.startHour <= currentHour);
+                const isPeakHour = slotGroup.startHour >= 17 && slotGroup.startHour <= 21;
+                
+                const selectedInBlock = selectedSlots.filter(s => s.timeSlot === slotGroup.time);
+                const blockTotal = selectedInBlock.reduce((sum, s) => sum + s.price, 0);
 
-                    visibleSlotsCount++;
-                    const isPeakHour = slotGroup.startHour >= 17 && slotGroup.startHour <= 21;
+                scheduleHTML += `
+                <div class="bg-white rounded-3xl p-5 border border-slate-100 shadow-sm mb-4">
+                    <div class="flex items-center justify-between border-b border-slate-100 pb-3 mb-4">
+                        <div class="flex items-center gap-2">
+                            <span class="text-base font-black text-slate-900 tracking-tight">${slotGroup.time}</span>
+                            ${isPeakHour ? `<span class="bg-amber-50 text-amber-700 px-2 py-0.5 rounded-md text-[10px] font-extrabold border border-amber-200/60 flex items-center gap-1"><i class="fa-solid fa-fire text-[9px]"></i> Peak</span>` : ''}
+                        </div>
+                        ${blockTotal > 0 ? `<span class="bg-brand-50 text-brand-700 px-2.5 py-1 rounded-lg text-[11px] font-bold">₱${blockTotal}</span>` : ''}
+                    </div>
+                    <div class="flex flex-wrap gap-2.5">
+                `;
+
+                grouped[slotGroup.time].forEach(court => {
+                    const isSelected = selectedSlots.some(s => s.timeSlot === court.TimeSlot && s.courtName === court.CourtName);
                     
-                    const selectedInBlock = selectedSlots.filter(s => s.timeSlot === slotGroup.time);
-                    const blockTotal = selectedInBlock.reduce((sum, s) => sum + s.price, 0);
-
-                    let html = `
-                    <div class="bg-white rounded-3xl p-5 border border-slate-100 shadow-sm mb-4">
-                        <div class="flex items-center justify-between border-b border-slate-100 pb-3 mb-4">
-                            <div class="flex items-center gap-2">
-                                <span class="text-base font-black text-slate-900 tracking-tight">${slotGroup.time}</span>
-                                ${isPeakHour ? `<span class="bg-amber-50 text-amber-700 px-2 py-0.5 rounded-md text-[10px] font-extrabold border border-amber-200/60 flex items-center gap-1"><i class="fa-solid fa-fire text-[9px]"></i> Peak</span>` : ''}
-                            </div>
-                            ${blockTotal > 0 ? `<span class="bg-brand-50 text-brand-700 px-2.5 py-1 rounded-lg text-[11px] font-bold">₱${blockTotal}</span>` : ''}
-                        </div>
-                        <div class="flex flex-wrap gap-2.5">
-                    `;
-
-                    grouped[slotGroup.time].forEach(court => {
-                        const isSelected = selectedSlots.some(s => s.timeSlot === court.TimeSlot && s.courtName === court.CourtName);
-                        
-                        if (court.Status === "Available") {
-                            if (isSelected) {
-                                html += `<button onclick="toggleSlot('${court.TimeSlot}', '${court.CourtName}', ${court.Price})" class="flex-1 min-w-[30%] py-2.5 bg-brand-500 border-2 border-brand-500 text-white rounded-xl text-xs font-bold transform scale-105 transition-all shadow-md">✓ ${court.CourtName}</button>`;
-                            } else {
-                                html += `<button onclick="toggleSlot('${court.TimeSlot}', '${court.CourtName}', ${court.Price})" class="flex-1 min-w-[30%] py-2.5 bg-white border-2 border-slate-200 text-slate-700 rounded-xl text-xs font-bold hover:border-brand-300 hover:bg-brand-50 transition-colors">${court.CourtName}</button>`;
-                            }
+                    // Case-insensitive status mapping!
+                    let displayStatus = court.Status.toLowerCase();
+                    if (isPast) displayStatus = "passed";
+                    
+                    if (displayStatus === "available" && !forceFullyBooked) {
+                        hasAnyAvailableSlot = true;
+                        if (isSelected) {
+                            scheduleHTML += `<button onclick="toggleSlot('${court.TimeSlot}', '${court.CourtName}', ${court.Price})" class="flex-1 min-w-[30%] py-2.5 bg-brand-500 border-2 border-brand-500 text-white rounded-xl text-xs font-bold transform scale-105 transition-all shadow-md">✓ ${court.CourtName}</button>`;
                         } else {
-                            html += `<div class="flex-1 min-w-[30%] py-2.5 bg-slate-100 border-2 border-transparent text-slate-400 rounded-xl text-xs font-semibold text-center opacity-70">Booked</div>`;
+                            scheduleHTML += `<button onclick="toggleSlot('${court.TimeSlot}', '${court.CourtName}', ${court.Price})" class="flex-1 min-w-[30%] py-2.5 bg-white border-2 border-slate-200 text-slate-700 rounded-xl text-xs font-bold hover:border-brand-300 hover:bg-brand-50 transition-colors">${court.CourtName}</button>`;
                         }
-                    });
-
-                    html += `</div></div>`;
-                    container.innerHTML += html;
+                    } else if (displayStatus === "passed" || forceFullyBooked) {
+                        scheduleHTML += `<div class="flex-1 min-w-[30%] py-2.5 bg-slate-50 border-2 border-transparent text-slate-300 rounded-xl text-xs font-semibold text-center opacity-60">Passed</div>`;
+                    } else {
+                        scheduleHTML += `<div class="flex-1 min-w-[30%] py-2.5 bg-slate-100 border-2 border-transparent text-slate-400 rounded-xl text-xs font-semibold text-center opacity-70">Booked</div>`;
+                    }
                 });
-            }
 
-            // WAITLIST CARD UI
-            if (visibleSlotsCount === 0 || forceFullyBooked) {
-                container.innerHTML = `
-                    <div class="p-6 text-center bg-white rounded-3xl border border-slate-200 shadow-sm mt-4">
-                        <div class="w-12 h-12 mx-auto rounded-full bg-slate-100 flex items-center justify-center text-xl mb-3">
-                            😞
-                        </div>
-                        <div>
-                            <h4 class="font-bold text-slate-900 text-sm">Sorry! All courts booked</h4>
-                        </div>
+                scheduleHTML += `</div></div>`;
+            });
+
+            // Smart Waitlist trigger - Render waitlist ON TOP if everything is booked/passed
+            if (!hasAnyAvailableSlot || forceFullyBooked) {
+                container.innerHTML += `
+                    <div class="p-6 text-center bg-white rounded-3xl border border-slate-200 shadow-sm mb-6">
+                        <div class="w-12 h-12 mx-auto rounded-full bg-slate-100 flex items-center justify-center text-xl mb-3">😞</div>
+                        <div><h4 class="font-bold text-slate-900 text-sm">Sorry! All courts booked</h4></div>
                         <div class="space-y-3 mt-5 text-left">
                             <div>
                                 <label class="block text-[11px] font-bold text-slate-700 mb-1 ml-1 uppercase tracking-wider">Name</label>
@@ -322,6 +337,9 @@
                     </div>
                 `;
             }
+            
+            // Append schedule cards directly underneath
+            container.innerHTML += scheduleHTML;
         }
 
         // ==========================================
@@ -353,7 +371,7 @@
             };
             
             try {
-                if (SCRIPT_URL !== 'YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL_HERE') {
+                if (SCRIPT_URL && !SCRIPT_URL.includes('YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL_HERE')) {
                     await fetch(SCRIPT_URL, {
                         method: 'POST',
                         mode: 'no-cors',
@@ -471,7 +489,7 @@
             };
 
             try {
-                if (SCRIPT_URL !== 'YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL_HERE') {
+                if (SCRIPT_URL && !SCRIPT_URL.includes('YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL_HERE')) {
                     await fetch(SCRIPT_URL, {
                         method: 'POST',
                         mode: 'no-cors',
