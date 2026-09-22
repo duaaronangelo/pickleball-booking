@@ -503,7 +503,7 @@
         container.appendChild(emptyNotice);
       }
 
-      // ENHANCED WAITLIST CARD
+      // UPDATED WAITLIST CARD WITH CLEAR, SIMPLE WORDING
       if (selectedSlots.length === 0 && !selectedReclubSlot) {
         const waitlistCard = document.createElement('div');
         waitlistCard.className = "bg-gradient-to-r from-emerald-50/60 via-white to-white rounded-3xl border border-emerald-500/20 shadow-sm mt-6 mb-6 overflow-hidden transition-all hover:border-emerald-500/40";
@@ -514,7 +514,7 @@
                 <i class="fa-solid fa-bell text-brand-900"></i>
               </div>
               <div>
-                <h4 class="font-black text-slate-900 text-xs tracking-tight">Can't find your preferred slot?</h4>
+                <h4 class="font-black text-slate-900 text-xs tracking-tight">No More Available Courts?</h4>
                 <p class="text-[10px] text-slate-500 font-semibold">Tap here to join the Pasalo Waitlist</p>
               </div>
             </div>
@@ -610,7 +610,7 @@
               <div class="text-lg font-black text-brand-900 flex items-center justify-end gap-1"><span>₱${baseTotal.toLocaleString()}</span></div>
             </div>
           </div>
-          <button onclick="openCheckoutModal()" class="w-full py-3.5 bg-gradient-to-r from-brand-900 to-emerald-900 hover:from-brand-950 text-white rounded-2xl font-black text-sm shadow-xl shadow-brand-900/25 active:scale-[0.98] transition flex items-center justify-center gap-2">
+          <button onclick="openCheckoutModal()" class="w-full py-3.5 bg-gradient-to-r from-brand-900 to-emerald-900 hover:from-brand-950 text-white font-black rounded-2xl shadow-lg transition text-xs flex items-center justify-center gap-2">
             <span>Proceed to Payment to Book</span>
             <i class="fa-solid fa-arrow-right text-xs"></i>
           </button>
