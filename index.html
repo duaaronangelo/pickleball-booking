@@ -289,7 +289,6 @@
               selectedDateStr = selectedDateObj.str;
               document.getElementById('currentDateLabel').textContent = `${selectedDateStr} • Schedule`;
               
-              // Visually update the date picker
               document.querySelectorAll('.date-chip').forEach((b, i) => {
                 if (i === idx) {
                   b.className = "date-chip flex-shrink-0 w-12 py-2 rounded-2xl bg-brand-900 text-white shadow-sm border border-brand-900 flex flex-col items-center transition";
@@ -333,7 +332,7 @@
     window.onload = function() {
       initDates();
       renderDatePicker();
-      loadCart(); // Load memory before fetching slots
+      loadCart();
       fetchSlots(); 
     };
 
@@ -362,7 +361,7 @@
       
       selectedSlots = [];
       selectedReclubSlot = null;
-      saveCart(); // Clear cart in memory for the new date
+      saveCart();
       updateBottomDrawer();
       fetchSlots();
     }
@@ -555,7 +554,7 @@
         }
       }
 
-      saveCart(); // Save state to memory
+      saveCart();
       renderSchedule();
       updateBottomDrawer();
     }
@@ -563,16 +562,16 @@
     function updateBottomDrawer() {
       const drawer = document.getElementById('bookingDrawer');
 
-      // STATE 1: RECLUB OPEN PLAY SELECTED
+      // STATE 1: RECLUB OPEN PLAY SELECTED (ALL CAPS & CENTERED)
       if (selectedReclubSlot) {
         drawer.innerHTML = `
-          <div class="flex items-center justify-between mb-3">
-            <h3 class="text-base font-black text-slate-900 tracking-tight">You are viewing an Open Play</h3>
-            <div class="w-10 h-10 rounded-full bg-reclub-light flex items-center justify-center border border-reclub-yellow shadow-sm">
+          <div class="flex flex-col items-center text-center mb-4">
+            <div class="w-10 h-10 rounded-full bg-reclub-light flex items-center justify-center border border-reclub-yellow shadow-sm mb-2">
               ${RECLUB_R_ICON}
             </div>
+            <h3 class="text-sm sm:text-base font-black text-slate-900 tracking-tight uppercase">YOU ARE VIEWING AN OPEN PLAY</h3>
+            <p class="text-xs font-bold text-slate-700 mt-1">Want to join? Sign up via Reclub App</p>
           </div>
-          <p class="text-xs font-bold text-slate-700 mb-4">Want to join? Sign up via Reclub App</p>
           <a href="${selectedReclubSlot.link}" target="_blank" class="w-full py-3.5 bg-reclub-yellow hover:bg-reclub-hover text-reclub-blue rounded-2xl font-black text-sm shadow-xl shadow-reclub-yellow/25 active:scale-[0.98] transition flex items-center justify-center gap-2 border border-reclub-yellow">
             <span>Proceed to Reclub App</span>
             <i class="fa-solid fa-arrow-right text-xs"></i>
@@ -658,7 +657,6 @@
         closeCheckoutModal();
         document.getElementById('successModal').classList.remove('opacity-0', 'pointer-events-none');
         
-        // Clear memory after successful booking
         selectedSlots = [];
         saveCart(); 
         
