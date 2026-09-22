@@ -539,39 +539,41 @@
         container.appendChild(emptyNotice);
       }
 
-      // PERSISTENT WAITLIST CARD (Updated with Dual CTAs and exact copy)
-      const waitlistCard = document.createElement('div');
-      waitlistCard.className = "p-5 bg-white rounded-3xl border border-slate-200 shadow-sm mt-6 mb-6";
-      waitlistCard.innerHTML = `
-        <div class="flex items-center gap-3 mb-3">
-            <div class="w-10 h-10 rounded-full bg-emerald-50 text-brand-900 flex items-center justify-center text-lg">
-                <i class="fa-solid fa-list-check"></i>
-            </div>
-            <div>
-                <h4 class="font-black text-slate-900 text-sm">Join the Pasalo Waitlist</h4>
-                <p class="text-[11px] text-slate-500">We will call you in case a court becomes vacant today!</p>
-            </div>
-        </div>
-        <div class="space-y-3 mt-4 text-left">
-            <div>
-                <label class="block text-[11px] font-bold text-slate-700 mb-1 ml-1 uppercase tracking-wider">Your Name</label>
-                <input type="text" id="waitlist-name" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500" placeholder="Juan Dela Cruz">
-            </div>
-            <div>
-                <label class="block text-[11px] font-bold text-slate-700 mb-1 ml-1 uppercase tracking-wider">Mobile Number</label>
-                <input type="tel" id="waitlist-mobile" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500" placeholder="0917 123 4567">
-            </div>
-        </div>
-        <button id="waitlist-submit-btn" onclick="submitWaitlist()" class="w-full py-3 bg-brand-900 hover:bg-brand-950 text-white font-black rounded-xl text-xs uppercase tracking-wider transition cursor-pointer mt-4 shadow-md">
-            Join Priority Waitlist
-        </button>
-        <button onclick="scrollToTopDates()" class="w-full py-2.5 mt-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl text-xs transition flex items-center justify-center gap-1.5">
-            <i class="fa-regular fa-calendar-days text-slate-500"></i>
-            <span>Check Future Dates</span>
-        </button>
-        <p class="text-[10px] text-slate-400 text-center mt-3 leading-tight">Your info is securely kept and only used to notify you for a pasalo court.</p>
-      `;
-      container.appendChild(waitlistCard);
+      // PERSISTENT WAITLIST CARD (Conditionally hidden when user selects slots)
+      if (selectedSlots.length === 0) {
+        const waitlistCard = document.createElement('div');
+        waitlistCard.className = "p-5 bg-white rounded-3xl border border-slate-200 shadow-sm mt-6 mb-6";
+        waitlistCard.innerHTML = `
+          <div class="flex items-center gap-3 mb-3">
+              <div class="w-10 h-10 rounded-full bg-emerald-50 text-brand-900 flex items-center justify-center text-lg">
+                  <i class="fa-solid fa-list-check"></i>
+              </div>
+              <div>
+                  <h4 class="font-black text-slate-900 text-sm">Join the Pasalo Waitlist</h4>
+                  <p class="text-[11px] text-slate-500">We will call you in case a court becomes vacant today!</p>
+              </div>
+          </div>
+          <div class="space-y-3 mt-4 text-left">
+              <div>
+                  <label class="block text-[11px] font-bold text-slate-700 mb-1 ml-1 uppercase tracking-wider">Your Name</label>
+                  <input type="text" id="waitlist-name" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500" placeholder="Juan Dela Cruz">
+              </div>
+              <div>
+                  <label class="block text-[11px] font-bold text-slate-700 mb-1 ml-1 uppercase tracking-wider">Mobile Number</label>
+                  <input type="tel" id="waitlist-mobile" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500" placeholder="0917 123 4567">
+              </div>
+          </div>
+          <button id="waitlist-submit-btn" onclick="submitWaitlist()" class="w-full py-3 bg-brand-900 hover:bg-brand-950 text-white font-black rounded-xl text-xs uppercase tracking-wider transition cursor-pointer mt-4 shadow-md">
+              Join Priority Waitlist
+          </button>
+          <button onclick="scrollToTopDates()" class="w-full py-2.5 mt-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl text-xs transition flex items-center justify-center gap-1.5">
+              <i class="fa-regular fa-calendar-days text-slate-500"></i>
+              <span>Check Future Dates</span>
+          </button>
+          <p class="text-[10px] text-slate-400 text-center mt-3 leading-tight">Your info is securely kept and only used to notify you for a pasalo court.</p>
+        `;
+        container.appendChild(waitlistCard);
+      }
     }
 
     function toggleSlotSelection(time, courtName, slotId, price) {
