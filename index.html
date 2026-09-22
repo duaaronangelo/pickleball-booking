@@ -202,7 +202,6 @@
   </div>
 
   <script>
-    // === IMPORTANT: PASTE YOUR GOOGLE APPS SCRIPT WEB APP URL HERE ===
     const API_URL = "https://script.google.com/macros/s/AKfycbxjcGWN_iyGH26kuzwY_FX7qnHn365D3evpZ-cqZxYoRNO6IrmIgIJC2BVlwG6PiLIxXQ/exec"; 
     
     const STANDARD_TIMES = [
@@ -231,7 +230,6 @@
     let selectedDateObj = null;
     let selectedDateStr = "";
     
-    // States for Cart and Reclub Feature
     let selectedSlots = [];
     let selectedReclubSlot = null;
     
@@ -346,7 +344,6 @@
         visibleSlotsCount++;
         const normalizedSlotTime = normalizeTimeSlot(slot.time);
         
-        // Sum block total for standard cart items
         const selectedInThisBlock = selectedSlots.filter(s => normalizeTimeSlot(s.time) === normalizedSlotTime);
         const blockTotal = selectedInThisBlock.reduce((sum, s) => sum + s.price, 0);
         
@@ -379,7 +376,6 @@
           const isSelectedReclub = selectedReclubSlot && selectedReclubSlot.time === slot.time && selectedReclubSlot.court === courtName;
 
           if (isReclub) {
-            // Selected Reclub Tile (Solid Logo Yellow Background, Logo Blue Text/Icon)
             if (isSelectedReclub) {
               cardHTML += `
                 <button onclick="toggleSlotSelection('${slot.time}', '${courtName}', '${slotId}', ${courtPrice}, 'Reclub', '${rLink}')" class="flex-grow min-w-[30%] sm:min-w-[20%] py-3 px-3.5 rounded-2xl bg-reclub-yellow text-reclub-blue flex items-center justify-center gap-1.5 border-2 border-reclub-yellow shadow-md bounce-pop transition">
@@ -387,7 +383,6 @@
                   ${RECLUB_R_ICON}
                 </button>`;
             } 
-            // Deselected Reclub Tile (Pale yellow background, Yellow border, Blue text/icon)
             else {
               cardHTML += `
                 <button onclick="toggleSlotSelection('${slot.time}', '${courtName}', '${slotId}', ${courtPrice}, 'Reclub', '${rLink}')" class="flex-grow min-w-[30%] sm:min-w-[20%] py-3 px-3.5 rounded-2xl bg-reclub-light hover:bg-yellow-100 border-2 border-reclub-yellow text-reclub-blue flex items-center justify-center gap-1.5 transition active:scale-95">
@@ -429,7 +424,6 @@
         container.appendChild(emptyNotice);
       }
 
-      // Show Waitlist Banner only if nothing is selected (No Cart, No Reclub)
       if (selectedSlots.length === 0 && !selectedReclubSlot) {
         const waitlistCard = document.createElement('div');
         waitlistCard.className = "bg-white rounded-3xl border border-slate-200 shadow-sm mt-6 mb-6 overflow-hidden transition-all";
@@ -475,11 +469,11 @@
         if (selectedReclubSlot && selectedReclubSlot.id === slotId) {
           selectedReclubSlot = null; // Toggle Off
         } else {
-          selectedSlots = []; // Clear standard cart so they don't clash
+          selectedSlots = []; 
           selectedReclubSlot = { time: time, court: courtName, id: slotId, link: reclubLink };
         }
       } else {
-        selectedReclubSlot = null; // Tapping a normal court clears Reclub viewer
+        selectedReclubSlot = null; 
         const existingIndex = selectedSlots.findIndex(s => s.time === time && s.court === courtName);
         if (existingIndex > -1) {
           selectedSlots.splice(existingIndex, 1);
@@ -495,15 +489,14 @@
     function updateBottomDrawer() {
       const drawer = document.getElementById('bookingDrawer');
 
-      // STATE 1: RECLUB OPEN PLAY SELECTED
+      // STATE 1: RECLUB OPEN PLAY SELECTED (UPDATED SECTION)
       if (selectedReclubSlot) {
         drawer.innerHTML = `
           <div class="flex items-center justify-between mb-4">
             <div>
-              <span class="text-[11px] uppercase tracking-wider text-slate-500 font-extrabold block">You are viewing an Open Play</span>
-              <div class="text-sm font-black text-slate-900 mt-1">${selectedReclubSlot.court} • ${selectedReclubSlot.time}</div>
+              <h3 class="text-base sm:text-lg font-black text-slate-900 tracking-tight">You are viewing an Open Play</h3>
             </div>
-            <div class="w-10 h-10 rounded-full bg-reclub-light flex items-center justify-center border border-reclub-yellow">
+            <div class="w-10 h-10 rounded-full bg-reclub-light flex items-center justify-center border border-reclub-yellow shadow-sm">
               ${RECLUB_R_ICON}
             </div>
           </div>
