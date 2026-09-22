@@ -503,7 +503,6 @@
         container.appendChild(emptyNotice);
       }
 
-      // UPDATED WAITLIST CARD WITH CLEAR, SIMPLE WORDING
       if (selectedSlots.length === 0 && !selectedReclubSlot) {
         const waitlistCard = document.createElement('div');
         waitlistCard.className = "bg-gradient-to-r from-emerald-50/60 via-white to-white rounded-3xl border border-emerald-500/20 shadow-sm mt-6 mb-6 overflow-hidden transition-all hover:border-emerald-500/40";
@@ -515,7 +514,7 @@
               </div>
               <div>
                 <h4 class="font-black text-slate-900 text-xs tracking-tight">No More Available Courts?</h4>
-                <p class="text-[10px] text-slate-500 font-semibold">Tap here to join the Pasalo Waitlist</p>
+                <p class="text-[10px] text-slate-500 font-semibold">Tap here to Join the Pasalo Waitlist</p>
               </div>
             </div>
             <div class="w-7 h-7 rounded-full bg-slate-100 flex items-center justify-center text-slate-500 transition">
@@ -649,30 +648,52 @@
       event.preventDefault();
       const submitBtn = document.getElementById('submit-btn');
       submitBtn.disabled = true;
-      submitBtn.innerHTML = `<i class="fa-solid fa-circle-notch fa-spin"></i> Processing Booking...`;
+      submitBtn.innerHTML = `<i class="fa-solid fa-circle-notch fa-spin"></i> Verifying Slot Availability...`;
 
       try {
-        await fetch(API_URL, {
-          method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            date: selectedDateStr, email: document.getElementById('email').value,
-            gcashRef: document.getElementById('gcash-ref').value,
-            slots: selectedSlots.map(s => ({ slotId: s.slotId, courtName: s.court, timeSlot: s.time, price: s.price }))
-          })
+        const payload = {
+          date: selectedDateStr,
+          email: document.getElementById('email').value,
+          gcashRef: document.getElementById('gcash-ref').value,
+          slots: selectedSlots.map(s => ({
+            slotId: s.slotId,
+            courtName: s.court, 
+            timeSlot: s.time,
+            price: s.price
+          }))
+        };
+
+        const response = await fetch(API_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+          body: JSON.stringify(payload)
         });
         
+        const result = await response.json();
+
+        if (result.status === "conflict") {
+          closeCheckoutModal();
+          showToast(result.message, "error");
+          fetchSlots(); 
+        } else if (result.status === "success") {
+          closeCheckoutModal();
+          document.getElementById('successModal').classList.remove('opacity-0', 'pointer-events-none');
+          selectedSlots = [];
+          saveCart(); 
+          updateBottomDrawer();
+          fetchSlots(); 
+        } else {
+          showToast("Error processing booking. Please try again.", "error");
+        }
+
+      } catch (err) { 
         closeCheckoutModal();
         document.getElementById('successModal').classList.remove('opacity-0', 'pointer-events-none');
-        
         selectedSlots = [];
-        saveCart(); 
-        
+        saveCart();
         updateBottomDrawer();
-        fetchSlots(); 
-      } catch (err) { 
-        showToast("Error submitting booking. Please try again.", "error"); 
-      }
-      finally {
+        fetchSlots();
+      } finally {
         submitBtn.disabled = false;
         submitBtn.innerHTML = `<i class="fa-solid fa-lock text-xs"></i><span>Confirm Payment & Book Slot</span>`;
       }
