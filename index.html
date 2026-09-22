@@ -212,22 +212,22 @@
     const API_URL = "https://script.google.com/macros/s/AKfycbxjcGWN_iyGH26kuzwY_FX7qnHn365D3evpZ-cqZxYoRNO6IrmIgIJC2BVlwG6PiLIxXQ/exec"; 
     
     const STANDARD_TIMES = [
-      { id: 's1', startHour: 7, time: '7:00 AM - 8:00 AM', period: 'morning' },
-      { id: 's2', startHour: 8, time: '8:00 AM - 9:00 AM', period: 'morning' },
-      { id: 's3', startHour: 9, time: '9:00 AM - 10:00 AM', period: 'morning' },
-      { id: 's4', startHour: 10, time: '10:00 AM - 11:00 AM', period: 'morning' },
-      { id: 's5', startHour: 11, time: '11:00 AM - 12:00 PM', period: 'morning' },
-      { id: 's6', startHour: 12, time: '12:00 PM - 1:00 PM', period: 'afternoon' },
-      { id: 's7', startHour: 13, time: '1:00 PM - 2:00 PM', period: 'afternoon' },
-      { id: 's8', startHour: 14, time: '2:00 PM - 3:00 PM', period: 'afternoon' },
-      { id: 's9', startHour: 15, time: '3:00 PM - 4:00 PM', period: 'afternoon' },
-      { id: 's10', startHour: 16, time: '4:00 PM - 5:00 PM', period: 'afternoon' },
-      { id: 's11', startHour: 17, time: '5:00 PM - 6:00 PM', period: 'afternoon' },
-      { id: 's12', startHour: 18, time: '6:00 PM - 7:00 PM', period: 'afternoon' },
-      { id: 's13', startHour: 19, time: '7:00 PM - 8:00 PM', period: 'afternoon' },
-      { id: 's14', startHour: 20, time: '8:00 PM - 9:00 PM', period: 'afternoon' },
-      { id: 's15', startHour: 21, time: '9:00 PM - 10:00 PM', period: 'afternoon' },
-      { id: 's16', startHour: 22, time: '10:00 PM - 11:00 PM', period: 'afternoon' }
+      { id: 's1', startHour: 7, endHour: 8, time: '7:00 AM - 8:00 AM', period: 'morning' },
+      { id: 's2', startHour: 8, endHour: 9, time: '8:00 AM - 9:00 AM', period: 'morning' },
+      { id: 's3', startHour: 9, endHour: 10, time: '9:00 AM - 10:00 AM', period: 'morning' },
+      { id: 's4', startHour: 10, endHour: 11, time: '10:00 AM - 11:00 AM', period: 'morning' },
+      { id: 's5', startHour: 11, endHour: 12, time: '11:00 AM - 12:00 PM', period: 'morning' },
+      { id: 's6', startHour: 12, endHour: 13, time: '12:00 PM - 1:00 PM', period: 'afternoon' },
+      { id: 's7', startHour: 13, endHour: 14, time: '1:00 PM - 2:00 PM', period: 'afternoon' },
+      { id: 's8', startHour: 14, endHour: 15, time: '2:00 PM - 3:00 PM', period: 'afternoon' },
+      { id: 's9', startHour: 15, endHour: 16, time: '3:00 PM - 4:00 PM', period: 'afternoon' },
+      { id: 's10', startHour: 16, endHour: 17, time: '4:00 PM - 5:00 PM', period: 'afternoon' },
+      { id: 's11', startHour: 17, endHour: 18, time: '5:00 PM - 6:00 PM', period: 'afternoon' },
+      { id: 's12', startHour: 18, endHour: 19, time: '6:00 PM - 7:00 PM', period: 'afternoon' },
+      { id: 's13', startHour: 19, endHour: 20, time: '7:00 PM - 8:00 PM', period: 'afternoon' },
+      { id: 's14', startHour: 20, endHour: 21, time: '8:00 PM - 9:00 PM', period: 'afternoon' },
+      { id: 's15', startHour: 21, endHour: 22, time: '9:00 PM - 10:00 PM', period: 'afternoon' },
+      { id: 's16', startHour: 22, endHour: 23, time: '10:00 PM - 11:00 PM', period: 'afternoon' }
     ];
 
     const RECLUB_R_ICON = `<svg viewBox="0 0 24 24" fill="currentColor" class="w-3.5 h-3.5 text-reclub-blue"><path d="M6 2h7.5c4 0 6.5 2.2 6.5 5.8 0 2.8-1.6 4.7-4 5.4l4.5 6.8h-4.5l-3.8-6h-3.2v6H6V2zm3.5 3v5.5h3.8c1.8 0 3-1.1 3-2.6s-1.2-2.9-3-2.9H9.5z"/></svg>`;
@@ -242,7 +242,6 @@
     let slotMap = {};
     let dynamicCourts = []; 
 
-    // Toast Notification System
     function showToast(message, type = 'success') {
       const toast = document.getElementById('toastNotification');
       const icon = document.getElementById('toastIcon');
@@ -268,7 +267,6 @@
       }, 3500);
     }
 
-    // Cart Memory System
     function saveCart() {
       sessionStorage.setItem('pickleHubCart', JSON.stringify({
         date: selectedDateStr,
@@ -410,9 +408,19 @@
       container.innerHTML = '';
       let visibleSlotsCount = 0;
 
+      const now = new Date();
+      const currentHour = now.getHours();
+      const currentMinute = now.getMinutes();
+
       STANDARD_TIMES.forEach((slot) => {
         if (activeFilter !== 'all' && slot.period !== activeFilter) return;
-        if (selectedDateObj.isToday && slot.startHour < new Date().getHours()) return;
+
+        // Hide slot if current time has already reached or passed its end time on today's date
+        if (selectedDateObj.isToday) {
+          if (slot.endHour <= currentHour || (slot.endHour - 1 === currentHour && currentMinute > 0)) {
+            return;
+          }
+        }
 
         visibleSlotsCount++;
         const normalizedSlotTime = normalizeTimeSlot(slot.time);
@@ -562,7 +570,6 @@
     function updateBottomDrawer() {
       const drawer = document.getElementById('bookingDrawer');
 
-      // STATE 1: RECLUB OPEN PLAY SELECTED (ALL CAPS & CENTERED)
       if (selectedReclubSlot) {
         drawer.innerHTML = `
           <div class="flex flex-col items-center text-center mb-4">
@@ -578,9 +585,7 @@
           </a>
         `;
         drawer.classList.remove('translate-y-full');
-      } 
-      // STATE 2: STANDARD BOOKING CART
-      else if (selectedSlots.length > 0) {
+      } else if (selectedSlots.length > 0) {
         const baseTotal = selectedSlots.reduce((sum, item) => sum + item.price, 0);
         const courtsUsed = [...new Set(selectedSlots.map(s => s.court))].sort();
         const dayTag = selectedDateObj.isToday ? `Today, ${selectedDateObj.month}-${selectedDateObj.date}` : `${selectedDateObj.fullDay}, ${selectedDateObj.month}-${selectedDateObj.date}`;
@@ -607,9 +612,7 @@
           </button>
         `;
         drawer.classList.remove('translate-y-full');
-      } 
-      // STATE 3: NOTHING SELECTED
-      else {
+      } else {
         drawer.classList.add('translate-y-full');
       }
     }
